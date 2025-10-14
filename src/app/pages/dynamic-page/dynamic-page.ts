@@ -1,16 +1,20 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, DOCUMENT, Inject } from '@angular/core';
-import { ContentfulClientApi, createClient, EntryCollection, EntrySkeletonType } from 'contentful';
+import { ContentfulClientApi, createClient, Entry, EntryCollection, EntrySkeletonType } from 'contentful';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-dynamic-page',
-  imports: [AsyncPipe],
+  imports: [],
   templateUrl: './dynamic-page.html',
   styleUrl: './dynamic-page.scss'
 })
 export class DynamicPage {
-pageEntries: Promise<string | EntryCollection<EntrySkeletonType, undefined, string>>;
-  standardPageConfig: Promise<string | EntryCollection<EntrySkeletonType, undefined, string>>;
+  pageEntries: Promise<Entry<EntrySkeletonType, undefined, string>>;
+  contentType = "";
+  pageContent: any;
+
+  standardPageConfig: Promise<Entry<EntrySkeletonType, undefined, string>>;
   
   private contentfulClient: ContentfulClientApi<undefined>  = createClient({
       space: 'dbcppdxw8bib',//this.contentfulConfiguration.spaceId,
@@ -25,39 +29,55 @@ pageEntries: Promise<string | EntryCollection<EntrySkeletonType, undefined, stri
 
     const pathParts = route.split('/').filter(e => e !== '');
     let slug = pathParts.reverse()[0];
-    let urlSubfolder = route.substr(0, route.lastIndexOf(slug));
+    //const urlSubfolder = route.substr(0, route.lastIndexOf(slug));
+    const urlSubfolderNew = route.substring(0, route.lastIndexOf(slug));
     slug = slug || 'index';
 
-      console.info('ROUTE', route);
-      //console.info('NAME', ctx.route.name);
-      console.info('URL-SUBFOLDER', urlSubfolder);
-      console.info('SLUG', slug);
+    console.info('ROUTE', route);
+    //console.info('NAME', ctx.route.name);
+    //console.info('URL-SUBFOLDER', urlSubfolder);
+    console.info('URL-SUBFOLDER new', urlSubfolderNew);
+    console.info('SLUG', slug);
 
-    this.pageEntries = this.getEntriesForPage();
+    this.pageEntries = this.getEntriesForPage(slug);
+
     this.standardPageConfig = this.getStandardPageConfig();
   }
 
-  private getEntriesForPage() {
+  private getEntriesForPage(slug: string): Promise<Entry<EntrySkeletonType, undefined, string>> {
     return this.contentfulClient.getEntries({
       content_type: 'page',
-      'fields.slug': 'home',//slug,
+      'fields.slug': slug,
       include: 6
     }).then(response => {
-      console.log("Page", response)
-      const stringified = JSON.stringify(response, this.getCircularReplacer(), 2)
-      return stringified;
+      const pageObject = response?.items[0];
+      console.info("Page", pageObject);
+      //if page not able to be fetched -> probably 404 error
+      if (!pageObject) {
+        console.error('Error 404: Page could not be found.')
+        /* ctx.error({ message: 'Error 404', statusCode: 404 });
+        return; */
+      }
+      this.pageContent = pageObject?.fields ? pageObject.fields['content'] : {};
+      this.contentType = this.pageContent?.sys?.contentType?.sys?.id;
+      console.info("contentType", this.contentType)
+      return pageObject;
     })
   }
 
-  private getStandardPageConfig() {
+  private getStandardPageConfig(): Promise<Entry<EntrySkeletonType, undefined, string>> {
     return this.contentfulClient.getEntries({
       content_type: 'standardPageConfig',
       include: 6
     }).then(response => {
-      console.log("Standard Page Config", response);
-      const stringified = JSON.stringify(response, this.getCircularReplacer(), 2)
-      return stringified;
+      const standardPageConfigObject = response?.items[0];
+      console.info("Standard Page Config", standardPageConfigObject);
+      return standardPageConfigObject;
     })
+  }
+
+  stringify(obj: any) {
+    return JSON.stringify(obj, this.getCircularReplacer(), 2);
   }
 
   private getCircularReplacer = () => {
