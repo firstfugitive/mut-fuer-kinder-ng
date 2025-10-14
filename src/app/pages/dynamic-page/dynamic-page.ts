@@ -1,22 +1,23 @@
 import { AsyncPipe, NgComponentOutlet } from '@angular/common';
-import { Component, DOCUMENT, Inject, Type, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DOCUMENT, Inject, Type, ViewContainerRef } from '@angular/core';
 import { ContentfulClientApi, createClient, Entry, EntryCollection, EntrySkeletonType } from 'contentful';
 import { stringify } from 'querystring';
 import { PageContentBlog } from '../page-content-blog/page-content-blog';
+import { CfPage } from '../../models/contentful-content-types/page';
+import { CfStandardPageConfig } from '../../models/contentful-content-types/standard-page-config';
 
 @Component({
   selector: 'app-dynamic-page',
   imports: [NgComponentOutlet],
   templateUrl: './dynamic-page.html',
-  styleUrl: './dynamic-page.scss'
+  styleUrl: './dynamic-page.scss',
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class DynamicPage {
-  pageEntries: Promise<Entry<EntrySkeletonType, undefined, string>>;
   contentType = "";
-  pageContent: any;
   fullPath = "";
-
-  standardPageConfig: Promise<Entry<EntrySkeletonType, undefined, string>>;
+  pageContent: CfPage;
+  standardPageConfig: CfStandardPageConfig;
   
   private contentfulClient: ContentfulClientApi<undefined>  = createClient({
       space: 'dbcppdxw8bib',//this.contentfulConfiguration.spaceId,
@@ -43,13 +44,12 @@ export class DynamicPage {
 
     this.fullPath = `${urlSubfolderNew}${slug}`;
 
-    this.pageEntries = this.getEntriesForPage(slug);
-
-    this.standardPageConfig = this.getStandardPageConfig();
+    this.getEntriesForPage(slug);
+    this.getStandardPageConfig();
   }
 
-  private getEntriesForPage(slug: string): Promise<Entry<EntrySkeletonType, undefined, string>> {
-    return this.contentfulClient.getEntries({
+  private getEntriesForPage(slug: string): void {
+    this.contentfulClient.getEntries({
       content_type: 'page',
       'fields.slug': slug,
       include: 6
@@ -62,21 +62,19 @@ export class DynamicPage {
         /* ctx.error({ message: 'Error 404', statusCode: 404 });
         return; */
       }
-      this.pageContent = pageObject?.fields ? pageObject.fields['content'] : {};
+      this.pageContent = pageObject?.fields ? pageObject.fields['content'] as CfPage : {};
       this.contentType = this.pageContent?.sys?.contentType?.sys?.id;
-      console.info("contentType", this.contentType)
-      return pageObject;
+      console.info("contentType", this.contentType);
     })
   }
 
-  private getStandardPageConfig(): Promise<Entry<EntrySkeletonType, undefined, string>> {
-    return this.contentfulClient.getEntries({
+  private getStandardPageConfig(): void {
+    this.contentfulClient.getEntries({
       content_type: 'standardPageConfig',
       include: 6
     }).then(response => {
-      const standardPageConfigObject = response?.items[0];
-      console.info("Standard Page Config", standardPageConfigObject);
-      return standardPageConfigObject;
+      this.standardPageConfig = response?.items[0] as CfStandardPageConfig;
+      console.info("Standard Page Config", this.standardPageConfig);
     })
   }
 
@@ -85,6 +83,7 @@ export class DynamicPage {
   }
 
   getPageComponentInputs(): Record<string, unknown> {
+    console.log("standardPageConfig footer", this.standardPageConfig?.fields?.footer)
     return {
       "data": this.pageContent,
       "fullPath": this.fullPath,
@@ -92,7 +91,7 @@ export class DynamicPage {
     }
   }
 
-  stringify(obj: any) {
+  /* stringify(obj: any) {
     return JSON.stringify(obj, this.getCircularReplacer(), 2);
   }
 
@@ -107,5 +106,5 @@ export class DynamicPage {
       }
       return value;
     };
-  }
+  } */
 }

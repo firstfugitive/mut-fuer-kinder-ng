@@ -1,0 +1,10 @@
+/* these modules should have standard spacing after  */
+$no-default-spacing: 
+    text-module,
+    markdown-text;
+
+@each $elemA in $no-default-spacing {
+    .page-header + .#{$elemA} {
+        margin-top: var(--height-header);
+    }
+}

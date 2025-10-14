@@ -1,0 +1,134 @@
+@use "fonts";
+@use "variables" as *;
+@use "placeholder";
+@use "module-spacings";
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+
+html {
+  box-sizing: border-box;
+  //font-family: "Gill Sans Book", "Arial";
+  //font-family: "iCiel Thin", "Arial";
+  font-family: "HomepageBaukasten Book", "Arial";
+  //font-family: "iCiel Medium", "Arial";
+  letter-spacing: .5px;
+  color: $dark-text;
+  line-height: 1.6rem;
+  @include mb-up($tablet-min) {
+    line-height: 1.8rem;
+  }
+  @include mb-up($desktop-min) {
+    line-height: 2rem;
+  }
+}
+
+
+p {
+  margin: 0;
+  padding: 0;
+  @extend %fontStandard;
+  /* font-size: 1.125rem;
+  line-height: 1.3em;
+  color: $color-design-grey;
+
+  @include mb-up($desktop-min) {
+    font-size: 1.25rem;
+  } */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+.u-headline1,
+.u-headline2,
+.u-headline3,
+.u-headline4,
+.u-headline5 {
+  font-family: "iCiel Medium", "Arial";
+  letter-spacing: 1.75px;
+  line-height: 1.1em;
+  margin-top: 10px;
+  margin-bottom: 5px;
+
+  &:first-child {
+    margin-top: unset;
+  }
+}
+
+h1,
+.u-headline1 {
+  font-size: 2.125rem;
+
+  @include mb-up($tablet-min) {
+    font-size: 2.625rem;
+  }
+
+  @include mb-up($desktop-min) {
+    font-size: 48px;
+  }
+
+  & + .u-subline {
+    @include mb-up($desktop-min) {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+h2,
+.u-headline2 {
+  font-size: 1.75rem;
+
+  @include mb-up($desktop-min) {
+    font-size: 2.25rem;
+  }
+
+  & + .u-subline {
+    @include mb-up($desktop-min) {
+      font-size: 1.375rem;
+    }
+  }
+}
+
+h3,
+.u-headline3 {
+  font-size: 1.5rem;
+
+  @include mb-up($desktop-min) {
+    font-size: 1.875rem;
+  }
+}
+
+h4,
+.u-headline4 {
+  font-size: 1.25rem;
+
+  @include mb-up($desktop-min) {
+    font-size: 1.375rem;
+  }
+}
+
+
+ul {
+  list-style: none;
+  margin: unset;
+  padding-inline-start: unset;
+  padding: unset;
+}
+
+.module {
+  @extend %module-spacing;
+}
+
+.arrow-bottom-wrapper {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: rotate(180deg);
+}

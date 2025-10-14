@@ -1,0 +1,138 @@
+$color-design-black: #1F2732;
+$color-design-very-dark-grey: #343D46;
+$color-design-dark-grey: #4F5B66;
+$color-design-grey: #606C78;
+$color-design-medium-grey: #6B7C8C;
+$color-design-very-light-grey: #aaaaaa;
+$color-design-very-very-light-grey: #e6e6e6e6;
+$color-design-light-grey: #A7ADBA;
+//this one is used in webmanifest without "transparent": #606164
+$color-design-transparent-grey: #a7adba77;
+$color-design-blue: #03A8D3;
+$color-design-light-blue: #84A3D5;
+$color-design-dark-blue: #043648;
+$color-design-background-medium: #0000008d;
+$color-design-background-light: #0000004a;
+
+$color-design-green: #00cb33;
+$color-paypal-button: #FFC44C;
+$color-paypal-button-bright: #ffd76a;
+
+$color-blue: #75b7c5;
+
+$color-design-background: #F5FAFE;
+$color-headings: #1f2732;
+
+$color-white: #ffffff;
+$color-very-soft-white: rgba(255, 255, 255, 0.25);
+$color-soft-white: rgba(255, 255, 255, 0.8);
+$color-transparent-white: rgba(255, 255, 255, 0.9);
+
+$dark-text: $color-design-grey;
+$bright-text: $color-soft-white;
+
+
+$max-width-desktop: 1440px;
+$max-width-desktop-content: 1200px;
+$max-width-tablet: 1024px;
+$max-width-tablet-content: 992px;
+
+$gutter-size: 2rem;
+$header-navigation-gutter-size: calc(#{$gutter-size} - 0.4rem);
+
+$mobile-max: 575px;
+$tablet-min: 576px;
+$tablet-max: 1023px;
+$desktop-min: 1024px;
+$desktop-extended: 1440px;
+
+
+:root {
+  & {
+    --height-header: 74px;
+    --module-max-content-width: 80%;
+  }
+
+  @media (min-width: $tablet-min) {
+    --height-header: 100px;
+  }
+
+  @media (min-width: $tablet-min) {
+    --module-max-content-width: 70%;
+  }
+
+  @media (min-width: $desktop-min) {
+    --module-max-content-width: 620px;
+  }
+
+  @media (min-width: $desktop-extended) {
+    --module-max-content-width: 700px;
+  }
+}
+
+@mixin mb-down($width) {
+  @media (max-width: $width) {
+    @content;
+  }
+}
+
+@mixin mb-up($width) {
+  @media (min-width: $width) {
+    @content;
+  }
+}
+
+@mixin two-color-gradient($color1, $color2) {
+  background: linear-gradient(135deg, $color1, $color2);
+}
+
+@mixin three-color-gradient($color1, $color2, $color3) {
+  background: linear-gradient(90deg, $color1 0%, $color2 40%, $color3 100%);
+}
+
+@mixin set-box-shadow {
+  box-shadow: 0 5px 12px 1px rgba(0, 0, 0, 0.07);
+  border-radius: 8px;
+}
+
+/* @mixin set-module-width {
+  margin-left: auto;
+  margin-right: auto;
+
+  @include mb-up($device-min-width-tablet) {
+    max-width: $max-width-tablet;
+  }
+
+  @include mb-up($device-min-width-desktop) {
+    max-width: $max-width-desktop;
+  }
+} */
+
+/* @mixin set-module-paddings {
+  @include media-breakpoint-less-than($device-max-width-mobile) {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  @include mb-up($device-min-width-tablet) {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
+  @include mb-up($device-min-width-desktop) {
+    padding-top: 75px;
+    padding-bottom: 75px;
+  }
+} */
+
+/* @mixin set-module-content-width {
+  @include media-breakpoint-less-than($device-min-width-desktop) {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  @include mb-up($device-min-width-desktop) {
+    padding-left: calc((#{$max-width-desktop} - #{$max-width-desktop-content}) / 2);
+    padding-right: calc((#{$max-width-desktop} - #{$max-width-desktop-content}) / 2);
+  }
+} */

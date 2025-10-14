@@ -1,0 +1,145 @@
+@use "variables" as *;
+
+%borderRadiusBox {
+  border-radius: 15px;
+}
+%borderRadiusButton {
+  border-radius: 50px;
+}
+
+%boxShadow {
+  box-shadow: 0 5px 12px 1px rgba(0,0,0,0.07);
+}
+
+%boxShadowHover {
+  box-shadow: 0 5px 12px 1px rgb(0 0 0 / 20%);
+}
+
+%fontGotham {
+  font-family: "iCiel Medium", "Arial";
+  letter-spacing: 2.5px;
+  line-height: 2rem;
+  @include mb-up($tablet-min) {
+    line-height: 2.2rem;
+  }
+  @include mb-up($desktop-min) {
+    line-height: 2.8rem;
+  }
+}
+
+%fontStandard {
+  font-family: "HomepageBaukasten Book", "Arial";
+  letter-spacing: .5px;
+  font-size: 0.9rem;
+  @include mb-up($tablet-min) {
+    font-size: 1.1rem;
+  }
+  @include mb-up($desktop-min) {
+    font-size: 1.25rem;
+  }
+}
+
+%fontBig {
+  font-size: 1.25rem;
+  @include mb-up($tablet-min) {
+    font-size: 1.5rem;
+  }
+  @include mb-up($desktop-min) {
+    font-size: 1.7rem;
+  }
+}
+
+%fontVeryBig {
+  font-size: 1.6rem;
+  @include mb-up($tablet-min) {
+    font-size: 2rem;
+  }
+  @include mb-up($desktop-min) {
+    font-size: 2.5rem;
+  }
+}
+
+%fontHeadline {
+  line-height: 50px;
+  font-size: 38px;
+  letter-spacing: 4px;
+  @include mb-up($tablet-min) {
+    font-size: 50px;
+    letter-spacing: 5px;
+    line-height: 65px;
+  }
+  @include mb-up($desktop-min) {
+    font-size: 65px;
+    letter-spacing: 6px;
+    line-height: 80px;
+    
+  }
+  /* @include mb-up($desktop-extended) {
+    font-size: 80px;
+    letter-spacing: 8px;
+    line-height: 90px;
+    
+  } */
+}
+
+%teaserCard {
+  transition: box-shadow 200ms;
+  text-decoration: none;
+
+  &:hover {
+    box-shadow: 0 5px 12px 1px rgb(0 0 0 / 20%);
+  }
+}
+
+%textbox-on-image {
+  text-align: center;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  min-width: 16rem;
+
+  background-color: $color-soft-white;
+  //border: 1px solid $color-design-black;
+  @extend %borderRadiusBox;
+  padding: 4% 6%;
+  @include mb-up($tablet-min) {
+    padding: 28px 30px;
+  }
+  @include mb-up($desktop-min) {
+    padding: 40px 50px;
+  }
+  
+  div~div {
+    margin-top: 7px;
+    @include mb-up($tablet-min) {
+      margin-top: 16px;
+    }
+  }
+}
+
+%link {
+  font-size: 1.125rem;
+  line-height: 1.1em;
+  color: $color-design-blue;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  @include mb-up($desktop-min) {
+    font-size: 1.25rem;
+  }
+}
+
+%module-spacing {
+  margin: 3rem auto;
+  max-width: var(--module-max-content-width);
+
+  
+  @include mb-up($desktop-min) {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+  }
+}

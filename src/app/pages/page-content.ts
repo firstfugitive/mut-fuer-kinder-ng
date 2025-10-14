@@ -1,10 +1,19 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { CfStandardPageConfig } from "../models/contentful-content-types/standard-page-config";
 
 @Component({
     template: "",
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export abstract class PageContent {
-    @Input() data: any;
-    @Input() fullPath: string = "";
-    @Input() standardPageConfig: any;
+export class PageContent {
+    @Input() fullPath: string;
+    @Input() standardPageConfig: CfStandardPageConfig;
+    
+    header() {
+        return this.standardPageConfig?.fields?.header;
+    }
+    
+    footer() {
+        return this.standardPageConfig?.fields?.footer;
+    }
 }
