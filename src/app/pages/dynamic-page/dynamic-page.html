@@ -1,3 +1,2 @@
 <p>dynamic-page works!</p>
-<pre>{{ stringify(standardPageConfig) }}</pre>
-<ng-template ></ng-template>
+<ng-container *ngComponentOutlet="getPageComponent(); inputs: getPageComponentInputs()" />

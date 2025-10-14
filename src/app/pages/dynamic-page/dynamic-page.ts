@@ -1,11 +1,12 @@
-import { AsyncPipe } from '@angular/common';
-import { Component, DOCUMENT, Inject } from '@angular/core';
+import { AsyncPipe, NgComponentOutlet } from '@angular/common';
+import { Component, DOCUMENT, Inject, Type, ViewContainerRef } from '@angular/core';
 import { ContentfulClientApi, createClient, Entry, EntryCollection, EntrySkeletonType } from 'contentful';
 import { stringify } from 'querystring';
+import { PageContentBlog } from '../page-content-blog/page-content-blog';
 
 @Component({
   selector: 'app-dynamic-page',
-  imports: [],
+  imports: [NgComponentOutlet],
   templateUrl: './dynamic-page.html',
   styleUrl: './dynamic-page.scss'
 })
@@ -13,6 +14,7 @@ export class DynamicPage {
   pageEntries: Promise<Entry<EntrySkeletonType, undefined, string>>;
   contentType = "";
   pageContent: any;
+  fullPath = "";
 
   standardPageConfig: Promise<Entry<EntrySkeletonType, undefined, string>>;
   
@@ -38,6 +40,8 @@ export class DynamicPage {
     //console.info('URL-SUBFOLDER', urlSubfolder);
     console.info('URL-SUBFOLDER new', urlSubfolderNew);
     console.info('SLUG', slug);
+
+    this.fullPath = `${urlSubfolderNew}${slug}`;
 
     this.pageEntries = this.getEntriesForPage(slug);
 
@@ -74,6 +78,18 @@ export class DynamicPage {
       console.info("Standard Page Config", standardPageConfigObject);
       return standardPageConfigObject;
     })
+  }
+
+  getPageComponent(): Type<any> {
+    return PageContentBlog;
+  }
+
+  getPageComponentInputs(): Record<string, unknown> {
+    return {
+      "data": this.pageContent,
+      "fullPath": this.fullPath,
+      "standardPageConfig": this.standardPageConfig
+    }
   }
 
   stringify(obj: any) {
