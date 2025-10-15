@@ -8,11 +8,11 @@ import { CfStandardPageConfig } from "../models/contentful-content-types/standar
 export class PageContent {
     @Input() fullPath: string;
     @Input() standardPageConfig: CfStandardPageConfig;
-    
+
     header() {
         return this.standardPageConfig?.fields?.header;
     }
-    
+
     footer() {
         return this.standardPageConfig?.fields?.footer;
     }

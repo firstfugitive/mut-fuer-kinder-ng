@@ -1,55 +1,67 @@
-import { AsyncPipe, NgComponentOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DOCUMENT, Inject, Type, ViewContainerRef } from '@angular/core';
-import { ContentfulClientApi, createClient, Entry, EntryCollection, EntrySkeletonType } from 'contentful';
-import { stringify } from 'querystring';
+import { NgComponentOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Type } from '@angular/core';
+import { ContentfulClientApi, createClient } from 'contentful';
 import { PageContentBlog } from '../page-content-blog/page-content-blog';
 import { CfPage } from '../../models/contentful-content-types/page';
 import { CfStandardPageConfig } from '../../models/contentful-content-types/standard-page-config';
+import { NavigationEnd, Router } from '@angular/router';
+import { debounceTime, filter } from 'rxjs';
 
 @Component({
   selector: 'app-dynamic-page',
   imports: [NgComponentOutlet],
   templateUrl: './dynamic-page.html',
-  styleUrl: './dynamic-page.scss',
-  changeDetection: ChangeDetectionStrategy.Default
+  styleUrl: './dynamic-page.scss'
 })
 export class DynamicPage {
   contentType = "";
   fullPath = "";
   pageContent: CfPage;
   standardPageConfig: CfStandardPageConfig;
-  
-  private contentfulClient: ContentfulClientApi<undefined>  = createClient({
-      space: 'dbcppdxw8bib',//this.contentfulConfiguration.spaceId,
-      accessToken: 'XIOUq8XaCeuhXgblbO1DA2mgHX-uo1bAseK-FZ6jqJQ',//this.contentfulConfiguration.accessToken,
-      host: 'cdn.contentful.com',//this.contentfulConfiguration.environment,
-      environment: 'master',
-      //resolveLinks: true,
-    });
+  pageComponent: Type<any>;
+  pageComponentInputs: Record<string, unknown>;
 
-  constructor(@Inject(DOCUMENT) private document: Document) {
-    const route = this.document.location.pathname;
+  private contentfulClient: ContentfulClientApi<undefined> = createClient({
+    space: 'dbcppdxw8bib',//this.contentfulConfiguration.spaceId,
+    accessToken: 'XIOUq8XaCeuhXgblbO1DA2mgHX-uo1bAseK-FZ6jqJQ',//this.contentfulConfiguration.accessToken,
+    host: 'cdn.contentful.com',//this.contentfulConfiguration.environment,
+    environment: 'master',
+    //resolveLinks: true,
+  });
 
-    const pathParts = route.split('/').filter(e => e !== '');
-    let slug = pathParts.reverse()[0];
-    //const urlSubfolder = route.substr(0, route.lastIndexOf(slug));
-    const urlSubfolderNew = route.substring(0, route.lastIndexOf(slug));
-    slug = slug || 'index';
-
-    console.info('ROUTE', route);
-    //console.info('NAME', ctx.route.name);
-    //console.info('URL-SUBFOLDER', urlSubfolder);
-    console.info('URL-SUBFOLDER new', urlSubfolderNew);
-    console.info('SLUG', slug);
-
-    this.fullPath = `${urlSubfolderNew}${slug}`;
-
-    this.getEntriesForPage(slug);
-    this.getStandardPageConfig();
+  constructor(private router: Router) {
+    this.loadInformationByRoute();
   }
 
-  private getEntriesForPage(slug: string): void {
-    this.contentfulClient.getEntries({
+  private loadInformationByRoute() {
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        debounceTime(200)
+      )
+      .subscribe((event: NavigationEnd) => {
+        const route = event.url;//router.url;
+        const pathParts = route.split('/').filter(e => e !== '');
+        let slug = pathParts.reverse()[0];
+        const urlSubfolder = route.substring(0, route.lastIndexOf(slug));
+        slug = slug || 'index';
+
+        console.info('ROUTE', route);
+        console.info('URL-SUBFOLDER', urlSubfolder);
+        console.info('SLUG', slug);
+
+        this.fullPath = `${urlSubfolder}${slug}`;
+        
+        Promise.all([this.getEntriesForPage(slug), this.getStandardPageConfig()])
+        .then(() => {
+          this.setPageComponent();
+          this.setPageComponentInputs();
+        })
+      });
+  }
+
+  private async getEntriesForPage(slug: string): Promise<void> {
+    await this.contentfulClient.getEntries({
       content_type: 'page',
       'fields.slug': slug,
       include: 6
@@ -68,8 +80,8 @@ export class DynamicPage {
     })
   }
 
-  private getStandardPageConfig(): void {
-    this.contentfulClient.getEntries({
+  private async getStandardPageConfig(): Promise<void> {
+    await this.contentfulClient.getEntries({
       content_type: 'standardPageConfig',
       include: 6
     }).then(response => {
@@ -78,33 +90,15 @@ export class DynamicPage {
     })
   }
 
-  getPageComponent(): Type<any> {
-    return PageContentBlog;
+  setPageComponent(): void {
+    this.pageComponent = PageContentBlog;
   }
 
-  getPageComponentInputs(): Record<string, unknown> {
-    console.log("standardPageConfig footer", this.standardPageConfig?.fields?.footer)
-    return {
+  setPageComponentInputs(): void {
+    this.pageComponentInputs = {
       "data": this.pageContent,
       "fullPath": this.fullPath,
       "standardPageConfig": this.standardPageConfig
     }
   }
-
-  /* stringify(obj: any) {
-    return JSON.stringify(obj, this.getCircularReplacer(), 2);
-  }
-
-  private getCircularReplacer = () => {
-    const seen = new WeakSet();
-    return (key: any, value: any) => {
-      if (typeof value === "object" && value !== null) {
-        if (seen.has(value)) {
-          return;
-        }
-        seen.add(value);
-      }
-      return value;
-    };
-  } */
 }
