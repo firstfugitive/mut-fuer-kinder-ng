@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, Input, signal } from '@angular/core';
 
 @Component({
   selector: 'app-base-text',
@@ -8,21 +8,19 @@ import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BaseText {
-  @Input() text: string;
-  @Input() align: string;
-  @Input() big = false;
-  @Input() headline = false;
-  @Input() bold = false;
-  @Input() gotham = false;
-  @Input() htmlTag: string;
+  text = input.required<string>();
+  align = input("");
+  big = input(false);
+  headline = input(false);
+  bold = input(false);
+  gotham = input(false);
+  htmlTag = input("");
 
-  get classes() {
-    return {
+  classes = computed(() => ({
       'base-text': true,
-      'base-text--big': this.big,
-      'base-text--headline': this.headline,
-      'base-text--bold': this.bold,
-      'base-text--gotham': this.gotham
-    }
-  }
+      'base-text--big': this.big(),
+      'base-text--headline': this.headline(),
+      'base-text--bold': this.bold(),
+      'base-text--gotham': this.gotham()
+  }))
 }

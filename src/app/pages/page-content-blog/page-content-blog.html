@@ -1,5 +1,5 @@
-<p>header</p>
-<p>Items: {{ data?.fields?.content?.length}}</p> 
-<img [src]="data?.fields?.image?.fields?.file?.url"/>
+<app-page-header [data]="header()"></app-page-header>
+<!-- <p>Items: {{ data?.fields?.content?.length}}</p> 
+<img [src]="data?.fields?.image?.fields?.file?.url"/> -->
 <p>footer</p>
 <app-page-footer [data]="footer()"></app-page-footer>

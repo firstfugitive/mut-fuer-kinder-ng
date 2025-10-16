@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
+import { CfPageHeader } from '../../../models/contentful-content-types/page-header';
 
 @Component({
   selector: 'app-page-header',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './page-header.scss'
 })
 export class PageHeader {
-
+  data = input<CfPageHeader>();
 }

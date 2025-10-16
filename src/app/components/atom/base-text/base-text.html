@@ -1,5 +1,5 @@
 <!-- Todo: add htmlTag with https://dev.to/builderio/how-to-dynamically-render-html-tags-in-angular-162-42b7 -->
-<div [class]="classes"
+<div [class]="classes()"
     [style]="align ? `text-align: ${align}` : ''">
-    {{ text }}
+    {{ text() }}
 </div>

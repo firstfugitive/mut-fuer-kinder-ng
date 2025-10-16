@@ -6,6 +6,7 @@ import { CfPage } from '../../models/contentful-content-types/page';
 import { CfStandardPageConfig } from '../../models/contentful-content-types/standard-page-config';
 import { NavigationEnd, Router } from '@angular/router';
 import { debounceTime, filter } from 'rxjs';
+import { PageContentHome } from '../page-content-home/page-content-home';
 
 @Component({
   selector: 'app-dynamic-page',
@@ -54,7 +55,7 @@ export class DynamicPage {
         
         Promise.all([this.getEntriesForPage(slug), this.getStandardPageConfig()])
         .then(() => {
-          this.setPageComponent();
+          this.pageComponent = this.getPageComponent();
           this.setPageComponentInputs();
         })
       });
@@ -90,13 +91,19 @@ export class DynamicPage {
     })
   }
 
-  setPageComponent(): void {
-    this.pageComponent = PageContentBlog;
+  getPageComponent(): Type<void> {
+    switch(this.contentType) {
+      case "pageContentBlog": 
+        return PageContentBlog;
+      case "pageContentHome":
+      default:
+        return PageContentHome;
+    }
   }
 
   setPageComponentInputs(): void {
     this.pageComponentInputs = {
-      "data": this.pageContent,
+      "pageContent": this.pageContent,
       "fullPath": this.fullPath,
       "standardPageConfig": this.standardPageConfig
     }

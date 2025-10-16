@@ -19,3 +19,11 @@ export interface CfPageContentBlogOverview extends CfContentType {
         content?: any[];
     }
 }
+
+export interface CfPageContentBlogHome extends CfContentType {
+    fields?: {
+        name?: EntryFields.Text;
+        heroImages?: Asset[];
+        content?: any[];
+    }
+}

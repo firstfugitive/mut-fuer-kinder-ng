@@ -1,0 +1,17 @@
+.base-image {
+  //display: block;
+  img {
+    //display: block;
+    height: auto;
+    /* -o-object-fit: contain;
+    object-fit: contain; */
+    width: 100%;
+  }
+  &-full-width img {
+    max-width: unset !important;
+    -o-object-fit: cover;
+    object-fit: cover;
+    width: 100svw;
+    height: 100svh;
+  }
+}

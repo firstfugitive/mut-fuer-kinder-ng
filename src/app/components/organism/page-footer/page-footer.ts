@@ -13,6 +13,7 @@ import { RouterModule } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PageFooter {
+  //todo make signal
   @Input() data: CfPageFooter;
 
   get copyright() {
