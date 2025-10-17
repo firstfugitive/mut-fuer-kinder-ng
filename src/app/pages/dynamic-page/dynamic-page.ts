@@ -7,7 +7,8 @@ import { CfStandardPageConfig } from '../../models/contentful-content-types/stan
 import { NavigationEnd, Router } from '@angular/router';
 import { debounceTime, filter } from 'rxjs';
 import { PageContentHome } from '../page-content-home/page-content-home';
-import { pageMock, standardPageConfigMock } from '../../models/mock.js';
+import { pageMock, standardPageConfigMock } from '../../components/shared/mock';
+import { getContentTypeFromEntry } from '../../components/shared/util';
 
 @Component({
   selector: 'app-dynamic-page',
@@ -87,7 +88,7 @@ export class DynamicPage {
       return; */
     }
     this.pageContent = pageObject?.fields ? pageObject.fields['content'] as CfPage : {};
-    this.contentType = this.pageContent?.sys?.contentType?.sys?.id;
+    this.contentType = getContentTypeFromEntry(this.pageContent);
     console.info("contentType", this.contentType);
   }
 
