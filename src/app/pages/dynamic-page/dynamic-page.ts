@@ -7,6 +7,7 @@ import { CfStandardPageConfig } from '../../models/contentful-content-types/stan
 import { NavigationEnd, Router } from '@angular/router';
 import { debounceTime, filter } from 'rxjs';
 import { PageContentHome } from '../page-content-home/page-content-home';
+import { pageMock, standardPageConfigMock } from '../../models/mock.js';
 
 @Component({
   selector: 'app-dynamic-page',
@@ -15,6 +16,7 @@ import { PageContentHome } from '../page-content-home/page-content-home';
   styleUrl: './dynamic-page.scss'
 })
 export class DynamicPage {
+  mock = false;
   contentType = "";
   fullPath = "";
   pageContent: CfPage;
@@ -52,48 +54,64 @@ export class DynamicPage {
         console.info('SLUG', slug);
 
         this.fullPath = `${urlSubfolder}${slug}`;
-        
+
         Promise.all([this.getEntriesForPage(slug), this.getStandardPageConfig()])
-        .then(() => {
-          this.pageComponent = this.getPageComponent();
-          this.setPageComponentInputs();
-        })
+          .then(() => {
+            this.pageComponent = this.getPageComponent();
+            this.setPageComponentInputs();
+          })
       });
   }
 
   private async getEntriesForPage(slug: string): Promise<void> {
+    if (this.mock) {
+      this.processEntriesForPage(pageMock);
+      return;
+    }
     await this.contentfulClient.getEntries({
       content_type: 'page',
       'fields.slug': slug,
       include: 6
     }).then(response => {
-      const pageObject = response?.items[0];
-      console.info("Page", pageObject);
-      //if page not able to be fetched -> probably 404 error
-      if (!pageObject) {
-        console.error('Error 404: Page could not be found.')
-        /* ctx.error({ message: 'Error 404', statusCode: 404 });
-        return; */
-      }
-      this.pageContent = pageObject?.fields ? pageObject.fields['content'] as CfPage : {};
-      this.contentType = this.pageContent?.sys?.contentType?.sys?.id;
-      console.info("contentType", this.contentType);
+      this.processEntriesForPage(response);
     })
   }
 
+  private processEntriesForPage(serviceReponse: any) {
+    const pageObject = serviceReponse?.items[0];
+    console.info("Page", pageObject);
+    //if page not able to be fetched -> probably 404 error
+    if (!pageObject) {
+      console.error('Error 404: Page could not be found.')
+      /* ctx.error({ message: 'Error 404', statusCode: 404 });
+      return; */
+    }
+    this.pageContent = pageObject?.fields ? pageObject.fields['content'] as CfPage : {};
+    this.contentType = this.pageContent?.sys?.contentType?.sys?.id;
+    console.info("contentType", this.contentType);
+  }
+
   private async getStandardPageConfig(): Promise<void> {
+    if(this.mock) {
+      this.processStandardPageConfig(standardPageConfigMock);
+      return;
+    }
     await this.contentfulClient.getEntries({
       content_type: 'standardPageConfig',
       include: 6
     }).then(response => {
-      this.standardPageConfig = response?.items[0] as CfStandardPageConfig;
-      console.info("Standard Page Config", this.standardPageConfig);
+      this.processStandardPageConfig(response);
     })
   }
 
+  private processStandardPageConfig(serviceResponse: any) {
+    this.standardPageConfig = serviceResponse?.items[0] as CfStandardPageConfig;
+    console.info("Standard Page Config", this.standardPageConfig);
+  }
+
   getPageComponent(): Type<void> {
-    switch(this.contentType) {
-      case "pageContentBlog": 
+    switch (this.contentType) {
+      case "pageContentBlog":
         return PageContentBlog;
       case "pageContentHome":
       default:
@@ -107,5 +125,22 @@ export class DynamicPage {
       "fullPath": this.fullPath,
       "standardPageConfig": this.standardPageConfig
     }
+  }
+
+  stringify(obj: any) {
+    return JSON.stringify(obj, this.getCircularReplacer(), 2);
+  }
+
+  private getCircularReplacer = () => {
+    const seen = new WeakSet();
+    return (key: any, value: any) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return;
+        }
+        seen.add(value);
+      }
+      return value;
+    };
   }
 }

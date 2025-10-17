@@ -12,13 +12,13 @@ export class BaseImage {
   width = input(0);
   height = input(0);
   lazyLoadDisabled = input(false);
-  fullSize = input(false);
+  fullWidth = input(false);
   smallSize = input(false);
 
   imageTitle = computed<string>(() => this.image()?.fields?.title?.toString());
   imageUrl = computed<string>(() => {
     const imageUrl = this.image()?.fields?.file?.url?.toString();
-    let imageUrlProcessed = this.fullSize() ? this.getContentfulUrl(imageUrl, this.fullSizeMd)
+    let imageUrlProcessed = this.fullWidth() ? this.getContentfulUrl(imageUrl, this.fullSizeMd)
       : this.getContentfulUrl(imageUrl, this.standardSizeMd);
     if (this.smallSize()) {
       imageUrlProcessed = this.getContentfulUrl(imageUrl, this.smallSizeMd);
@@ -45,7 +45,7 @@ export class BaseImage {
   
   sources = computed(() => {
     const imageUrlNoCf = this.image()?.fields?.file?.url?.toString();
-    if (this.fullSize()) {
+    if (this.fullWidth()) {
       const sourceListFullSize = [
         {
           srcset: this.getContentfulUrl(imageUrlNoCf, this.fullSizeXl),

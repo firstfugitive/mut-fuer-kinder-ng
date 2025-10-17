@@ -1,5 +1,4 @@
-<picture [class]="{'base-image': true, 'base-image-full-width': fullSize()}">
-    
+<picture [class]="{'base-image': true, 'base-image-full-width': fullWidth()}">
     @for(elem of sources(); track $index) {
         <source [srcset]="elem.srcset" [media]="elem.media" type="image/webp">
     }
