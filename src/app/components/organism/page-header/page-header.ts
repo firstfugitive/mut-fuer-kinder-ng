@@ -3,6 +3,7 @@ import { CfPageHeader } from '../../../models/contentful-content-types/page-head
 import { DynamicPageRoutingModule } from "../../../pages/dynamic-page/dynamic-page.routing.module";
 import { getUrlFromPage } from '../../shared/Util';
 import { CfNavigationElement } from '../../../models/contentful-content-types/navigation-element';
+import { BaseImage } from "../../atom/base-image/base-image";
 
 @Component({
   selector: 'app-page-header',
@@ -18,6 +19,7 @@ export class PageHeader {
 
   title = computed<string>(() => this.data()?.fields?.title);
   linkHome = computed<string>(() => getUrlFromPage(this.data()?.fields?.linkHome));
+  linkDonate = computed<string>(() => getUrlFromPage(this.data()?.fields?.linkDonate));
   navigationElements = computed<CfNavigationElement[]>(() => this.data()?.fields?.navigationElements)
 
   pageHeaderToggleMenu(e) {

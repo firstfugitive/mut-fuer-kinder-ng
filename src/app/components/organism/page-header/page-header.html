@@ -5,8 +5,14 @@
         </div>
         <header class="">
             <ul class="page-header__elements">
+                <li class="home-link">
+                    <a [routerLink]="linkHome()">
+                        <img src="/icon-192-inv.png" />
+                        {{ title() }}
+                    </a>
+                </li>
                 <li>
-                    <a [routerLink]="linkHome()">{{ title() }}</a>
+                    <a [routerLink]="linkDonate()">Spenden</a>
                 </li>
             </ul>
             <div (click)="pageHeaderToggleMenu($event)" class="page-header__menu-button">

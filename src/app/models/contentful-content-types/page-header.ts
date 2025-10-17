@@ -8,6 +8,7 @@ export interface CfPageHeader extends CfContentType {
         name?: EntryFields.Text;
         title?: EntryFields.Text;
         linkHome?: CfPage;
+        linkDonate?: CfPage;
         navigationElements?: CfNavigationElement[];
     }
 }

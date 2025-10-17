@@ -4,9 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && npm run cp-redirects",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "cp-redirects": "cp ./_redirects ./dist/mfk/browser/"
   },
   "prettier": {
     "printWidth": 100,
