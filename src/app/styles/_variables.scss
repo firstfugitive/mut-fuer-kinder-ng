@@ -49,12 +49,12 @@ $desktop-extended: 1440px;
 
 :root {
   & {
-    --height-header: 74px;
+    --height-header: 60px;
     --module-max-content-width: 80%;
   }
 
   @media (min-width: $tablet-min) {
-    --height-header: 100px;
+    --height-header: 80px;
   }
 
   @media (min-width: $tablet-min) {

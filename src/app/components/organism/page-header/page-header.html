@@ -1,1 +1,41 @@
-<p>page-header works!</p>
+<div class="page-header">
+    <div class="page-header__wrapper">
+        <div class="page-header__bg">
+            <div class="page-header__gradient"></div>
+        </div>
+        <header class="">
+            <ul class="page-header__elements">
+                <li>
+                    <a [routerLink]="linkHome()">{{ title() }}</a>
+                </li>
+            </ul>
+            <div (click)="pageHeaderToggleMenu($event)" class="page-header__menu-button">
+                <svg width="20" height="20" viewBox="0 0 20 20"
+                    [class]="{'page-header__menu-icon': true, 'page-header__menu-icon--active': menuActive}">
+                    <title>
+                        dots
+                    </title>
+                    <circle cx="10" cy="10" r="2" />
+                    <circle cx="3" cy="10" r="2" />
+                    <circle cx="17" cy="10" r="2" />
+                </svg>
+            </div>
+            <div [class]="{'page-header__menu': true, 'page-header__menu--active': menuActive}">
+                <ul class="page-header__menu-navigation">
+                    @for(elem of navigationElements(); track $index) {
+                    <li class="page-header__menu-element">
+                        @if(getNavElementUrl(elem) !== fullPath()) {
+                        <a [routerLink]="getNavElementUrl(elem)">{{getNavElementUrlText(elem)}}</a>
+                        }
+                        @if(getNavElementUrl(elem) === fullPath()) {
+                        <div (click)="pageHeaderToggleMenu($event)">
+                            {{getNavElementUrlText(elem)}}
+                        </div>
+                        }
+                    </li>
+                    }
+                </ul>
+            </div>
+        </header>
+    </div>
+</div>
