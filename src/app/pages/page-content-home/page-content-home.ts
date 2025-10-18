@@ -5,9 +5,8 @@ import { PageHeader } from '../../components/organism/page-header/page-header';
 import { CfPageContentBlogHome } from '../../models/contentful-content-types/page-content';
 import { Asset } from 'contentful';
 import { BaseImage } from "../../components/atom/base-image/base-image";
-import { CfTextModule } from '../../models/contentful-content-types/text-module';
 import { NgComponentOutlet } from '@angular/common';
-import { getContentTypeFromEntry } from '../../components/shared/utils';
+import { MarkdownText } from "../../components/molecule/markdown-text/markdown-text";
 
 @Component({
   selector: 'app-page-content-home',
@@ -16,16 +15,21 @@ import { getContentTypeFromEntry } from '../../components/shared/utils';
   styleUrl: './page-content-home.scss'
 })
 export class PageContentHome extends PageContent {
+  elementsIndices = [1,2]
   pageContent = input<CfPageContentBlogHome>();
 
   firstHeroImage = computed<Asset>(() => this.pageContent()?.fields?.heroImages[0]);
-  secondContentElement = computed<ContentElementData>(() => {
-    return {
-      component: this.getComponentOfEntry(this.pageContent()),
-      inputs: {
-        data: this.pageContent()?.fields?.content[1]
-      }
+  contentElements = computed<ContentElementData[]>(() => {
+    let contentElements: ContentElementData[] = []
+    for (const entry of this.pageContent()?.fields?.content) {
+      contentElements.push({
+        component: this.getComponentOfEntry(entry),
+        inputs: {
+          data: entry
+        }
+      });
     }
+    return contentElements;
   });
 }
 

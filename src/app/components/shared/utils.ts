@@ -2,6 +2,7 @@ import { Entry } from "contentful";
 import { CfPage } from "../../models/contentful-content-types/page";
 import { TextModule } from "../organism/text-module/text-module";
 import { Type } from "@angular/core";
+import { MarkdownText } from "../molecule/markdown-text/markdown-text";
 
 export const getUrlFromPage = (page: CfPage) => {
   if(page?.fields?.urlSubfolder?.fields?.path && page?.fields?.slug) {
@@ -19,6 +20,8 @@ export const mapContentTypeToComponent = (contentType: string): Type<void> => {
   switch(contentType) {
     case "textModule":
       return TextModule;
+    case "markdownText":
+      return MarkdownText;
     default:
       return TextModule;
   }

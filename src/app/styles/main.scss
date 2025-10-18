@@ -127,6 +127,7 @@ ul {
 
 .module {
   @extend %module-spacing;
+  display: block;
 }
 
 .arrow-bottom-wrapper {

@@ -1,4 +1,6 @@
 <app-page-header [data]="header()" [fullPath]="fullPath()"></app-page-header>
 <app-base-image [image]="firstHeroImage()" [lazyLoadDisabled]="true" [fullWidth]="true"></app-base-image>
-<ng-container *ngComponentOutlet="secondContentElement()?.component; inputs: secondContentElement()?.inputs" />
+@for(i of elementsIndices; track $index) {
+<ng-container *ngComponentOutlet="contentElements()[i]?.component; inputs: contentElements()[i]?.inputs" />
+}
 <app-page-footer [data]="footer()"></app-page-footer>
