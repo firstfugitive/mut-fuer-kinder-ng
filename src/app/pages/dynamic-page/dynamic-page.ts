@@ -8,7 +8,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { debounceTime, filter } from 'rxjs';
 import { PageContentHome } from '../page-content-home/page-content-home';
 import { pageMock, standardPageConfigMock } from '../../components/shared/mock';
-import { getContentTypeFromEntry } from '../../components/shared/util';
+import { getContentTypeFromEntry } from '../../components/shared/utils';
 
 @Component({
   selector: 'app-dynamic-page',

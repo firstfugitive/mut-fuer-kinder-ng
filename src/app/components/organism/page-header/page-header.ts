@@ -1,7 +1,7 @@
 import { Component, computed, input, Input } from '@angular/core';
 import { CfPageHeader } from '../../../models/contentful-content-types/page-header';
 import { DynamicPageRoutingModule } from "../../../pages/dynamic-page/dynamic-page.routing.module";
-import { getUrlFromPage } from '../../shared/util';
+import { getUrlFromPage } from '../../shared/utils';
 import { CfNavigationElement } from '../../../models/contentful-content-types/navigation-element';
 
 @Component({

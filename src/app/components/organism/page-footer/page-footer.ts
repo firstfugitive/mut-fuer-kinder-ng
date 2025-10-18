@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CfPageFooter } from '../../../models/contentful-content-types/page-footer';
-import { getUrlFromPage } from '../../shared/util';
+import { getUrlFromPage } from '../../shared/utils';
 import { DynamicPageRoutingModule } from "../../../pages/dynamic-page/dynamic-page.routing.module";
 import { BaseText } from "../../atom/base-text/base-text";
 import { RouterModule } from '@angular/router';

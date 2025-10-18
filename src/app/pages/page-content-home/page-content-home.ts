@@ -7,7 +7,7 @@ import { Asset } from 'contentful';
 import { BaseImage } from "../../components/atom/base-image/base-image";
 import { CfTextModule } from '../../models/contentful-content-types/text-module';
 import { NgComponentOutlet } from '@angular/common';
-import { getContentTypeFromEntry } from '../../components/shared/util';
+import { getContentTypeFromEntry } from '../../components/shared/utils';
 
 @Component({
   selector: 'app-page-content-home',
