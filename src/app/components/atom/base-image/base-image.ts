@@ -14,6 +14,7 @@ export class BaseImage {
   height = input(0);
   lazyLoadDisabled = input(false);
   fullWidth = input(false);
+  halfSize = input(false);
   smallSize = input(false);
 
   imageTitle = computed<string>(() => this.image()?.fields?.title?.toString());

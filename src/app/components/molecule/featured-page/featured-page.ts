@@ -11,7 +11,7 @@ import { BaseText } from '../../atom/base-text/base-text';
 
 @Component({
   selector: 'app-featured-page',
-  imports: [TextModule, MarkdownText, RouterModule, BaseText],
+  imports: [MarkdownText, RouterModule, BaseText],
   templateUrl: './featured-page.html',
   styleUrl: './featured-page.scss',
   host: {

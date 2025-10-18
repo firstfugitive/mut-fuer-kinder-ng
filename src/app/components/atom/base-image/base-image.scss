@@ -1,5 +1,12 @@
+@use "../../../styles/variables.scss" as *;
+
+:host {
+  text-align: center;
+}
+
 .base-image {
-  //display: block;
+  display: block;
+
   img {
     //display: block;
     height: auto;
@@ -7,11 +14,36 @@
     object-fit: contain; */
     width: 100%;
   }
+
   &-full-width img {
     max-width: 100%;
     -o-object-fit: cover;
     object-fit: cover;
     width: 100svw;
     height: 60svh;
+  }
+
+  &--half-size img {
+    width: 100%;
+
+    @include mb-up($tablet-min) {
+      width: 70%;
+    }
+
+    @include mb-up($desktop-min) {
+      width: 50%;
+    }
+  }
+
+  &--small-size img {
+    width: 50%;
+
+    @include mb-up($tablet-min) {
+      width: 200px;
+    }
+
+    @include mb-up($desktop-min) {
+      width: 250px;
+    }
   }
 }
