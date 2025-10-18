@@ -3,7 +3,6 @@ import { CfPageHeader } from '../../../models/contentful-content-types/page-head
 import { DynamicPageRoutingModule } from "../../../pages/dynamic-page/dynamic-page.routing.module";
 import { getUrlFromPage } from '../../shared/util';
 import { CfNavigationElement } from '../../../models/contentful-content-types/navigation-element';
-import { BaseImage } from "../../atom/base-image/base-image";
 
 @Component({
   selector: 'app-page-header',
