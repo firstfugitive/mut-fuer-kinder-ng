@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, input, Type } from "@angu
 import { CfStandardPageConfig } from "../models/contentful-content-types/standard-page-config";
 import { CfPageHeader } from "../models/contentful-content-types/page-header";
 import { CfPageFooter } from "../models/contentful-content-types/page-footer";
-import { getContentTypeFromEntry, mapContentTypeToComponent } from "../components/shared/utils";
+import { getContentTypeFromEntry } from "../components/shared/utils";
+import { mapContentTypeToComponent } from "../components/shared/mapping";
 
 @Component({
     template: "",

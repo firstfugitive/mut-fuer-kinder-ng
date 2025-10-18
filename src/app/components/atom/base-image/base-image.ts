@@ -1,5 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { Asset } from 'contentful';
+import { getImageUrl } from '../../shared/utils';
 
 @Component({
   selector: 'app-base-image',
@@ -17,7 +18,7 @@ export class BaseImage {
 
   imageTitle = computed<string>(() => this.image()?.fields?.title?.toString());
   imageUrl = computed<string>(() => {
-    const imageUrl = this.image()?.fields?.file?.url?.toString();
+    const imageUrl = getImageUrl(this.image());
     let imageUrlProcessed = this.fullWidth() ? this.getContentfulUrl(imageUrl, this.fullSizeMd)
       : this.getContentfulUrl(imageUrl, this.standardSizeMd);
     if (this.smallSize()) {
@@ -44,7 +45,7 @@ export class BaseImage {
 
   
   sources = computed(() => {
-    const imageUrlNoCf = this.image()?.fields?.file?.url?.toString();
+    const imageUrlNoCf = getImageUrl(this.image());
     if (this.fullWidth()) {
       const sourceListFullSize = [
         {

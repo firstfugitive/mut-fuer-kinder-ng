@@ -1,4 +1,4 @@
-import { Entry } from "contentful";
+import { Asset, Entry } from "contentful";
 import { CfPage } from "../../models/contentful-content-types/page";
 import { TextModule } from "../organism/text-module/text-module";
 import { Type } from "@angular/core";
@@ -16,15 +16,8 @@ export const getContentTypeFromEntry = (entry: Entry | CfPage | any) => {
   return entry?.sys?.contentType?.sys?.id;
 }
 
-export const mapContentTypeToComponent = (contentType: string): Type<void> => {
-  switch(contentType) {
-    case "textModule":
-      return TextModule;
-    case "markdownText":
-      return MarkdownText;
-    default:
-      return TextModule;
-  }
+export const getImageUrl = (image: Asset): string => {
+  return image?.fields?.file?.url?.toString();
 }
 
 export const formatDate = (rawDate: any) => {

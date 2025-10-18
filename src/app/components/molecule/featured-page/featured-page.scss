@@ -1,0 +1,59 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/placeholder.scss" as *;
+
+.featured-page-background {
+    background-color: $color-design-transparent-grey;
+    background-repeat: no-repeat;
+    //führt zu Problemen bei ios safari
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+
+    @supports (-webkit-touch-callout: none) {
+        /* CSS specific to iOS devices */
+        background-attachment: local;
+    }
+}
+
+.featured-page-wrapper {
+    background-color: $color-design-background-medium;
+}
+
+.featured-page {
+    color: $color-white;
+
+    a {
+        color: $color-white;
+    }
+
+    padding: 4rem 0;
+
+    &-headline {
+        margin-bottom: 1.5rem;
+
+        @include mb-up($tablet-min) {
+            margin-bottom: 2rem;
+        }
+
+        @include mb-up($desktop-min) {
+            margin-bottom: 2rem;
+        }
+    }
+
+    &-text {
+        margin-bottom: 2.5rem;
+
+        @include mb-up($tablet-min) {
+            margin-bottom: 3rem;
+        }
+
+        @include mb-up($desktop-min) {
+            margin-bottom: 3rem;
+        }
+    }
+
+    &-button {
+        margin: 0 auto;
+        max-width: 24rem;
+    }
+}

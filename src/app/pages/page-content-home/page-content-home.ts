@@ -15,7 +15,7 @@ import { MarkdownText } from "../../components/molecule/markdown-text/markdown-t
   styleUrl: './page-content-home.scss'
 })
 export class PageContentHome extends PageContent {
-  elementsIndices = [1,2]
+  elementsIndices = [1,2,3]
   pageContent = input<CfPageContentBlogHome>();
 
   firstHeroImage = computed<Asset>(() => this.pageContent()?.fields?.heroImages[0]);
