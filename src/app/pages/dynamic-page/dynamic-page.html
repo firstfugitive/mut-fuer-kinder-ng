@@ -1,1 +1,6 @@
 <ng-container *ngComponentOutlet="pageComponent; inputs: pageComponentInputs" />
+<div class="page-info">
+    <p>Path: {{ fullPath }}</p>
+    <p>Page name: {{ pageContent?.fields?.name }}</p>
+    <p>Page type: {{ contentType }}</p>
+</div>
