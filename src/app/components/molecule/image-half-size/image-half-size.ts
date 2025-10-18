@@ -6,8 +6,8 @@ import { BaseImage } from '../../atom/base-image/base-image';
 @Component({
   selector: 'app-image-half-size',
   imports: [BaseImage],
-  templateUrl: './image-half-size.html',
-  styleUrl: './image-half-size.scss',
+  template: '<app-base-image class="image-half-size-image" [image]="image()" [width]="700" [smallSize]="small() ? true : false" [halfSize]="true" />',
+  styles: '',
   host: {
     '[class]': "{'image-half-size': true, 'image-half-size--small': small()}",
   },

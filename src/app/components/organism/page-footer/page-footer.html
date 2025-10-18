@@ -1,11 +1,11 @@
 <footer class="page-footer">
     <div class="page-footer-links">
-        <a [routerLink]="imprintLink">
+        <a [routerLink]="imprintLink()">
             <app-base-text text="Impressum" [bold]="true"></app-base-text>
         </a>
-        <a [routerLink]="dataProtectionLink">
+        <a [routerLink]="dataProtectionLink()">
             <app-base-text text="Datenschutz" [bold]="true"></app-base-text>
         </a>
     </div>
-    <app-base-text [text]="copyright" ></app-base-text>
+    <app-base-text [text]="copyright()" ></app-base-text>
 </footer>

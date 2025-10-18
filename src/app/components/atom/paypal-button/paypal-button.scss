@@ -1,0 +1,39 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/placeholder.scss" as *;
+
+:host {
+  text-align: center;
+
+  .link {
+    margin-left: auto;
+    margin-right: auto;
+    text-decoration: none;
+    color: $color-design-black;
+    display: block;
+    position: relative;
+    padding: 1rem 2rem;
+    @extend %borderRadiusButton;
+    transition: background-color 0.5s;
+    background-color: $color-paypal-button;
+    max-width: 13rem;
+    @include mb-up($tablet-min) {
+      max-width: 18rem;
+    }
+    @include mb-up($desktop-min) {
+      max-width: 22rem;
+    }
+    &:hover {
+      background-color: $color-paypal-button-bright;
+    }
+    img {
+      width: 7rem;
+      @include mb-up($tablet-min) {
+        width: 10rem;
+      }
+      @include mb-up($desktop-min) {
+        width: 13rem;
+      }
+
+    }
+  }
+}

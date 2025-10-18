@@ -5,7 +5,7 @@ import { CfMarkdownText } from '../../../models/contentful-content-types/markdow
 @Component({
   selector: 'app-markdown-text',
   imports: [],
-  templateUrl: './markdown-text.html',
+  template: '<div [innerHTML]="parsedMarkdown()" [style]="`text-align: ${align()}`"></div>',
   styleUrl: './markdown-text.scss',
   host: {
     '[class.module]': '!noModule()',

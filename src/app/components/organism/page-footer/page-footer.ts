@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, Input } from '@angular/core';
 import { CfPageFooter } from '../../../models/contentful-content-types/page-footer';
 import { getUrlFromPage } from '../../shared/utils';
 import { DynamicPageRoutingModule } from "../../../pages/dynamic-page/dynamic-page.routing.module";
@@ -13,20 +13,9 @@ import { RouterModule } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PageFooter {
-  //todo make signal
-  @Input() data: CfPageFooter;
+  data = input<CfPageFooter>();
 
-  get copyright() {
-    return this.data?.fields?.copyright;
-  }
-
-  get imprintLink() {
-    const pageObject = this.data?.fields?.imprint;
-    return getUrlFromPage(pageObject);
-  }
-
-  get dataProtectionLink() {
-    const pageObject = this.data?.fields?.dataProtection;
-    return getUrlFromPage(pageObject);
-  }
+  copyright = computed<string>(() => this.data().fields?.copyright);
+  imprintLink = computed<string>(() => getUrlFromPage(this.data().fields?.imprint));
+  dataProtectionLink = computed<string>(() => getUrlFromPage(this.data().fields?.dataProtection));
 }

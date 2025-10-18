@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, Type } from '@angular/core';
+import { Component, computed, input, Type } from '@angular/core';
 import { PageContent } from '../page-content';
 import { PageFooter } from '../../components/organism/page-footer/page-footer';
 import { PageHeader } from '../../components/organism/page-header/page-header';
@@ -6,7 +6,6 @@ import { CfPageContentBlogHome } from '../../models/contentful-content-types/pag
 import { Asset } from 'contentful';
 import { BaseImage } from "../../components/atom/base-image/base-image";
 import { NgComponentOutlet } from '@angular/common';
-import { MarkdownText } from "../../components/molecule/markdown-text/markdown-text";
 
 @Component({
   selector: 'app-page-content-home',
@@ -15,7 +14,7 @@ import { MarkdownText } from "../../components/molecule/markdown-text/markdown-t
   styleUrl: './page-content-home.scss'
 })
 export class PageContentHome extends PageContent {
-  elementsIndices = [1,2,3,4,5,6,7,8,9]
+  elementsIndices = [1,2,3,4,5,6,7,8,9,10,11,12,13]
   pageContent = input<CfPageContentBlogHome>();
 
   firstHeroImage = computed<Asset>(() => this.pageContent()?.fields?.heroImages[0]);
