@@ -7,13 +7,15 @@ import { ButtonModule } from "../molecule/button-module/button-module";
 import { PageContentBlog } from "../../pages/page-content-blog/page-content-blog";
 import { PageContentHome } from "../../pages/page-content-home/page-content-home";
 import { PageContentStandard } from "../../pages/page-content-standard/page-content-standard";
+import { ImagePerson } from "../molecule/image-person/image-person";
 
 const contentTypeEntryMap = {
     "textModule": TextModule,
     "markdownText": MarkdownText,
     "featuredPage": FeaturedPage,
     "imageHalfSize": ImageHalfSize,
-    "buttonModule": ButtonModule
+    "buttonModule": ButtonModule,
+    "imagePerson": ImagePerson
 };
 
 const contentTypePageMap = {

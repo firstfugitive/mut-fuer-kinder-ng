@@ -3,6 +3,8 @@ import { CfPageHeader } from '../../../models/contentful-content-types/page-head
 import { DynamicPageRoutingModule } from "../../../pages/dynamic-page/dynamic-page.routing.module";
 import { getUrlFromPage } from '../../shared/utils';
 import { CfNavigationElement } from '../../../models/contentful-content-types/navigation-element';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-page-header',
@@ -21,17 +23,27 @@ export class PageHeader {
   linkDonate = computed<string>(() => getUrlFromPage(this.data()?.fields?.linkDonate));
   navigationElements = computed<CfNavigationElement[]>(() => this.data()?.fields?.navigationElements)
 
-  pageHeaderToggleMenu(e) {
-    e.preventDefault();
+constructor(private router: Router) {
+  this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd)
+      )
+      .subscribe((event: NavigationEnd) => {
+        this.menuActive = false;
+      });
+  }
+
+  pageHeaderToggleMenu(event: MouseEvent) {
+    event.preventDefault();
     this.menuActive = !this.menuActive;
   }
 
-  getNavElementUrl(element) {
-    let linkPage = element?.fields?.link;
+  getNavElementUrl(element: CfNavigationElement) {
+    const linkPage = element?.fields?.link;
     return getUrlFromPage(linkPage);
   }
 
-  getNavElementUrlText(element) {
+  getNavElementUrlText(element: CfNavigationElement) {
     return element?.fields?.title;
   }
 }
