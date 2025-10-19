@@ -1,6 +1,10 @@
 @use "../../../styles/variables" as *;
 @use "../../../styles/placeholder.scss" as *;
 
+:host {
+  display: block;
+}
+
 .base-text {
   &:not(.base-text--big, .base-text--headline) {
     @include mb-down($mobile-max) {

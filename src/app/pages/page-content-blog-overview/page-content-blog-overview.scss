@@ -1,0 +1,30 @@
+@use "../../styles/variables" as *;
+@use "../../styles/placeholder.scss" as *;
+
+.content-blog-overview {
+  &__intro  {
+    display: block;
+    margin-top: calc(var(--height-header) + 25px);
+    margin-bottom: 4rem;
+    text-align: center;
+  }
+  &__blogs {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: stretch;
+    margin: 0 5%;
+    gap: 1.5rem;
+    @include mb-up($tablet-min) {
+      margin: 0 1.5rem;
+      gap: 2rem;
+    }
+    @include mb-up($desktop-min) {
+      margin: 0 4rem;
+      gap: 3rem;
+    }
+    @include mb-up($desktop-extended) {
+      margin: 0 15rem;
+    }
+  }
+}

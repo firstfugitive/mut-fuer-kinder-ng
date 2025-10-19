@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, input, Input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, input, Input, signal, viewChild, ViewEncapsulation } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'app-base-text',
-  imports: [],
+  imports: [NgTemplateOutlet],
   templateUrl: './base-text.html',
-  styleUrl: './base-text.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrl: './base-text.scss'
 })
 export class BaseText {
   text = input.required<string>();

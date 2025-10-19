@@ -11,7 +11,6 @@ import { NgComponentOutlet } from '@angular/common';
   selector: 'app-page-content-home',
   imports: [PageFooter, PageHeader, BaseImage, NgComponentOutlet],
   templateUrl: './page-content-home.html',
-  styleUrl: './page-content-home.scss'
 })
 export class PageContentHome extends PageContent {
   override pageContent = input<CfPageContentHome>();

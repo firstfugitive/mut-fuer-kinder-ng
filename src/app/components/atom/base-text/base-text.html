@@ -1,5 +1,17 @@
 <!-- Todo: add htmlTag with https://dev.to/builderio/how-to-dynamically-render-html-tags-in-angular-162-42b7 -->
-<div [class]="classes()"
-    [style]="align ? `text-align: ${align()}` : ''">
-    {{ text() }}
-</div>
+<ng-template #content>
+        {{ text() }}
+</ng-template>
+
+@if(htmlTag() === "h1") {
+<h1 [class]="classes()" [style]="align ? `text-align: ${align()}` : ''"><ng-container *ngTemplateOutlet="content"></ng-container></h1>
+}
+@else if(htmlTag() === "h2") {
+<h2 [class]="classes()" [style]="align ? `text-align: ${align()}` : ''"><ng-container *ngTemplateOutlet="content"></ng-container></h2>
+}
+@else if(htmlTag() === "h3") {
+<h3 [class]="classes()" [style]="align ? `text-align: ${align()}` : ''"><ng-container *ngTemplateOutlet="content"></ng-container></h3>
+}
+@else {
+<div [class]="classes()" [style]="align ? `text-align: ${align()}` : ''"><ng-container *ngTemplateOutlet="content"></ng-container></div>
+}

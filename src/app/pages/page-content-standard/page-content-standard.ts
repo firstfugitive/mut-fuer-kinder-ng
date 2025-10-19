@@ -9,7 +9,10 @@ import { NgComponentOutlet } from '@angular/common';
   selector: 'app-page-content-standard',
   imports: [PageFooter, PageHeader, NgComponentOutlet],
   templateUrl: './page-content-standard.html',
-  styleUrl: './page-content-standard.scss'
+  styles: `
+  .content-standard-spacer {
+    min-height: calc(var(--height-header) - 20px);
+  }`
 })
 export class PageContentStandard extends PageContent {
   override pageContent = input<CfPageContentStandard>();

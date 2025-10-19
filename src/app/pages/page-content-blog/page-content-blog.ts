@@ -11,7 +11,6 @@ import { NgComponentOutlet } from '@angular/common';
   selector: 'app-page-content-blog',
   imports: [PageFooter, PageHeader, BaseImage, NgComponentOutlet],
   templateUrl: './page-content-blog.html',
-  styleUrl: './page-content-blog.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PageContentBlog extends PageContent {

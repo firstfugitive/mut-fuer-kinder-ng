@@ -8,6 +8,7 @@ import { PageContentBlog } from "../../pages/page-content-blog/page-content-blog
 import { PageContentHome } from "../../pages/page-content-home/page-content-home";
 import { PageContentStandard } from "../../pages/page-content-standard/page-content-standard";
 import { ImagePerson } from "../molecule/image-person/image-person";
+import { PageContentBlogOverview } from "../../pages/page-content-blog-overview/page-content-blog-overview";
 
 const contentTypeEntryMap = {
     "textModule": TextModule,
@@ -20,8 +21,10 @@ const contentTypeEntryMap = {
 
 const contentTypePageMap = {
     "pageContentBlog": PageContentBlog,
+    "pageContentBlogOverview": PageContentBlogOverview,
     "pageContentHome": PageContentHome,
-    "pageContentStandard": PageContentStandard
+    "pageContentStandard": PageContentStandard,
+
 };
 
 export const mapContentTypeToComponent = (contentType: string): Type<void> => {

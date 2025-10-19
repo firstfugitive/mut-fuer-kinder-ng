@@ -5,8 +5,10 @@ import { BaseText } from "../../atom/base-text/base-text";
 @Component({
   selector: 'app-text-module',
   imports: [BaseText],
-  templateUrl: './text-module.html',
-  styleUrl: './text-module.scss'
+  template: `
+  <app-base-text class="module" [text]="text()" [big]="big()" [bold]="bold()" [gotham]="gotham()" [align]="align()"
+    [htmlTag]="htmlTag()">
+  `
 })
 export class TextModule {
   data = input<CfTextModule>();

@@ -1,7 +1,7 @@
 <div class="featured-page-wrapper">
     <div class="module featured-page">
         @if(headline()) {
-            <app-base-text class="module" [text]="this.headline()" [big]="true" [bold]="true" [headline]="true" [gotham]="true" [align]="'center'" [htmlTag]="'h3'"></app-base-text>
+            <app-base-text class="featured-page-headline" [text]="this.headline()" [big]="true" [bold]="true" [headline]="true" [gotham]="true" [align]="'center'" [htmlTag]="'h3'"></app-base-text>
         }
 
         <app-markdown-text class="featured-page-text" [data]="text()" [noModule]="true">
