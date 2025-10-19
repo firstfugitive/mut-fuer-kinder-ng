@@ -9,15 +9,36 @@ import { mapContentTypeToComponent } from "../components/shared/mapping";
     template: "",
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PageContent {
+export abstract class PageContent {
     fullPath = input<string>();
     standardPageConfig = input<CfStandardPageConfig>();
+    pageContent = input<any>();
 
     header = computed<CfPageHeader>(() => this.standardPageConfig()?.fields?.header);
     footer = computed<CfPageFooter>(() => this.standardPageConfig()?.fields?.footer);
+
+    contentElements = computed<ContentElementData[]>(() => {
+        let contentElements: ContentElementData[] = []
+        for (const entry of this.pageContent()?.fields?.content) {
+            contentElements.push({
+                component: this.getComponentOfEntry(entry),
+                inputs: {
+                    data: entry
+                }
+            });
+        }
+        return contentElements;
+    });
 
     getComponentOfEntry(entry: any): Type<void> {
         const contentType = getContentTypeFromEntry(entry);
         return mapContentTypeToComponent(contentType);
     }
+}
+
+export interface ContentElementData {
+    component: Type<void>;
+    inputs: {
+        data: any;
+    };
 }

@@ -20,10 +20,17 @@ export interface CfPageContentBlogOverview extends CfContentType {
     }
 }
 
-export interface CfPageContentBlogHome extends CfContentType {
+export interface CfPageContentHome extends CfContentType {
     fields?: {
         name?: EntryFields.Text;
         heroImages?: Asset[];
+        content?: any[];
+    }
+}
+
+export interface CfPageContentStandard extends CfContentType {
+    fields?: {
+        name?: EntryFields.Text;
         content?: any[];
     }
 }

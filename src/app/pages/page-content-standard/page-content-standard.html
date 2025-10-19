@@ -1,5 +1,5 @@
 <app-page-header [data]="header()" [fullPath]="fullPath()"></app-page-header>
-<app-base-image [image]="firstHeroImage()" [lazyLoadDisabled]="true" [fullWidth]="true"></app-base-image>
+<div class="content-standard-spacer"></div>
 @for(element of contentElements(); track $index) {
 <ng-container *ngComponentOutlet="element?.component; inputs: element?.inputs" />
 }

@@ -9,6 +9,7 @@ import { debounceTime, filter } from 'rxjs';
 import { PageContentHome } from '../page-content-home/page-content-home';
 import { pageMock, standardPageConfigMock } from '../../components/shared/mock';
 import { getContentTypeFromEntry } from '../../components/shared/utils';
+import { mapContentTypePageToComponent } from '../../components/shared/mapping';
 
 @Component({
   selector: 'app-dynamic-page',
@@ -58,7 +59,7 @@ export class DynamicPage {
 
         Promise.all([this.getEntriesForPage(slug), this.getStandardPageConfig()])
           .then(() => {
-            this.pageComponent = this.getPageComponent();
+            this.pageComponent = mapContentTypePageToComponent(this.contentType);
             this.setPageComponentInputs();
           })
       });
@@ -108,16 +109,6 @@ export class DynamicPage {
   private processStandardPageConfig(serviceResponse: any) {
     this.standardPageConfig = serviceResponse?.items[0] as CfStandardPageConfig;
     console.info("Standard Page Config", this.standardPageConfig);
-  }
-
-  getPageComponent(): Type<void> {
-    switch (this.contentType) {
-      case "pageContentBlog":
-        return PageContentBlog;
-      case "pageContentHome":
-      default:
-        return PageContentHome;
-    }
   }
 
   setPageComponentInputs(): void {

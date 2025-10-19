@@ -5,16 +5,17 @@ import { CfPageContentBlog } from '../../models/contentful-content-types/page-co
 import { PageHeader } from '../../components/organism/page-header/page-header';
 import { Asset } from 'contentful';
 import { BaseImage } from '../../components/atom/base-image/base-image';
+import { NgComponentOutlet } from '@angular/common';
 
 @Component({
   selector: 'app-page-content-blog',
-  imports: [PageFooter, PageHeader, BaseImage],
+  imports: [PageFooter, PageHeader, BaseImage, NgComponentOutlet],
   templateUrl: './page-content-blog.html',
   styleUrl: './page-content-blog.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PageContentBlog extends PageContent {
-  pageContent = input<CfPageContentBlog>();
+  override pageContent = input<CfPageContentBlog>();
 
   heroImage = computed<Asset>(() => this.pageContent()?.fields?.image);
 

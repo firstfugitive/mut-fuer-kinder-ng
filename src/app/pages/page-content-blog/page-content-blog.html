@@ -1,4 +1,6 @@
 <app-page-header [data]="header()" [fullPath]="fullPath()"></app-page-header>
 <app-base-image [image]="heroImage()" [lazyLoadDisabled]="true" [fullWidth]="true"></app-base-image>
-
+@for(element of contentElements(); track $index) {
+<ng-container *ngComponentOutlet="element?.component; inputs: element?.inputs" />
+}
 <app-page-footer [data]="footer()"></app-page-footer>
