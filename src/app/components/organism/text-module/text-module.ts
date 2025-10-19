@@ -6,12 +6,14 @@ import { BaseText } from "../../atom/base-text/base-text";
   selector: 'app-text-module',
   imports: [BaseText],
   template: `
-  <app-base-text class="module" [text]="text()" [big]="big()" [bold]="bold()" [gotham]="gotham()" [align]="align()"
+  <app-base-text class="module" [text]="text() === textToReplace ? replaceWith : text()" [big]="big()" [bold]="bold()" [gotham]="gotham()" [align]="align()"
     [htmlTag]="htmlTag()">
   `
 })
 export class TextModule {
   data = input<CfTextModule>();
+  textToReplace = "$Bildung/Chancen/Zukunft/Hoffnung$für Kinder."
+  replaceWith = "Hoffnung für Kinder."
 
   text = computed<string>(() => this.data()?.fields?.text);
   big = computed<boolean>(() => this.data()?.fields?.big);
