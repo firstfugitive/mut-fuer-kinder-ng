@@ -14,17 +14,10 @@ html {
   box-sizing: border-box;
   //font-family: "Gill Sans Book", "Arial";
   //font-family: "iCiel Thin", "Arial";
-  font-family: "HomepageBaukasten Book", "Arial";
+  @extend %fontText;
+  @extend %fontStandard;
   //font-family: "iCiel Medium", "Arial";
-  letter-spacing: .5px;
   color: $dark-text;
-  line-height: 1.6rem;
-  @include mb-up($tablet-min) {
-    line-height: 1.8rem;
-  }
-  @include mb-up($desktop-min) {
-    line-height: 2rem;
-  }
 }
 
 body {
@@ -54,9 +47,8 @@ h5,
 .u-headline3,
 .u-headline4,
 .u-headline5 {
-  font-family: "iCiel Medium", "Arial";
-  letter-spacing: 1.75px;
-  line-height: 1.1em;
+  @extend %fontGotham;
+
   margin-top: 10px;
   margin-bottom: 5px;
 

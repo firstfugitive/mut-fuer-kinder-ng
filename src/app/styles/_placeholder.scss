@@ -3,12 +3,13 @@
 %borderRadiusBox {
   border-radius: 15px;
 }
+
 %borderRadiusButton {
   border-radius: 50px;
 }
 
 %boxShadow {
-  box-shadow: 0 5px 12px 1px rgba(0,0,0,0.07);
+  box-shadow: 0 5px 12px 1px rgba(0, 0, 0, 0.07);
 }
 
 %boxShadowHover {
@@ -16,70 +17,76 @@
 }
 
 %fontGotham {
-  font-family: "iCiel Medium", "Arial";
-  letter-spacing: 2.5px;
-  line-height: 2rem;
+  font-family: "Open Sans", "Arial";
+  letter-spacing: 1px;
+  line-height: 16px;
+
   @include mb-up($tablet-min) {
-    line-height: 2.2rem;
+    letter-spacing: 1px;
+    line-height: 35px;
   }
+
   @include mb-up($desktop-min) {
-    line-height: 2.8rem;
+    letter-spacing: 2px;
+    line-height: 44px;
   }
 }
 
+%fontText {
+  font-family: "Lora", "Arial";
+  letter-spacing: 0px;
+}
+
 %fontStandard {
-  font-family: "HomepageBaukasten Book", "Arial";
-  letter-spacing: .5px;
-  font-size: 0.9rem;
+  font-size: 13px;
+
   @include mb-up($tablet-min) {
-    font-size: 1.1rem;
+    font-size: 16px;
   }
+
   @include mb-up($desktop-min) {
-    font-size: 1.25rem;
+    font-size: 18px;
   }
 }
 
 %fontBig {
-  font-size: 1.25rem;
+  font-size: 20px;
+
   @include mb-up($tablet-min) {
-    font-size: 1.5rem;
+    font-size: 24px;
   }
+
   @include mb-up($desktop-min) {
-    font-size: 1.7rem;
+    font-size: 27px;
   }
 }
 
 %fontVeryBig {
-  font-size: 1.6rem;
+  font-size: 25px;
+
   @include mb-up($tablet-min) {
-    font-size: 2rem;
+    font-size: 32px;
   }
+
   @include mb-up($desktop-min) {
-    font-size: 2.5rem;
+    font-size: 40px;
   }
 }
 
 %fontHeadline {
-  line-height: 50px;
   font-size: 38px;
-  letter-spacing: 4px;
+  line-height: 50px;
+
   @include mb-up($tablet-min) {
     font-size: 50px;
-    letter-spacing: 5px;
     line-height: 65px;
   }
+
   @include mb-up($desktop-min) {
     font-size: 65px;
-    letter-spacing: 6px;
     line-height: 80px;
-    
+
   }
-  /* @include mb-up($desktop-extended) {
-    font-size: 80px;
-    letter-spacing: 8px;
-    line-height: 90px;
-    
-  } */
 }
 
 %teaserCard {
@@ -103,15 +110,18 @@
   //border: 1px solid $color-design-black;
   @extend %borderRadiusBox;
   padding: 4% 6%;
+
   @include mb-up($tablet-min) {
     padding: 28px 30px;
   }
+
   @include mb-up($desktop-min) {
     padding: 40px 50px;
   }
-  
+
   div~div {
     margin-top: 7px;
+
     @include mb-up($tablet-min) {
       margin-top: 16px;
     }
@@ -137,7 +147,7 @@
   margin: 3rem auto;
   max-width: var(--module-max-content-width);
 
-  
+
   @include mb-up($desktop-min) {
     margin-top: 4rem;
     margin-bottom: 4rem;
