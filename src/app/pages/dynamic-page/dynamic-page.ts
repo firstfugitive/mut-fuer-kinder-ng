@@ -10,6 +10,7 @@ import { PageContentHome } from '../page-content-home/page-content-home';
 import { pageMock, standardPageConfigMock } from '../../components/shared/mock';
 import { getContentTypeFromEntry } from '../../components/shared/utils';
 import { mapContentTypePageToComponent } from '../../components/shared/mapping';
+import { contentfulClient } from '../../components/shared/contentful';
 
 @Component({
   selector: 'app-dynamic-page',
@@ -25,14 +26,6 @@ export class DynamicPage {
   standardPageConfig: CfStandardPageConfig;
   pageComponent: Type<any>;
   pageComponentInputs: Record<string, unknown>;
-
-  private contentfulClient: ContentfulClientApi<undefined> = createClient({
-    space: 'dbcppdxw8bib',//this.contentfulConfiguration.spaceId,
-    accessToken: 'XIOUq8XaCeuhXgblbO1DA2mgHX-uo1bAseK-FZ6jqJQ',//this.contentfulConfiguration.accessToken,
-    host: 'cdn.contentful.com',//this.contentfulConfiguration.environment,
-    environment: 'master',
-    //resolveLinks: true,
-  });
 
   constructor(private router: Router) {
     this.loadInformationByRoute();
@@ -70,7 +63,7 @@ export class DynamicPage {
       this.processEntriesForPage(pageMock);
       return;
     }
-    await this.contentfulClient.getEntries({
+    await contentfulClient.getEntries({
       content_type: 'page',
       'fields.slug': slug,
       include: 6
@@ -98,7 +91,7 @@ export class DynamicPage {
       this.processStandardPageConfig(standardPageConfigMock);
       return;
     }
-    await this.contentfulClient.getEntries({
+    await contentfulClient.getEntries({
       content_type: 'standardPageConfig',
       include: 6
     }).then(response => {
