@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { CfPageFooter } from '../../../models/contentful-content-types/page-footer';
 import { getUrlFromPage } from '../../shared/utils';
 import { DynamicPageRoutingModule } from "../../../pages/dynamic-page/dynamic-page.routing.module";
@@ -9,8 +9,7 @@ import { RouterModule } from '@angular/router';
   selector: 'app-page-footer',
   imports: [DynamicPageRoutingModule, BaseText, RouterModule],
   templateUrl: './page-footer.html',
-  styleUrl: './page-footer.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrl: './page-footer.scss'
 })
 export class PageFooter {
   data = input<CfPageFooter>();

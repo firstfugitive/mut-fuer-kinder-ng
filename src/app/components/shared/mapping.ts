@@ -9,6 +9,7 @@ import { PageContentHome } from "../../pages/page-content-home/page-content-home
 import { PageContentStandard } from "../../pages/page-content-standard/page-content-standard";
 import { ImagePerson } from "../molecule/image-person/image-person";
 import { PageContentBlogOverview } from "../../pages/page-content-blog-overview/page-content-blog-overview";
+import { SliderHalfSize } from "../organism/slider-half-size/slider-half-size";
 
 const contentTypeEntryMap = {
     "textModule": TextModule,
@@ -16,7 +17,8 @@ const contentTypeEntryMap = {
     "featuredPage": FeaturedPage,
     "imageHalfSize": ImageHalfSize,
     "buttonModule": ButtonModule,
-    "imagePerson": ImagePerson
+    "imagePerson": ImagePerson,
+    "sliderHalfSize": SliderHalfSize
 };
 
 const contentTypePageMap = {

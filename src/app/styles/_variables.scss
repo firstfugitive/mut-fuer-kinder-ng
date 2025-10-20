@@ -50,7 +50,7 @@ $desktop-extended: 1440px;
 :root {
   & {
     --height-header: 60px;
-    --module-max-content-width: 80%;
+    --module-max-content-width: 90%;
   }
 
   @media (min-width: $tablet-min) {
@@ -58,15 +58,15 @@ $desktop-extended: 1440px;
   }
 
   @media (min-width: $tablet-min) {
-    --module-max-content-width: 70%;
+    --module-max-content-width: 80%;
   }
 
   @media (min-width: $desktop-min) {
-    --module-max-content-width: 620px;
+    --module-max-content-width: 700px;
   }
 
   @media (min-width: $desktop-extended) {
-    --module-max-content-width: 700px;
+    --module-max-content-width: 800px;
   }
 }
 

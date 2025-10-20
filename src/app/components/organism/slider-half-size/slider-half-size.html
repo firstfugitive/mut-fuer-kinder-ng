@@ -1,0 +1,9 @@
+<swiper-container class="mfk-swiper" navigation="true" [pagination]="{clickable: true}" rewind="true" autoplay="false" >
+    @for(image of images(); track image?.sys?.id) {
+    <swiper-slide>
+        <div [class]="{'slider-half-size-slide': true, 'slider-half-size-slide--small': small()}">
+            <app-base-image class="slider-half-size-image" [image]="image" />
+        </div>
+    </swiper-slide>
+    }
+</swiper-container>
