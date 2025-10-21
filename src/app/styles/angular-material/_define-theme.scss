@@ -1,0 +1,13 @@
+@use '@angular/material' as mat;
+@use "./colors" as c;
+
+:root {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: c.$primary-palette
+    ),
+    typography: "Open Sans",
+    density: 0,
+  ));
+}

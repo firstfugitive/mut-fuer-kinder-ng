@@ -1,0 +1,9 @@
+@use "@angular/material" as mat;
+
+.mat-raised-button--primary {
+  @include mat.button-overrides((
+    protected-container-color: var(--mat-sys-primary),
+    protected-label-text-color: var(--mat-sys-on-primary),
+    protected-ripple-color: var(--mat-sys-on-primary-container),
+  ));
+}

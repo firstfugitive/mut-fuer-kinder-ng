@@ -1,0 +1,7 @@
+@use "@angular/material" as mat;
+
+.mat-expansion--large-header {
+  @include mat.expansion-overrides((
+    header-collapsed-state-height: 4rem,
+  ));
+}
