@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 $color-design-black: #1F2732;
 $color-design-very-dark-grey: #343D46;
 $color-design-dark-grey: #4F5B66;
@@ -28,7 +30,7 @@ $color-very-soft-white: rgba(255, 255, 255, 0.25);
 $color-soft-white: rgba(255, 255, 255, 0.8);
 $color-transparent-white: rgba(255, 255, 255, 0.9);
 
-$dark-text: $color-design-grey;
+$dark-text: var(--mat-sys-on-surface);//$color-design-grey;
 $bright-text: $color-soft-white;
 
 
