@@ -2,16 +2,15 @@ import { Component, computed, input, ViewEncapsulation } from '@angular/core';
 import { CfFeaturedPage } from '../../../models/contentful-content-types/featured-page';
 import { CfMarkdownText } from '../../../models/contentful-content-types/markdown-text';
 import { getImageUrl, getUrlFromPage } from '../../shared/utils';
-import { CfPage } from '../../../models/contentful-content-types/page';
-import { TextModule } from '../../organism/text-module/text-module';
 import { MarkdownText } from '../markdown-text/markdown-text';
 import { CfTextModule } from '../../../models/contentful-content-types/text-module';
 import { RouterModule } from '@angular/router';
 import { BaseText } from '../../atom/base-text/base-text';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-featured-page',
-  imports: [MarkdownText, RouterModule, BaseText],
+  imports: [MarkdownText, RouterModule, BaseText, MatButtonModule],
   templateUrl: './featured-page.html',
   styleUrl: './featured-page.scss',
   host: {
@@ -43,11 +42,11 @@ export class FeaturedPage {
   }));
 
   getBackgroundImageStyle(pageImageUrl) {
-        if(!pageImageUrl) return '';
-        if(this.isSafari) {
-            return `background-image: url('${pageImageUrl}?w=1000');`;
-        } else {
-            return `background-image: image-set(url('${pageImageUrl}?w=720&fm=webp') 1x type('image/webp'), url('${pageImageUrl}?w=1400&fm=webp') 2x type('image/webp'));`
-        }
+    if (!pageImageUrl) return '';
+    if (this.isSafari) {
+      return `background-image: url('${pageImageUrl}?w=1000');`;
+    } else {
+      return `background-image: image-set(url('${pageImageUrl}?w=720&fm=webp') 1x type('image/webp'), url('${pageImageUrl}?w=1400&fm=webp') 2x type('image/webp'));`
     }
+  }
 }

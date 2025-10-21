@@ -1,14 +1,18 @@
 <div class="featured-page-wrapper">
     <div class="module featured-page">
         @if(headline()) {
-            <app-base-text class="featured-page-headline" [text]="this.headline()" [big]="true" [bold]="true" [headline]="true" [gotham]="true" [align]="'center'" [htmlTag]="'h3'"></app-base-text>
+        <app-base-text class="featured-page-headline" [text]="this.headline()" [big]="true" [bold]="true"
+            [headline]="true" [gotham]="true" [align]="'center'" [htmlTag]="'h3'"></app-base-text>
         }
 
         <app-markdown-text class="featured-page-text" [data]="text()" [noModule]="true">
         </app-markdown-text>
 
-        <a class="featured-page-button" [routerLink]="pageLink()">
-            <app-base-text class="module" [text]="this.linkText() ? this.linkText() : 'Mehr erfahren'" [big]="true" [gotham]="true" [align]="'center'"></app-base-text>
-        </a>
+        <div class="featured-page-button">
+            <a matButton="elevated" [routerLink]="pageLink()">
+                <!-- <app-base-text class="module" [text]="this.linkText() ? this.linkText() : 'Mehr erfahren'" [big]="true" [gotham]="true" [align]="'center'"></app-base-text> -->
+                {{ this.linkText() ? this.linkText() : 'Mehr erfahren' }}
+            </a>
+        </div>
     </div>
 </div>
