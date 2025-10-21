@@ -12,7 +12,7 @@
                     </a>
                 </li>
                 <li>
-                    <a [routerLink]="linkDonate()">Spenden</a>
+                    <a matButton="elevated" class="mat-raised-button--tertiary" [routerLink]="linkDonate()">Spenden</a>
                 </li>
             </ul>
             <div (click)="pageHeaderToggleMenu($event)" class="page-header__menu-button">
@@ -31,12 +31,12 @@
                     @for(elem of navigationElements(); track $index) {
                     <li class="page-header__menu-element">
                         @if(getNavElementUrl(elem) !== fullPath()) {
-                        <a [routerLink]="getNavElementUrl(elem)">{{getNavElementUrlText(elem)}}</a>
+                        <a matButton="text" class="mat-text-button--big" [routerLink]="getNavElementUrl(elem)">{{getNavElementUrlText(elem)}}</a>
                         }
                         @if(getNavElementUrl(elem) === fullPath()) {
-                        <div (click)="pageHeaderToggleMenu($event)">
+                        <button matButton="text" class="mat-text-button--big" (click)="pageHeaderToggleMenu($event)">
                             {{getNavElementUrlText(elem)}}
-                        </div>
+                        </button>
                         }
                     </li>
                     }

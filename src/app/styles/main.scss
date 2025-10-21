@@ -39,7 +39,7 @@ body {
   // Angular Material's system-level CSS variables. Learn more about these
   // variables at https://material.angular.dev/guide/system-variables
   background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);//$dark-text
+  color: var(--mat-sys-on-surface); //$dark-text
   //font: var(--mat-sys-body-medium);
 
   // Reset the user agent margin.
@@ -91,7 +91,7 @@ h1,
     font-size: 48px;
   }
 
-  & + .u-subline {
+  &+.u-subline {
     @include mb-up($desktop-min) {
       font-size: 1.5rem;
     }
@@ -106,7 +106,7 @@ h2,
     font-size: 2.25rem;
   }
 
-  & + .u-subline {
+  &+.u-subline {
     @include mb-up($desktop-min) {
       font-size: 1.375rem;
     }
@@ -149,4 +149,12 @@ ul {
   bottom: 80px;
   left: 50%;
   transform: rotate(180deg);
+}
+
+app-featured-page:nth-child(even) .featured-page-wrapper {
+  background-color: var(--mat-sys-secondary); //$color-design-background-medium;
+}
+
+app-featured-page:nth-child(odd) .featured-page-wrapper {
+  background-color: var(--mat-sys-primary); //$color-design-background-medium;
 }

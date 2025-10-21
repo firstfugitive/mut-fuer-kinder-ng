@@ -5,9 +5,13 @@
   @include mat.theme((
     color: (
       theme-type: light,
-      primary: c.$primary-palette
+      primary: c.$primary-palette,
+      tertiary: c.$tertiary-palette
     ),
-    typography: "Open Sans",
+    typography: (
+      plain-family: "Open Sans",//"Lora",
+      brand-family: "Open Sans",
+    ),
     density: 0,
   ));
 }

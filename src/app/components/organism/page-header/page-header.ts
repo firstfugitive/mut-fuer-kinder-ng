@@ -5,10 +5,11 @@ import { getUrlFromPage } from '../../shared/utils';
 import { CfNavigationElement } from '../../../models/contentful-content-types/navigation-element';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-page-header',
-  imports: [DynamicPageRoutingModule],
+  imports: [DynamicPageRoutingModule, MatButtonModule],
   templateUrl: './page-header.html',
   styleUrl: './page-header.scss'
 })

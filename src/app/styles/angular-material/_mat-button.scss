@@ -1,9 +1,25 @@
 @use "@angular/material" as mat;
+@use "../variables" as v;
 
-.mat-raised-button--primary {
-  @include mat.button-overrides((
-    protected-container-color: var(--mat-sys-primary),
-    protected-label-text-color: var(--mat-sys-on-primary),
-    protected-ripple-color: var(--mat-sys-on-primary-container),
-  ));
+// .mat-raised-button--primary {
+//   @include mat.button-overrides((protected-container-color: var(--mat-sys-primary),
+//       protected-label-text-color: var(--mat-sys-on-primary),
+//       protected-ripple-color: var(--mat-sys-on-primary-container),
+//     ));
+// }
+
+.mat-text-button--big {
+  @include mat.button-overrides((text-label-text-size: 25px,
+      ));
+  @include v.mb-up(v.$tablet-min) {
+    @include mat.button-overrides((text-label-text-size: 35px,
+      ));
+  }
+}
+
+.mat-raised-button--tertiary {
+  @include mat.button-overrides((protected-container-color: var(--mat-sys-tertiary),
+      protected-label-text-color: var(--mat-sys-on-tertiary),
+      protected-ripple-color: var(--mat-sys-on-primary-container),
+    ));
 }
