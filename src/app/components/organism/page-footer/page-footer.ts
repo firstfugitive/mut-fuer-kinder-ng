@@ -4,10 +4,11 @@ import { getUrlFromPage } from '../../shared/utils';
 import { DynamicPageRoutingModule } from "../../../pages/dynamic-page/dynamic-page.routing.module";
 import { BaseText } from "../../atom/base-text/base-text";
 import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-page-footer',
-  imports: [DynamicPageRoutingModule, BaseText, RouterModule],
+  imports: [DynamicPageRoutingModule, BaseText, RouterModule, MatButtonModule],
   templateUrl: './page-footer.html',
   styleUrl: './page-footer.scss'
 })

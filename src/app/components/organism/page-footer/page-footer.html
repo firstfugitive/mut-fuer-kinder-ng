@@ -1,11 +1,7 @@
 <footer class="page-footer">
     <div class="page-footer-links">
-        <a [routerLink]="imprintLink()">
-            <app-base-text text="Impressum" [bold]="true"></app-base-text>
-        </a>
-        <a [routerLink]="dataProtectionLink()">
-            <app-base-text text="Datenschutz" [bold]="true"></app-base-text>
-        </a>
+        <a matButton="text" [routerLink]="imprintLink()">Impressum</a>
+        <a matButton="text" [routerLink]="dataProtectionLink()">Datenschutz</a>
     </div>
     <app-base-text [text]="copyright()" ></app-base-text>
     <img src="/icon-192.png" />

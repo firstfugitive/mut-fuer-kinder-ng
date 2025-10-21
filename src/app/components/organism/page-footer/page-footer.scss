@@ -8,16 +8,22 @@
 }
 
 .page-footer-links {
-  margin: 0 auto;
+  margin: 0 auto 10px auto;
   width: 15rem;
   display: flex;
   justify-content: space-between;
+
+  @include mb-up($tablet-min) {
+    margin-bottom: 16px;
+  }
 }
 
 img {
-  margin-top: 1rem;
+  margin-top: 10px;
   max-width: 50px;
+
   @include mb-up($tablet-min) {
     max-width: 80px;
+    margin-top: 16px;
   }
 }

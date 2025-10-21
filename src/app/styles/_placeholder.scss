@@ -144,12 +144,12 @@
 }
 
 %module-spacing {
-  margin: 3rem auto;
+  margin: 1rem auto;
   max-width: var(--module-max-content-width);
 
 
   @include mb-up($desktop-min) {
-    margin-top: 4rem;
-    margin-bottom: 4rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 }
