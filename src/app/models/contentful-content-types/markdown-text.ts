@@ -8,5 +8,6 @@ export interface CfMarkdownText extends CfContentType {
         name?: EntryFields.Text;
         text?: EntryFields.Text;
         align?: EntryFields.Text;
+        alternativeFontForText?: EntryFields.Boolean;
     }
 }

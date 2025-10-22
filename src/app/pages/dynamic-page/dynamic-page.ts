@@ -1,12 +1,9 @@
 import { NgComponentOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Type } from '@angular/core';
-import { ContentfulClientApi, createClient } from 'contentful';
-import { PageContentBlog } from '../page-content-blog/page-content-blog';
+import { Component, Type } from '@angular/core';
 import { CfPage } from '../../models/contentful-content-types/page';
 import { CfStandardPageConfig } from '../../models/contentful-content-types/standard-page-config';
 import { NavigationEnd, Router } from '@angular/router';
 import { debounceTime, filter } from 'rxjs';
-import { PageContentHome } from '../page-content-home/page-content-home';
 import { pageMock, standardPageConfigMock } from '../../components/shared/mock';
 import { getContentTypeFromEntry } from '../../components/shared/utils';
 import { mapContentTypePageToComponent } from '../../components/shared/mapping';
@@ -15,8 +12,7 @@ import { contentfulClient } from '../../components/shared/contentful';
 @Component({
   selector: 'app-dynamic-page',
   imports: [NgComponentOutlet],
-  templateUrl: './dynamic-page.html',
-  styleUrl: './dynamic-page.scss'
+  template: '<ng-container *ngComponentOutlet="pageComponent; inputs: pageComponentInputs" />',
 })
 export class DynamicPage {
   mock = false;

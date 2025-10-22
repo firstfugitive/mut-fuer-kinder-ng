@@ -23,7 +23,7 @@ html {
   box-sizing: border-box;
   //font-family: "Gill Sans Book", "Arial";
   //font-family: "iCiel Thin", "Arial";
-  @extend %fontText;
+  @extend %fontContinuousText;
   @extend %fontStandard;
   //font-family: "iCiel Medium", "Arial";
 }
@@ -69,7 +69,8 @@ h5,
 .u-headline3,
 .u-headline4,
 .u-headline5 {
-  @extend %fontGotham;
+  @extend %fontStructuredText;
+  @extend %fontStructuredTextBig;
 
   margin-top: 10px;
   margin-bottom: 5px;

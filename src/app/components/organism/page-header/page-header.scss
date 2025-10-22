@@ -85,7 +85,8 @@
         }
 
         &>li {
-            @extend %fontGotham;
+            @extend %fontStructuredText;
+            @extend %fontStructuredTextBig;
             margin-right: 1rem;
         }
 

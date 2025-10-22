@@ -30,7 +30,8 @@
   }
 
   &--gotham {
-    @extend %fontGotham;
+    @extend %fontStructuredText;
+    @extend %fontStructuredTextBig;
   }
 
 }

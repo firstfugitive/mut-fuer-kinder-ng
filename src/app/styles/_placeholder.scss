@@ -16,8 +16,11 @@
   box-shadow: 0 5px 12px 1px rgb(0 0 0 / 20%);
 }
 
-%fontGotham {
+%fontStructuredText {
   font-family: "Open Sans", "Arial";
+}
+
+%fontStructuredTextBig {
   letter-spacing: 1px;
   line-height: 29px;
 
@@ -32,7 +35,7 @@
   }
 }
 
-%fontText {
+%fontContinuousText {
   font-family: "Lora", "Arial";
   letter-spacing: 0px;
 }

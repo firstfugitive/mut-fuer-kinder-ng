@@ -4,6 +4,10 @@
 :host {
   text-align: center;
 
+  p {
+    @extend %fontStructuredText;
+  }
+
   .link {
     margin-left: auto;
     margin-right: auto;
