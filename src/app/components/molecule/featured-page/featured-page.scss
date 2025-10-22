@@ -4,7 +4,7 @@
 .featured-page {
     color: $color-white;
 
-    padding: 4rem 0;
+    padding: 4rem 18px;
 
     &-background {
         background-color: $color-design-transparent-grey;
@@ -21,9 +21,17 @@
     }
 
     &-wrapper {
-        width: 94%;
         margin: 0 auto;
         border-radius: 32px;
+        width: 90%;
+
+        @include mb-up($tablet-min) {
+            width: 80%;
+        }
+
+        @include mb-up($desktop-min) {
+        width: 60%;
+        }
     }
 
     &-headline {
