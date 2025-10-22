@@ -144,12 +144,17 @@
 }
 
 %module-spacing {
-  margin: 1rem auto;
+  margin: 20px auto;
   max-width: var(--module-max-content-width);
 
 
+  @include mb-up($tablet-min) {
+    margin-top: 28px;
+    margin-bottom: 28px;
+  }
+
   @include mb-up($desktop-min) {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    margin-top: 32px;
+    margin-bottom: 32px;
   }
 }

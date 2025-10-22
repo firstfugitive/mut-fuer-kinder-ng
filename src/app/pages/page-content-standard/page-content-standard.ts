@@ -11,7 +11,7 @@ import { NgComponentOutlet } from '@angular/common';
   templateUrl: './page-content-standard.html',
   styles: `
   .content-standard-spacer {
-    min-height: calc(var(--height-header) - 20px);
+    min-height: calc(var(--height-header) - 10px);
   }`
 })
 export class PageContentStandard extends PageContent {
