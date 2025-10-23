@@ -8,6 +8,8 @@ import { pageMock, standardPageConfigMock } from '../../components/shared/mock';
 import { getContentTypeFromEntry } from '../../components/shared/utils';
 import { mapContentTypePageToComponent } from '../../components/shared/mapping';
 import { contentfulClient } from '../../components/shared/contentful';
+import { Meta, MetaDefinition, Title } from '@angular/platform-browser';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-dynamic-page',
@@ -18,12 +20,13 @@ export class DynamicPage {
   mock = false;
   contentType = "";
   fullPath = "";
+  pageObject: any;
   pageContent: CfPage;
   standardPageConfig: CfStandardPageConfig;
   pageComponent: Type<any>;
   pageComponentInputs: Record<string, unknown>;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private titleTagService: Title, private metaTagService: Meta) {
     this.loadInformationByRoute();
   }
 
@@ -48,6 +51,7 @@ export class DynamicPage {
 
         Promise.all([this.getEntriesForPage(slug), this.getStandardPageConfig()])
           .then(() => {
+            this.setPageInformationAndSeo();
             this.pageComponent = mapContentTypePageToComponent(this.contentType);
             this.setPageComponentInputs();
           })
@@ -77,13 +81,14 @@ export class DynamicPage {
       /* ctx.error({ message: 'Error 404', statusCode: 404 });
       return; */
     }
+    this.pageObject = pageObject;
     this.pageContent = pageObject?.fields ? pageObject.fields['content'] as CfPage : {};
     this.contentType = getContentTypeFromEntry(this.pageContent);
     console.info("contentType", this.contentType);
   }
 
   private async getStandardPageConfig(): Promise<void> {
-    if(this.mock) {
+    if (this.mock) {
       this.processStandardPageConfig(standardPageConfigMock);
       return;
     }
@@ -106,6 +111,47 @@ export class DynamicPage {
       "fullPath": this.fullPath,
       "standardPageConfig": this.standardPageConfig
     }
+  }
+
+  setPageInformationAndSeo() {
+    const pageTitle = this.pageObject?.fields?.pageTitle;
+    const pageTitleComplete = pageTitle ? `${pageTitle} | ${environment?.organizationName}` : environment?.organizationName;
+    this.titleTagService.setTitle(pageTitleComplete);
+
+    this.setOpenGraphTags(pageTitleComplete);
+
+  }
+
+  setOpenGraphTags(pageTitle: string) {
+    const ogDescription = this.pageObject?.fields?.openGraphDescription ?
+      this.pageObject.fields.openGraphDescription : this.standardPageConfig?.fields?.openGraphStandardDescription;
+    const ogImage = this.pageObject?.fields?.openGraphImage ?
+      this.pageObject.fields.openGraphImage : this.standardPageConfig?.fields?.openGraphStandardImage;
+
+    let ogTags: MetaDefinition[] = [
+      //these tags are always available
+      { property: 'og:type', content: 'website' },
+      { property: 'og:site_name', content: environment?.organizationName },
+      {
+        property: 'og:url',
+        content: `${environment.baseUrl}${this.fullPath}/`
+      }
+    ];
+
+    //these tags may or may not be added, even though that might cause og tags not to be complete
+    if (pageTitle) ogTags.push({ property: 'og:title', content: pageTitle });
+    if (ogDescription) {
+      ogTags.push({ property: 'og:description', content: ogDescription });
+      ogTags.push({ name: 'description', content: ogDescription });
+    }
+    if (ogImage?.fields?.file?.url) {
+      ogTags.push({
+        property: 'og:image',
+        content: 'https:' + ogImage.fields.file.url
+      });
+    }
+
+    this.metaTagService.addTags(ogTags);
   }
 
   stringify(obj: any) {

@@ -1,14 +1,15 @@
 
-import { Component, DOCUMENT, Inject, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  template: `
+  <main class="main">
+    <router-outlet />
+  </main>`,
 })
 export class App {
-  protected readonly title = signal('mfk');
-  
+
 };
