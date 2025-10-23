@@ -1,15 +1,14 @@
 import { Component, computed, input, Input } from '@angular/core';
 import { CfPageHeader } from '../../../models/contentful-content-types/page-header';
-import { DynamicPageRoutingModule } from "../../../pages/dynamic-page/dynamic-page.routing.module";
 import { getUrlFromPage } from '../../shared/utils';
 import { CfNavigationElement } from '../../../models/contentful-content-types/navigation-element';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-page-header',
-  imports: [DynamicPageRoutingModule, MatButtonModule],
+  imports: [MatButtonModule, RouterModule],
   templateUrl: './page-header.html',
   styleUrl: './page-header.scss'
 })

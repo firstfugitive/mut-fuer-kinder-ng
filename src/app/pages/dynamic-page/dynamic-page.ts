@@ -34,7 +34,7 @@ export class DynamicPage {
         debounceTime(200)
       )
       .subscribe((event: NavigationEnd) => {
-        const route = event.url;//router.url;
+        const route = event.url === "/" ? "/home" : event.url;
         const pathParts = route.split('/').filter(e => e !== '');
         let slug = pathParts.reverse()[0];
         const urlSubfolder = route.substring(0, route.lastIndexOf(slug));
