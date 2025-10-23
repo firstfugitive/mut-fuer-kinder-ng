@@ -1,15 +1,16 @@
 import { NgComponentOutlet } from '@angular/common';
-import { Component, Type } from '@angular/core';
+import { Component, DOCUMENT, Inject, Type } from '@angular/core';
 import { CfPage } from '../../models/contentful-content-types/page';
 import { CfStandardPageConfig } from '../../models/contentful-content-types/standard-page-config';
 import { NavigationEnd, Router } from '@angular/router';
 import { debounceTime, filter } from 'rxjs';
 import { pageMock, standardPageConfigMock } from '../../components/shared/mock';
-import { getContentTypeFromEntry } from '../../components/shared/utils';
+import { getContentTypeFromEntry, getImageUrl } from '../../components/shared/utils';
 import { mapContentTypePageToComponent } from '../../components/shared/mapping';
 import { contentfulClient } from '../../components/shared/contentful';
 import { Meta, MetaDefinition, Title } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
+import { Asset, AssetDetails } from 'contentful';
 
 @Component({
   selector: 'app-dynamic-page',
@@ -26,7 +27,7 @@ export class DynamicPage {
   pageComponent: Type<any>;
   pageComponentInputs: Record<string, unknown>;
 
-  constructor(private router: Router, private titleTagService: Title, private metaTagService: Meta) {
+  constructor(private router: Router, private titleTagService: Title, private metaTagService: Meta, @Inject(DOCUMENT) private document: Document) {
     this.loadInformationByRoute();
   }
 
@@ -115,18 +116,21 @@ export class DynamicPage {
 
   setPageInformationAndSeo() {
     const pageTitle = this.pageObject?.fields?.pageTitle;
+    const ogDescription = this.pageObject?.fields?.openGraphDescription ?
+      this.pageObject.fields.openGraphDescription : this.standardPageConfig?.fields?.openGraphStandardDescription;
+    const ogImage: Asset = this.pageObject?.fields?.openGraphImage ?
+      this.pageObject.fields.openGraphImage : this.standardPageConfig?.fields?.openGraphStandardImage;
+    const ogImageUrl = ogImage?.fields?.file?.url?.toString();
     const pageTitleComplete = pageTitle ? `${pageTitle} | ${environment?.organizationName}` : environment?.organizationName;
     this.titleTagService.setTitle(pageTitleComplete);
 
-    this.setOpenGraphTags(pageTitleComplete);
-
+    this.setOpenGraphTags(ogDescription, pageTitleComplete, ogImageUrl);
+    this.setLinkTag(`${environment.baseUrl}${this.fullPath}/`, "canonical", undefined);
+    this.setLinkTag(ogImageUrl, undefined, "image");
+    this.setJsonLd(ogDescription, ogImage);
   }
 
-  setOpenGraphTags(pageTitle: string) {
-    const ogDescription = this.pageObject?.fields?.openGraphDescription ?
-      this.pageObject.fields.openGraphDescription : this.standardPageConfig?.fields?.openGraphStandardDescription;
-    const ogImage = this.pageObject?.fields?.openGraphImage ?
-      this.pageObject.fields.openGraphImage : this.standardPageConfig?.fields?.openGraphStandardImage;
+  setOpenGraphTags(ogDescription: string, pageTitle: string, ogImageUrl: string) {
 
     let ogTags: MetaDefinition[] = [
       //these tags are always available
@@ -144,14 +148,54 @@ export class DynamicPage {
       ogTags.push({ property: 'og:description', content: ogDescription });
       ogTags.push({ name: 'description', content: ogDescription });
     }
-    if (ogImage?.fields?.file?.url) {
+    if (ogImageUrl) {
       ogTags.push({
         property: 'og:image',
-        content: 'https:' + ogImage.fields.file.url
+        content: 'https:' + ogImageUrl
       });
     }
 
     this.metaTagService.addTags(ogTags);
+  }
+
+  setLinkTag(href: string, rel: string, itemprop: string) {
+    const linkTag = this.document.createElement('link');
+    if (rel) {
+      linkTag.setAttribute('rel', rel);
+    }
+    if (itemprop) {
+      linkTag.setAttribute('itemprop', itemprop);
+    }
+    linkTag.setAttribute('href', href);
+
+    this.document.head.append(linkTag);
+  }
+
+  setJsonLd(ogDescription: string, ogImage: Asset) {
+    const ogImageDetails: AssetDetails = ogImage?.fields?.file?.details as AssetDetails;
+    const innerHtml = `{
+        "@context": "https://schema.org/",
+        "@type": "WebSite",
+        "name": ${environment.organizationName},
+        "alternateName": ${environment.alternativeName},
+        "url": ${environment.baseUrl},
+        "description": "${ogDescription}",
+        "image": {
+          "@type": "ImageObject",
+          "url": "${getImageUrl(ogImage) ? 'https:' + getImageUrl(ogImage) : ''}",
+          "width": "${ogImageDetails?.image?.width ? ogImageDetails.image.width : ''}",
+          "height": "${ogImageDetails?.image?.height ? ogImageDetails.image.height : ''}"
+        },
+        "author": {
+          "@type": "Organization",
+          "name": ${environment.organizationName},
+          "url": ${environment.baseUrl}
+        }
+      }`;
+    const scriptTag = this.document.createElement('script');
+    scriptTag.setAttribute("type", "application/ld+json");
+    scriptTag.innerHTML = innerHtml;
+    this.document.head.append(scriptTag);
   }
 
   stringify(obj: any) {

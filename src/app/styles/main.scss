@@ -145,6 +145,10 @@ ul {
   display: block;
 }
 
+.ccm-root {
+  @extend %fontStructuredText;
+}
+
 .arrow-bottom-wrapper {
   position: absolute;
   bottom: 80px;
