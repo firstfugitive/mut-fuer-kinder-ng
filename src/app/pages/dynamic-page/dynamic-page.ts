@@ -75,7 +75,7 @@ export class DynamicPage {
 
   private processEntriesForPage(serviceReponse: any) {
     const pageObject = serviceReponse?.items[0];
-    console.info("Page", pageObject);
+    //console.info("Page", pageObject);
     //if page not able to be fetched -> probably 404 error
     if (!pageObject) {
       console.error('Error 404: Page could not be found.')
@@ -103,7 +103,7 @@ export class DynamicPage {
 
   private processStandardPageConfig(serviceResponse: any) {
     this.standardPageConfig = serviceResponse?.items[0] as CfStandardPageConfig;
-    console.info("Standard Page Config", this.standardPageConfig);
+    //console.info("Standard Page Config", this.standardPageConfig);
   }
 
   setPageComponentInputs(): void {
