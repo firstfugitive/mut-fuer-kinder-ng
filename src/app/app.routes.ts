@@ -4,27 +4,12 @@ import { environment } from '../environments/environment';
 import { contentfulClient } from './components/shared/contentful';
 
 export const routes: Routes = [
-    // {
-    //     path: 'home',
-    //     component: DynamicPage,
-    //     title: environment?.organizationName,
-    // },
-    // {
-    //     path: 'kontakt-und-spenden',
-    //     component: DynamicPage,
-    //     title: environment?.organizationName,
-    // },
-    // {
-    //     path: '',
-    //     component: DynamicPage,
-    //     title: environment?.organizationName,
-    // },
     {
-        path: '',
+        path: environment.production ? '' : '**',
         component: DynamicPage,
         title: environment?.organizationName,
-        loadChildren: generatePaths
-    },
+        loadChildren: environment.production ? generatePaths : undefined
+    }
 ];
 
 
@@ -40,6 +25,7 @@ export function generatePaths() {
     .then(filterIndexPaths)
     .then(logPaths)
     .catch(handleError);
+    //todo remove
   console.log("test", routes)
   return routes.then(arr => arr.map(route => ({
     path: route,
