@@ -8,7 +8,7 @@ on:
       - master
   repository_dispatch:
     types:
-      - webhook
+      - contentful-webhook
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
