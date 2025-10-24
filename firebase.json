@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "target": "mut-fuer-kinder-ng",
+    "public": "dist/mfk/browser",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

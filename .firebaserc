@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "mut-fuer-kinder"
+  },
+  "targets": {
+    "mut-fuer-kinder": {
+      "hosting": {
+        "mut-fuer-kinder-ng": [
+          "mut-fuer-kinder-ng"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

@@ -4,9 +4,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && npm run cp-redirects",
+    "build": "ng build && npm run cp-redirects && npm run cp-google",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "fire": "firebase deploy",
+    "build-deploy": "ng build && npm run fire",
+    "cp-google": "cp ./google1a998929089002f6.html ./dist/mfk/browser/",
     "cp-redirects": "cp ./_redirects ./dist/mfk/browser/"
   },
   "prettier": {
