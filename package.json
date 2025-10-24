@@ -9,7 +9,7 @@
     "test": "ng test",
     "fire": "firebase deploy",
     "build-deploy": "ng build && npm run fire",
-    "install-build-deploy": "npm ci && ng build && npm run fire",
+    "install-build-deploy": "npm ci && ng build",
     "cp-google": "cp ./google1a998929089002f6.html ./dist/mfk/browser/",
     "cp-redirects": "cp ./_redirects ./dist/mfk/browser/"
   },
