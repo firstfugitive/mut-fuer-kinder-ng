@@ -23,8 +23,8 @@ export class PageHeader {
   linkDonate = computed<string>(() => getUrlFromPage(this.data()?.fields?.linkDonate));
   navigationElements = computed<CfNavigationElement[]>(() => this.data()?.fields?.navigationElements)
 
-constructor(private router: Router) {
-  this.router.events
+  constructor(private router: Router) {
+    this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd)
       )

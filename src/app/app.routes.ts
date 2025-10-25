@@ -5,9 +5,11 @@ import { generatePaths } from './components/shared/generatePaths';
 
 export const routes: Routes = [
     {
-        path: environment.production ? '' : '**',
-        component: DynamicPage,
-        title: environment?.organizationName,
-        loadChildren: environment.production ? generatePaths : undefined
-    }
+        path: '',
+        loadChildren: generatePaths
+    },
+    // {
+    //     path: '*',
+    //     redirectTo: 'home'
+    // }
 ];
