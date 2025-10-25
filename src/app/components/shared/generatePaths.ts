@@ -1,9 +1,7 @@
-import { Entry, EntryCollection, EntrySkeletonType } from "contentful";
+import { Entry, EntrySkeletonType } from "contentful";
 import { environment } from "../../../environments/environment";
 import { DynamicPage } from "../../pages/dynamic-page/dynamic-page";
 import { contentfulClient } from "./contentful";
-import { title } from "process";
-import { Route, Routes } from "@angular/router";
 
 export const PAGES = {
     'content_type': 'page',
@@ -22,16 +20,11 @@ export function generatePaths() {
         .then(filterIndexPaths)
         .then(logPaths)
         .catch(handleError);
-    const routes = entries.then(arr => {
-        const response = arr.map(entry => ({
+    const routes = entries.then(arr => arr.map(entry => ({
             path: entry?.route,
             component: DynamicPage,
-            title: entry.title,
-        }));
-        //todo remove
-        console.log("routes", response)
-        return response;
-    });
+            title: entry?.title,
+        })));
     return routes;
 }
 
@@ -54,7 +47,7 @@ function filterIndexPaths(pages: RouteTitle[]): RouteTitle[] {
 
 function logPaths(paths: RouteTitle[]): RouteTitle[] {
     // console.dir(paths, { maxArrayLength: 1000 })
-    console.log('Sites to be generated:', paths.length)
+    // console.log('Sites to be generated:', paths.length)
     return paths;
 }
 
