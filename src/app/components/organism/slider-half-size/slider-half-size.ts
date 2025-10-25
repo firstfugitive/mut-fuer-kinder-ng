@@ -1,8 +1,6 @@
 import { Component, computed, CUSTOM_ELEMENTS_SCHEMA, input } from '@angular/core';
 import { CfSliderHalfSize } from '../../../models/contentful-content-types/slider-half-size';
 import { Asset } from 'contentful';
-import { Swiper } from 'swiper';
-import { Navigation } from 'swiper/modules';
 // import function to register Swiper custom elements
 import { register } from 'swiper/element/bundle';
 import { BaseImage } from "../../atom/base-image/base-image";
@@ -16,7 +14,7 @@ register();
   styleUrl: './slider-half-size.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   host: {
-    class: "module slider-half-size"
+    "[class]": "{'module': true, 'slider-half-size': true, 'slider-half-size--small': small()}"
   }
 })
 export class SliderHalfSize {
