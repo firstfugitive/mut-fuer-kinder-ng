@@ -4,12 +4,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && npm run cp-redirects && npm run cp-google",
+    "build": "ng build && npm run cp-redirects && npm run cp-google && npm run generate-sitemap",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "fire": "firebase deploy",
     "build-deploy": "ng build && npm run fire",
     "install-build-deploy": "npm ci && ng build",
+    "generate-sitemap": "tsx ./src/app/components/shared/generateSitemap.ts",
     "cp-google": "cp ./google1a998929089002f6.html ./dist/mfk/browser/",
     "cp-redirects": "cp ./_redirects ./dist/mfk/browser/"
   },
@@ -43,6 +44,7 @@
     "rxjs": "~7.8.0",
     "swiper": "^12.0.2",
     "tslib": "^2.3.0",
+    "tsx": "^4.20.6",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {

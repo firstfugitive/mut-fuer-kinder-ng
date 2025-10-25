@@ -38,7 +38,7 @@ export class DynamicPage {
         debounceTime(200)
       )
       .subscribe((event: NavigationEnd) => {
-        const route = event.url === "/" ? "/home" : event.url;
+        const route = event.url === "/" || event.url === "/index" ? "/home" : event.url;
         const pathParts = route.split('/').filter(e => e !== '');
         let slug = pathParts.reverse()[0];
         const urlSubfolder = route.substring(0, route.lastIndexOf(slug));
@@ -85,7 +85,7 @@ export class DynamicPage {
     this.pageObject = pageObject;
     this.pageContent = pageObject?.fields ? pageObject.fields['content'] as CfPage : {};
     this.contentType = getContentTypeFromEntry(this.pageContent);
-    console.info("contentType", this.contentType);
+    //console.info("contentType", this.contentType);
   }
 
   private async getStandardPageConfig(): Promise<void> {
