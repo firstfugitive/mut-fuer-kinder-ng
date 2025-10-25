@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "npm run generate-sitemap && ng build && npm run cp-redirects && npm run cp-google",
+    "build": "ng build && npm run generate-sitemap && npm run cp-redirects && npm run cp-google",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "fire": "firebase deploy",

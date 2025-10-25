@@ -17,7 +17,7 @@ function generateSitemapXml(entries: SitemapEntry[]) {
     let fileData = startOfXml;
     entries.forEach(entry => fileData = fileData.concat(`<url><loc>${entry.url}</loc><lastmod>${entry.lastmod}</lastmod></url>`));
     fileData = fileData.concat(endOfXml);
-    writeFileSync('./public/sitemap.xml', fileData);
+    writeFileSync('./dist/mfk/browser/sitemap.xml', fileData);
 }
 
 interface SitemapEntry {
