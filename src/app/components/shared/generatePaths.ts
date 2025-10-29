@@ -34,6 +34,13 @@ export async function generatePaths() {
         title: entry?.title,
         data: { pageObject: entry?.pageObject, standardPageConfig: standardPageConfig }
     }));
+    const homeRoute = routes.find(route => route.path === 'home');
+    routes.push({
+        path: '',
+        component: DynamicPage,
+        title: homeRoute?.title,
+        data: homeRoute?.data
+    })
     return routes;
 }
 
@@ -64,7 +71,7 @@ function filterIndexPaths(pages: RouteTitle[]): RouteTitle[] {
 
 function logPaths(paths: RouteTitle[]): RouteTitle[] {
     // console.dir(paths, { maxArrayLength: 1000 })
-    console.log('Sites to be generated:', paths.length)
+    // console.log('Sites to be generated:', paths.length)
     return paths;
 }
 
