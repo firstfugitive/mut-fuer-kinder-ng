@@ -1,18 +1,32 @@
 <div class="featured-page-wrapper">
     <div class="module featured-page">
-        @if(headline()) {
-        <app-base-text class="featured-page-headline" [text]="this.headline()" [big]="true" [bold]="true"
-            [headline]="true" [gotham]="true" [align]="'center'" [htmlTag]="'h3'"></app-base-text>
-        }
+        <div [class]="{'first': true, 'with-image': !!pageImage()}">
+            @if(headline()) {
+            <app-base-text class="featured-page-headline" [text]="this.headline()" [big]="true" [bold]="true"
+                [headline]="true" [gotham]="true" [align]="'center'" [htmlTag]="'h3'"></app-base-text>
+            }
 
-        <app-markdown-text class="featured-page-text" [data]="text()" [noModule]="true">
-        </app-markdown-text>
+            <app-markdown-text class="featured-page-text" [data]="text()" [noModule]="true">
+            </app-markdown-text>
 
-        <div class="featured-page-button">
-            <a matButton="elevated" [routerLink]="pageLink()">
-                <!-- <app-base-text class="module" [text]="this.linkText() ? this.linkText() : 'Mehr erfahren'" [big]="true" [gotham]="true" [align]="'center'"></app-base-text> -->
-                {{ this.linkText() ? this.linkText() : 'Mehr erfahren' }}
-            </a>
+            <div class="featured-page-button">
+                <a matButton="elevated" [routerLink]="pageLink()">
+                    {{ this.linkText() ? this.linkText() : 'Mehr erfahren' }}
+                </a>
+            </div>
         </div>
+
+        @if (pageImage()) {
+        <div class="second">
+            <!-- <app-base-image class="blog-teaser__image" [image]="pageImage()" [fullWidth]="true" [width]="200"
+                [height]="600" [roundCorners]="true" /> -->
+            <img class="mobile" [ngSrc]="pageImageUrl()" [width]="500" [height]="300"
+                [loaderParams]="{width: 500, height: 300, fillWithFaceFocus: true}" [sizes]="'20vw'"
+                [title]="pageImageTitle()" [alt]="pageImageTitle()">
+            <img class="desktop" [ngSrc]="pageImageUrl()" [width]="300" [height]="500"
+                [loaderParams]="{width: 300, height: 500, fillWithFaceFocus: true}" [sizes]="'20vw'"
+                [title]="pageImageTitle()" [alt]="pageImageTitle()">
+        </div>
+        }
     </div>
 </div>

@@ -47,7 +47,7 @@ export class DynamicPage {
       this.pageObject().fields.openGraphDescription : this.standardPageConfig()?.fields?.openGraphStandardDescription;
     const ogImage: Asset = this.pageObject()?.fields?.openGraphImage ?
       this.pageObject().fields.openGraphImage : this.standardPageConfig()?.fields?.openGraphStandardImage;
-    const ogImageUrl = ogImage?.fields?.file?.url?.toString();
+    const ogImageUrl = this.contentfulSmallImgLink(ogImage);
     const pageTitleComplete = pageTitle ? `${pageTitle} | ${environment?.organizationName}` : environment?.organizationName;
 
     this.setOpenGraphTags(ogDescription, pageTitleComplete, ogImageUrl);
@@ -96,7 +96,6 @@ export class DynamicPage {
   }
 
   setJsonLd(ogDescription: string, ogImage: Asset) {
-    const ogImageDetails: AssetDetails = ogImage?.fields?.file?.details as AssetDetails;
     const innerHtml = `{
         "@context": "https://schema.org/",
         "@type": "WebSite",
@@ -106,9 +105,9 @@ export class DynamicPage {
         "description": "${ogDescription}",
         "image": {
           "@type": "ImageObject",
-          "url": "${getImageUrl(ogImage) ? 'https:' + getImageUrl(ogImage) : ''}",
-          "width": "${ogImageDetails?.image?.width ? ogImageDetails.image.width : ''}",
-          "height": "${ogImageDetails?.image?.height ? ogImageDetails.image.height : ''}"
+          "url": "${this.contentfulSmallImgLink(ogImage) ? 'https:' + this.contentfulSmallImgLink(ogImage) : ''}",
+          "width": "700",
+          "height": "394"
         },
         "author": {
           "@type": "Organization",
@@ -134,5 +133,9 @@ export class DynamicPage {
       }
       return value;
     };
+  }
+
+  private contentfulSmallImgLink(image: Asset): string {
+    return `${getImageUrl(image)}?w=700&fm=webp`;
   }
 }

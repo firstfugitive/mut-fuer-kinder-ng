@@ -2,21 +2,50 @@
 @use "../../../styles/placeholder.scss" as *;
 
 .featured-page {
+    width: 100%;
     color: $color-white;
 
-    padding: 4rem 18px;
+    padding: 2rem 25px;
 
-    &-background {
-        background-color: $color-design-transparent-grey;
-        background-repeat: no-repeat;
-        //führt zu Problemen bei ios safari
-        background-attachment: fixed;
-        background-size: cover;
-        background-position: center;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column-reverse;
+    align-items: center;
 
-        @supports (-webkit-touch-callout: none) {
-            /* CSS specific to iOS devices */
-            background-attachment: local;
+    @include mb-up($desktop-min) {
+        flex-direction: row;
+    }
+
+    .first {
+        text-align: right;
+        position: relative;
+
+        h3 {
+            // color: var(--mat-sys-secondary);
+        }
+
+        // width: 100rem;
+        &.with-image {
+            @include mb-up($desktop-min) {
+                flex-basis: 120rem;
+                left: 30px;
+            }
+        }
+    }
+
+    .second {
+        img {
+            @extend %borderRadiusBox;
+        }
+        .mobile {
+            @include mb-up($desktop-min) {
+                display: none;
+            }
+        }
+        .desktop {
+            @include mb-down($tablet-max) {
+                display: none;
+            }
         }
     }
 
@@ -30,7 +59,7 @@
         }
 
         @include mb-up($desktop-min) {
-        width: 60%;
+            width: 60%;
         }
     }
 

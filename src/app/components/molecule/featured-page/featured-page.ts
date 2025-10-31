@@ -7,16 +7,14 @@ import { CfTextModule } from '../../../models/contentful-content-types/text-modu
 import { RouterModule } from '@angular/router';
 import { BaseText } from '../../atom/base-text/base-text';
 import { MatButtonModule } from '@angular/material/button';
+import { Asset } from 'contentful';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-featured-page',
-  imports: [MarkdownText, RouterModule, BaseText, MatButtonModule],
+  imports: [MarkdownText, RouterModule, BaseText, MatButtonModule, NgOptimizedImage],
   templateUrl: './featured-page.html',
   styleUrl: './featured-page.scss',
-  host: {
-    class: "featured-page-background",
-    '[style]': 'this.getBackgroundImageStyle(this.pageImageUrl())'
-  },
   encapsulation: ViewEncapsulation.None
 })
 export class FeaturedPage {
@@ -25,7 +23,9 @@ export class FeaturedPage {
   headline = computed<string>(() => this.data()?.fields?.headline);
   text = computed<CfMarkdownText>(() => this.data()?.fields?.text);
   pageLink = computed<string>(() => getUrlFromPage(this.data()?.fields?.page));
-  pageImageUrl = computed<string>(() => getImageUrl(this.data()?.fields?.page?.fields?.content?.fields['image']));
+  pageImage = computed<Asset>(() => this.data()?.fields?.page?.fields?.content?.fields['image']);
+  pageImageUrl = computed<string>(() => getImageUrl(this.pageImage()));
+  pageImageTitle = computed<string>(() => this.pageImage()?.fields?.title.toString());
   linkText = computed<string>(() => this.data()?.fields?.linkText);
 
   isSafari = false;
@@ -40,13 +40,4 @@ export class FeaturedPage {
       htmlTag: 'h3'
     }
   }));
-
-  getBackgroundImageStyle(pageImageUrl) {
-    if (!pageImageUrl) return '';
-    if (this.isSafari) {
-      return `background-image: url('${pageImageUrl}?w=1000');`;
-    } else {
-      return `background-image: image-set(url('${pageImageUrl}?w=720&fm=webp') 1x type('image/webp'), url('${pageImageUrl}?w=1400&fm=webp') 2x type('image/webp'));`
-    }
-  }
 }
