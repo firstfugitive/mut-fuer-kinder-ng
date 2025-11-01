@@ -1,10 +1,10 @@
 //https://swiperjs.com/swiper-api#navigation-parameters
 .mfk-swiper {
-    --swiper-theme-color: var(--mat-sys-tertiary);
+    --swiper-theme-color: var(--mat-sys-secondary);
 
     --swiper-navigation-size: 55px;
 
-    --swiper-pagination-bullet-inactive-color: var(--mat-sys-on-tertiary);
+    --swiper-pagination-bullet-inactive-color: var(--mat-sys-on-secondary);
     --swiper-pagination-bullet-inactive-opacity: 0.8;
 }
 

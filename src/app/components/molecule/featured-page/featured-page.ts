@@ -27,6 +27,7 @@ export class FeaturedPage {
   pageImageUrl = computed<string>(() => getImageUrl(this.pageImage()));
   pageImageTitle = computed<string>(() => this.pageImage()?.fields?.title.toString());
   linkText = computed<string>(() => this.data()?.fields?.linkText);
+  alternativeBackground = computed<boolean>(() => this.data()?.fields?.alternativeBackground);
 
   isSafari = false;
   textModuleHeadlineData = computed<CfTextModule>(() => ({

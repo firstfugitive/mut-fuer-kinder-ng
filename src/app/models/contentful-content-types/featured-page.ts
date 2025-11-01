@@ -10,5 +10,6 @@ export interface CfFeaturedPage extends CfContentType {
         text?: CfMarkdownText;
         headline?: EntryFields.Text;
         linkText?: EntryFields.Text;
+        alternativeBackground?: EntryFields.Boolean;
     }
 }

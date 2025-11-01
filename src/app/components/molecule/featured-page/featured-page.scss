@@ -1,65 +1,95 @@
 @use "../../../styles/variables" as *;
 @use "../../../styles/placeholder.scss" as *;
 
+.featured-page-wrapper {
+    background-color: var(--mat-sys-primary);
+    box-shadow: var(--mat-sys-level2);
+    margin: 0 auto;
+    border-radius: 32px;
+    max-width: 50rem;
+    width: 90%;
+
+    @include mb-up($tablet-min) {
+        width: 80%;
+    }
+
+    @include mb-up($desktop-min) {
+        width: 70%;
+    }
+
+    @include mb-up($desktop-extended) {
+        width: 60%;
+    }
+
+    &.alternative-background {
+        background-color: var(--mat-sys-secondary);
+    }
+}
+
 .featured-page {
     width: 100%;
     color: $color-white;
 
-    padding: 2rem 25px;
+    padding: 2rem 25px 1rem 25px;
 
     display: flex;
     flex-wrap: nowrap;
     flex-direction: column-reverse;
     align-items: center;
+    justify-content: center;
+
+    @extend %module-spacing;
+    max-width: calc(var(--module-max-content-width) + 40px);
 
     @include mb-up($desktop-min) {
         flex-direction: row;
+        max-width: calc(var(--module-max-content-width) + 150px);
     }
 
-    .first {
-        text-align: right;
+    @include mb-up($desktop-extended) {
+        max-width: calc(var(--module-max-content-width) + 40px);
+    }
+
+    .text-container {
+        z-index: 1;
         position: relative;
+        padding-bottom: 1rem;
 
-        h3 {
-            // color: var(--mat-sys-secondary);
-        }
-
-        // width: 100rem;
         &.with-image {
             @include mb-up($desktop-min) {
                 flex-basis: 120rem;
                 left: 30px;
             }
+
+            @include mb-down($tablet-max) {
+                bottom: 30px;
+                padding-bottom: 0;
+            }
         }
     }
 
-    .second {
+    .image-container {
+        z-index: 0;
+        text-align: center;
+
         img {
+            filter: brightness(70%);
+            object-fit: cover;
             @extend %borderRadiusBox;
         }
+
         .mobile {
+            max-width: 100%;
+
             @include mb-up($desktop-min) {
                 display: none;
             }
         }
+
         .desktop {
             @include mb-down($tablet-max) {
                 display: none;
             }
-        }
-    }
-
-    &-wrapper {
-        margin: 0 auto;
-        border-radius: 32px;
-        width: 90%;
-
-        @include mb-up($tablet-min) {
-            width: 80%;
-        }
-
-        @include mb-up($desktop-min) {
-            width: 60%;
         }
     }
 

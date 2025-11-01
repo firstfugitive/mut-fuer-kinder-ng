@@ -1,10 +1,11 @@
 import { Component, computed, input } from '@angular/core';
 import { Asset } from 'contentful';
 import { getImageUrl } from '../../shared/utils';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-base-image',
-  imports: [],
+  imports: [MatCardModule],
   templateUrl: './base-image.html',
   styleUrl: './base-image.scss'
 })
@@ -16,6 +17,7 @@ export class BaseImage {
   fullWidth = input(false);
   halfSize = input(false);
   smallSize = input(false);
+  roundCorners = input(false);
 
   imageTitle = computed<string>(() => this.image()?.fields?.title?.toString());
   imageUrl = computed<string>(() => {

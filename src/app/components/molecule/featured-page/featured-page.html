@@ -1,6 +1,6 @@
-<div class="featured-page-wrapper">
-    <div class="module featured-page">
-        <div [class]="{'first': true, 'with-image': !!pageImage()}">
+<div [class]="{'featured-page-wrapper': true, 'alternative-background': alternativeBackground()}">
+    <div class="featured-page">
+        <div [class]="{'text-container': true, 'with-image': !!pageImage()}">
             @if(headline()) {
             <app-base-text class="featured-page-headline" [text]="this.headline()" [big]="true" [bold]="true"
                 [headline]="true" [gotham]="true" [align]="'center'" [htmlTag]="'h3'"></app-base-text>
@@ -17,11 +17,11 @@
         </div>
 
         @if (pageImage()) {
-        <div class="second">
+        <div class="image-container">
             <!-- <app-base-image class="blog-teaser__image" [image]="pageImage()" [fullWidth]="true" [width]="200"
                 [height]="600" [roundCorners]="true" /> -->
-            <img class="mobile" [ngSrc]="pageImageUrl()" [width]="500" [height]="300"
-                [loaderParams]="{width: 500, height: 300, fillWithFaceFocus: true}" [sizes]="'20vw'"
+            <img class="mobile" [ngSrc]="pageImageUrl()" [width]="500" [height]="200"
+                [loaderParams]="{width: 500, height: 200, fillWithFaceFocus: true}" [sizes]="'20vw'"
                 [title]="pageImageTitle()" [alt]="pageImageTitle()">
             <img class="desktop" [ngSrc]="pageImageUrl()" [width]="300" [height]="500"
                 [loaderParams]="{width: 300, height: 500, fillWithFaceFocus: true}" [sizes]="'20vw'"

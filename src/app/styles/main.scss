@@ -155,11 +155,3 @@ ul {
   left: 50%;
   transform: rotate(180deg);
 }
-
-app-featured-page:nth-child(even) .featured-page-wrapper {
-  background-color: var(--mat-sys-secondary); //$color-design-background-medium;
-}
-
-app-featured-page:nth-child(odd) .featured-page-wrapper {
-  background-color: var(--mat-sys-primary); //$color-design-background-medium;
-}
