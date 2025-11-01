@@ -1,10 +1,5 @@
 <app-page-header [data]="header()" [fullPath]="fullPath()"></app-page-header>
 <app-base-image [image]="firstHeroImage()" [lazyLoadDisabled]="true" [fullWidth]="true"></app-base-image>
-<div class="img-wrapper">
-    <img [ngSrc]="firstHeroImageSrc()" [width]="300" [height]="500"
-        [loaderParams]="{width: 300, height: 500, fillWithFaceFocus: true}" sizes="20vw" priority
-        [title]="firstHeroImageTitle()" [alt]="firstHeroImageTitle()">
-</div>
 @for(element of contentElements(); track $index) {
 <ng-container *ngComponentOutlet="element?.component; inputs: element?.inputs" />
 }
