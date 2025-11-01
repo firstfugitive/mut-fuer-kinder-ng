@@ -18,8 +18,6 @@
 
         @if (pageImage()) {
         <div class="image-container">
-            <!-- <app-base-image class="blog-teaser__image" [image]="pageImage()" [fullWidth]="true" [width]="200"
-                [height]="600" [roundCorners]="true" /> -->
             <img class="mobile" [ngSrc]="pageImageUrl()" [width]="250" [height]="150"
                 [loaderParams]="{width: 250, height: 150, fillWithFaceFocus: true}" sizes="100vw"
                 [title]="pageImageTitle()" [alt]="pageImageTitle()">

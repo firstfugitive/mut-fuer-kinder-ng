@@ -1,6 +1,7 @@
 <a class="blog-teaser" [routerLink]="blogUrl()">
-    <app-base-image class="blog-teaser__image" [image]="blogImage()" [width]="480" [height]="270" />
-    <div class="blog-teaser__title">
-        {{ blogTitle() }}
-    </div>
+    <img class="mobile" [ngSrc]="blogImageUrl()" [width]="300" [height]="190" sizes="50vw" [title]="blogImageTitle()"
+        [alt]="blogImageTitle()">
+    <img class="desktop" [ngSrc]="blogImageUrl()" [width]="400" [height]="280" sizes="50vw" [title]="blogImageTitle()"
+        [alt]="blogImageTitle()">
+    <h2 class="blog-teaser__title">{{ blogTitle() }}</h2>
 </a>

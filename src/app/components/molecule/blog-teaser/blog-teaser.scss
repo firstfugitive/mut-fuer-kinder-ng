@@ -4,60 +4,61 @@
 :host {
     overflow: hidden;
     text-align: center;
-    max-width: 300px;
     text-decoration: none;
-    @extend %boxShadow;
+    box-shadow: var(--mat-sys-level2);
     border-radius: 8px;
-    color: $dark-text;
+    max-width: 300px;
     width: calc(100% - 2rem);
 
     @include mb-up($tablet-min) {
         width: calc(50% - 2rem);
     }
 
-    &:visited {
-        color: $dark-text;
-        text-decoration: none;
+    @include mb-up($desktop-min) {
+        width: calc(50% - 2rem);
+        max-width: 400px;
     }
 
     &:hover {
-        @extend %boxShadowHover;
+        box-shadow: var(--mat-sys-level4);
     }
 
     .blog-teaser {
-        display: contents;
+        position: relative;
 
-        &__image {
-            display: flex;
-            justify-content: center;
+        img {
+            filter: brightness(70%);
+            object-fit: cover;
+            margin: auto;
+            width: 100%;
+            height: 100%;
+        }
 
-            img {
-                width: 100%;
-                object-fit: cover;
-                border-top-right-radius: 8px;
-                border-top-left-radius: 8px;
-                height: 130px;
-
-                @include mb-up($tablet-min) {
-                    height: 150px;
-                }
-
-                @include mb-up($desktop-min) {
-                    height: 200px;
-                }
+        .mobile {
+            @include mb-up($desktop-min) {
+                display: none;
             }
         }
 
-        &__title {
-            line-height: 1.5rem;
-            padding: 0.6rem 1.3rem;
-
-            @include mb-up($tablet-min) {
-                padding: 0.8rem 1.6rem;
+        .desktop {
+            @include mb-down($tablet-max) {
+                display: none;
             }
+        }
+
+
+        &__title {
+            position: absolute;
+            bottom: 0;
+            text-decoration: none;
+            color: var(--mat-sys-on-secondary);
+            width: 100%;
+            margin: auto;
+            padding: 1rem;
+            font-size: 1.25rem;
 
             @include mb-up($desktop-min) {
-                padding: 1rem 2rem;
+                font-size: 1.375rem;
             }
         }
     }
