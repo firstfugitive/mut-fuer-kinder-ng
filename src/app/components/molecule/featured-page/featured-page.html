@@ -20,8 +20,11 @@
         <div class="image-container">
             <!-- <app-base-image class="blog-teaser__image" [image]="pageImage()" [fullWidth]="true" [width]="200"
                 [height]="600" [roundCorners]="true" /> -->
-            <img class="mobile" [ngSrc]="pageImageUrl()" [width]="500" [height]="200"
-                [loaderParams]="{width: 500, height: 200, fillWithFaceFocus: true}" [sizes]="'20vw'"
+            <img class="mobile" [ngSrc]="pageImageUrl()" [width]="250" [height]="150"
+                [loaderParams]="{width: 250, height: 150, fillWithFaceFocus: true}" sizes="100vw"
+                [title]="pageImageTitle()" [alt]="pageImageTitle()">
+            <img class="tablet" [ngSrc]="pageImageUrl()" [width]="500" [height]="200"
+                [loaderParams]="{width: 500, height: 200, fillWithFaceFocus: true}" sizes="90vw"
                 [title]="pageImageTitle()" [alt]="pageImageTitle()">
             <img class="desktop" [ngSrc]="pageImageUrl()" [width]="300" [height]="500"
                 [loaderParams]="{width: 300, height: 500, fillWithFaceFocus: true}" [sizes]="'20vw'"
