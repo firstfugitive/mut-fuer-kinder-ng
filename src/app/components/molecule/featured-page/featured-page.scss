@@ -30,7 +30,7 @@
     width: 100%;
     color: $color-white;
 
-    padding: 2rem 25px 1rem 25px;
+    padding: 2rem 25px 0rem 25px;
 
     display: flex;
     flex-wrap: nowrap;
@@ -53,7 +53,7 @@
     .text-container {
         z-index: 1;
         position: relative;
-        padding-bottom: 1rem;
+        padding-bottom: 2rem;
 
         &.with-image {
             @include mb-up($desktop-min) {
@@ -73,6 +73,7 @@
         text-align: center;
 
         img {
+            height: auto;
             filter: brightness(70%);
             object-fit: cover;
             @extend %borderRadiusBox;
@@ -80,13 +81,23 @@
 
         .mobile {
             max-width: 100%;
+            @include mb-up($tablet-min) {
+                display: none;
+            }
+        }
 
+        .tablet {
+            max-width: 100%;
             @include mb-up($desktop-min) {
+                display: none;
+            }
+            @include mb-down($mobile-max) {
                 display: none;
             }
         }
 
         .desktop {
+            margin-bottom: 2rem;
             @include mb-down($tablet-max) {
                 display: none;
             }
