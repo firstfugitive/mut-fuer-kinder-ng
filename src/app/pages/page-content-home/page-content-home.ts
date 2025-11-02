@@ -4,14 +4,14 @@ import { PageFooter } from '../../components/organism/page-footer/page-footer';
 import { PageHeader } from '../../components/organism/page-header/page-header';
 import { CfPageContentHome } from '../../models/contentful-content-types/page-content';
 import { Asset } from 'contentful';
-import { BaseImage } from "../../components/atom/base-image/base-image";
-import { NgComponentOutlet } from '@angular/common';
+import { NgComponentOutlet, NgOptimizedImage } from '@angular/common';
 import { getImageUrl } from '../../components/shared/utils';
 
 @Component({
   selector: 'app-page-content-home',
-  imports: [PageFooter, PageHeader, BaseImage, NgComponentOutlet],
-  templateUrl: './page-content-home.html'
+  imports: [PageFooter, PageHeader, NgComponentOutlet, NgOptimizedImage],
+  templateUrl: './page-content-home.html',
+  styleUrl: './page-content-home.scss'
 })
 export class PageContentHome extends PageContent {
   override pageContent = input<CfPageContentHome>();
@@ -19,7 +19,7 @@ export class PageContentHome extends PageContent {
   firstHeroImage = computed<Asset>(() => this.pageContent()?.fields?.heroImages[0]);
   firstHeroImageSrc = computed<string>(() => getImageUrl(this.firstHeroImage()));
   firstHeroImageTitle = computed<string>(() => this.firstHeroImage()?.fields?.title.toString());
-  
+
 }
 
 

@@ -161,3 +161,32 @@
     margin-bottom: 32px;
   }
 }
+
+%heroImage {
+  .img-wrapper {
+    width: 100%;
+    height: 35rem;
+    position: relative;
+    display: flex;
+    justify-content: center;
+
+    img {
+      height: auto;
+      width: 100%;
+      object-fit: cover;
+      filter: brightness(85%);
+    }
+
+    .mobile {
+      @include mb-up($tablet-min) {
+        display: none;
+      }
+    }
+
+    .desktop {
+      @include mb-down($mobile-max) {
+        display: none;
+      }
+    }
+  }
+}

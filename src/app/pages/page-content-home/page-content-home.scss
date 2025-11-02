@@ -1,0 +1,6 @@
+@use "../../styles/variables" as *;
+@use "../../styles/placeholder.scss" as *;
+
+:host {
+    @extend %heroImage;
+}

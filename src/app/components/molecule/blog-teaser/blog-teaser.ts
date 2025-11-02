@@ -4,12 +4,11 @@ import { CfPageContentBlog } from '../../../models/contentful-content-types/page
 import { Asset } from 'contentful';
 import { getImageUrl, getUrlFromPage } from '../../shared/utils';
 import { RouterModule } from '@angular/router';
-import { BaseImage } from "../../atom/base-image/base-image";
 import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-blog-teaser',
-  imports: [RouterModule, BaseImage, NgOptimizedImage],
+  imports: [RouterModule, NgOptimizedImage],
   templateUrl: './blog-teaser.html',
   styleUrl: './blog-teaser.scss',
 })
