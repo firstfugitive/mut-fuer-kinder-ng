@@ -4,3 +4,26 @@
 :host {
     @extend %heroImage;
 }
+
+.text-container {
+    background-color: var(--mat-sys-primary);
+    color: var(--mat-sys-on-primary);
+    width: 70%;
+    max-width: 50rem;
+    margin: 0 auto -3rem auto;
+    text-align: center;
+    padding: 30px 40px;
+    @extend %borderRadiusBox;
+    position: relative;
+    bottom: 80px;
+    h1 {
+        margin-bottom: 2rem;
+    }
+    .line {
+        height: 5px;
+        width: 10rem;
+        margin: auto;
+        background-color: var(--mat-sys-tertiary);
+        margin-bottom: 2rem;
+    }
+}

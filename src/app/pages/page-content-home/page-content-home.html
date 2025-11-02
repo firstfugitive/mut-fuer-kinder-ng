@@ -7,6 +7,11 @@
         [loaderParams]="{width: 1000, height: 500, fillWithFaceFocus: true}" sizes="(max-width: 1300px) 90em, 100vw" [alt]="firstHeroImageTitle()"
         [title]="firstHeroImageTitle()">
 </div>
+<div class="text-container">
+    <h1>Mut für Kinder e.V.</h1>
+    <div class="line"></div>
+    <p>Wir geben Kindern neuen Mut!</p>
+</div>
 @for(element of contentElements(); track $index) {
 <ng-container *ngComponentOutlet="element?.component; inputs: element?.inputs" />
 }
