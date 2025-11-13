@@ -3,7 +3,7 @@
         <div class="page-header__bg">
             <div class="page-header__gradient"></div>
         </div>
-        <header class="">
+        <header>
             <ul class="page-header__elements">
                 <li class="home-link">
                     <a [routerLink]="linkHome()">
@@ -26,7 +26,7 @@
                     <circle cx="17" cy="10" r="2" />
                 </svg>
             </div>
-            <div [class]="{'page-header__menu': true, 'page-header__menu--active': menuActive}">
+            <div [class]="{'page-header__menu': true, 'page-header__menu--active': menuActive}" (click)="headerMenuClicked($event)">
                 <ul class="page-header__menu-navigation">
                     @for(elem of navigationElements(); track $index) {
                     <li class="page-header__menu-element">

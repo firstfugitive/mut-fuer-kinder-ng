@@ -38,6 +38,11 @@ export class PageHeader {
     this.menuActive = !this.menuActive;
   }
 
+  headerMenuClicked(event: MouseEvent) {
+    event.preventDefault();
+    this.menuActive = !this.menuActive;
+  }
+
   getNavElementUrl(element: CfNavigationElement) {
     const linkPage = element?.fields?.link;
     return getUrlFromPage(linkPage);
