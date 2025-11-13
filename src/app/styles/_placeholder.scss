@@ -26,12 +26,12 @@
 
   @include mb-up($tablet-min) {
     letter-spacing: 1px;
-    line-height: 35px;
+    line-height: 40px;
   }
 
   @include mb-up($desktop-min) {
     letter-spacing: 2px;
-    line-height: 44px;
+    line-height: 47px;
   }
 }
 
@@ -163,9 +163,9 @@
 }
 
 %heroImage {
-  .img-wrapper {
+  .hero-img-wrapper {
     width: 100%;
-    height: 30rem; 
+    height: 30rem;
     position: relative;
     display: flex;
     justify-content: center;
@@ -187,6 +187,38 @@
       @include mb-down($mobile-max) {
         display: none;
       }
+    }
+  }
+}
+
+%heroTextContainer {
+  .hero-text-container {
+    background-color: var(--mat-sys-primary);
+    color: var(--mat-sys-on-primary);
+    width: 70%;
+    max-width: 50rem;
+    margin: 0 auto -5rem auto;
+    text-align: center;
+    @extend %borderRadiusBox;
+    position: relative;
+    bottom: 80px;
+    padding: 20px 25px;
+
+    .line {
+      height: 3px;
+      width: 10rem;
+      margin: 1rem auto;
+      background-color: var(--mat-sys-tertiary);
+
+      @include mb-up($tablet-min) {
+        height: 5px;
+        margin: 2rem auto;
+      }
+    }
+
+    @include mb-up($tablet-min) {
+      padding: 30px 40px;
+      margin-bottom: -3rem;
     }
   }
 }

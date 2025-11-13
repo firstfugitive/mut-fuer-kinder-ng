@@ -1,5 +1,5 @@
 <app-page-header [data]="header()" [fullPath]="fullPath()"></app-page-header>
-<div class="img-wrapper">
+<div class="hero-img-wrapper">
     <img priority class="mobile" [ngSrc]="heroImageSrc()" [width]="580" [height]="580"
         [loaderParams]="{width: 580, height: 580, fillWithFaceFocus: true}" sizes="100vw" [alt]="heroImageTitle()"
         [title]="heroImageTitle()">
@@ -7,7 +7,7 @@
         [loaderParams]="{width: 1000, height: 500, fillWithFaceFocus: true}" sizes="(max-width: 1300px) 90em, 100vw"
         [alt]="heroImageTitle()" [title]="heroImageTitle()">
 </div>
-<div class="text-container">
+<div class="hero-text-container">
     <h1>{{ heroHeadline() }}</h1>
     <div class="line"></div>
     <p>{{ heroSubline() }}</p>

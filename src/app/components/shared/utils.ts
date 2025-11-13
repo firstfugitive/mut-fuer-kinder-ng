@@ -20,7 +20,7 @@ export const getImageUrl = (image: Asset): string => {
   return image?.fields?.file?.url?.toString();
 }
 
-export const formatDate = (rawDate: any) => {
+export const formatDate = (rawDate: string) => {
   if (!rawDate) {
     return undefined;
   }
