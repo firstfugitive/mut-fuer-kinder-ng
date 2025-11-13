@@ -6,12 +6,6 @@
 }
 
 .base-text {
-  &:not(.base-text--big, .base-text--headline) {
-    @include mb-down($mobile-max) {
-      font-size: 13px;
-      line-height: 22px;
-    }
-  }
 
   &--big {
     @extend %fontVeryBig;

@@ -3,6 +3,10 @@
 
 :host {
     @extend %heroImage;
+
+    app-base-text~app-base-text {
+        margin-top: 1rem;
+    }
 }
 
 .text-container {
@@ -10,20 +14,36 @@
     color: var(--mat-sys-on-primary);
     width: 70%;
     max-width: 50rem;
-    margin: 0 auto -3rem auto;
+    margin: 0 auto -5rem auto;
     text-align: center;
-    padding: 30px 40px;
     @extend %borderRadiusBox;
     position: relative;
     bottom: 80px;
+    padding: 20px 25px;
+
     h1 {
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
+
+        @include mb-up($tablet-min) {
+            margin-bottom: 2rem;
+        }
     }
+
     .line {
-        height: 5px;
+        height: 3px;
         width: 10rem;
         margin: auto;
         background-color: var(--mat-sys-tertiary);
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
+
+        @include mb-up($tablet-min) {
+            height: 5px;
+            margin-bottom: 2rem;
+        }
+    }
+
+    @include mb-up($tablet-min) {
+        padding: 30px 40px;
+        margin-bottom: -3rem;
     }
 }

@@ -1,16 +1,20 @@
 <app-page-header [data]="header()" [fullPath]="fullPath()"></app-page-header>
 <div class="img-wrapper">
-    <img priority class="mobile" [ngSrc]="firstHeroImageSrc()" [width]="580" [height]="580"
-        [loaderParams]="{width: 580, height: 580, fillWithFaceFocus: true}" sizes="100vw" [alt]="firstHeroImageTitle()"
-        [title]="firstHeroImageTitle()">
-    <img priority class="desktop" [ngSrc]="firstHeroImageSrc()" [width]="1000" [height]="500"
-        [loaderParams]="{width: 1000, height: 500, fillWithFaceFocus: true}" sizes="(max-width: 1300px) 90em, 100vw" [alt]="firstHeroImageTitle()"
-        [title]="firstHeroImageTitle()">
+    <img priority class="mobile" [ngSrc]="heroImageSrc()" [width]="580" [height]="580"
+        [loaderParams]="{width: 580, height: 580, fillWithFaceFocus: true}" sizes="100vw" [alt]="heroImageTitle()"
+        [title]="heroImageTitle()">
+    <img priority class="desktop" [ngSrc]="heroImageSrc()" [width]="1000" [height]="500"
+        [loaderParams]="{width: 1000, height: 500, fillWithFaceFocus: true}" sizes="(max-width: 1300px) 90em, 100vw"
+        [alt]="heroImageTitle()" [title]="heroImageTitle()">
 </div>
 <div class="text-container">
-    <h1>Mut für Kinder e.V.</h1>
+    <h1>{{ heroHeadline() }}</h1>
     <div class="line"></div>
-    <p>Wir geben Kindern neuen Mut!</p>
+    <p>{{ heroSubline() }}</p>
+</div>
+<div class="module">
+    <app-base-text [text]="claim()" [align]="'center'" [big]="true" [bold]="true" [gotham]="true" [htmlTag]="'h2'" />
+    <app-base-text [text]="aboutUs()" [align]="'center'" />
 </div>
 @for(element of contentElements(); track $index) {
 <ng-container *ngComponentOutlet="element?.component; inputs: element?.inputs" />

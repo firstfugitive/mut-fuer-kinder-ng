@@ -23,7 +23,11 @@ export interface CfPageContentBlogOverview extends CfContentType {
 export interface CfPageContentHome extends CfContentType {
     fields?: {
         name?: EntryFields.Text;
-        heroImages?: Asset[];
+        heroImage?: Asset;
+        heroHeadline?: EntryFields.Text;
+        heroSubline?: EntryFields.Text;
+        claim?: EntryFields.Text;
+        aboutUs?: EntryFields.Text;
         content?: any[];
     }
 }
