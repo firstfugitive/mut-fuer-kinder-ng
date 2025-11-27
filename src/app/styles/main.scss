@@ -132,6 +132,13 @@ h4,
   }
 }
 
+header ul {
+  list-style: none;
+  margin: unset;
+  padding-inline-start: unset;
+  padding: unset;
+}
+
 .module {
   @extend %module-spacing;
   display: block;
