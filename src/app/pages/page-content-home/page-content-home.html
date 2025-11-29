@@ -13,7 +13,12 @@
     <p>{{ heroSubline() }}</p>
 </div>
 <div class="module">
-    <app-base-text [text]="claim()" [align]="'center'" [big]="true" [bold]="true" [gotham]="true" [htmlTag]="'h2'" />
+    @if (claimIsSlider()) {
+        <app-text-slider [sliderProperties]="sliderPropertiesFromClaim()"></app-text-slider>
+    }
+    @else {
+        <app-base-text [text]="claim()" [align]="'center'" [big]="true" [bold]="true" [gotham]="true" [htmlTag]="'h2'" />
+    }
     <app-base-text [text]="aboutUs()" [align]="'center'" />
 </div>
 @for(element of contentElements(); track $index) {

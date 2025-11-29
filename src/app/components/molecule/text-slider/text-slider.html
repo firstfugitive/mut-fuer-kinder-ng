@@ -1,0 +1,11 @@
+<div class="slider-wrapper">
+    <h2>{{sliderProperties()?.beforeSliderText}}</h2>
+    <div class="{{`slider slider-items-${sliderProperties()?.sliderItems.length}`}}">
+        @for (sliderItem of sliderProperties().sliderItems; track $index) {
+        <div class="{{`slider-item-${$index}`}}">
+            <h2>{{sliderItem}}</h2>
+        </div>
+        }
+    </div>
+    <h2>{{sliderProperties()?.afterSliderText}}</h2>
+</div>

@@ -1,0 +1,130 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/placeholder" as *;
+
+$desktop-height: 2.81rem;
+$mobile-height: 2.2rem;
+
+.slider-wrapper {
+    // font-size: 2.26rem;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+
+    @extend %fontStructuredText;
+    @extend %fontStructuredTextBig;
+    @extend %fontVeryBig;
+    font-weight: bold;
+}
+
+.animation>div>div {
+    padding: 0.25rem 0.75rem;
+    display: inline-block;
+    height: $mobile-height;
+    margin-bottom: $mobile-height;
+
+    @include mb-up($tablet-min) {
+        height: $desktop-height;
+        margin-bottom: $desktop-height;
+    }
+}
+
+.slider {
+    overflow: hidden;
+    margin-right: 1rem;
+    text-align: right;
+    height: calc($mobile-height + 0rem);
+
+    >div>h2 {
+        padding: 0.1rem 0.6rem;
+        display: inline-block;
+        height: $mobile-height;
+        margin-bottom: $mobile-height;
+
+        @include mb-up($tablet-min) {
+            padding: 0.25rem 0.75rem;
+            height: $desktop-height;
+            margin-bottom: $desktop-height;
+        }
+    }
+
+    >div:first-child>h2 {
+        background-color: var(--mat-sys-secondary);
+        color: var(--mat-sys-on-secondary);
+    }
+
+    >div:nth-child(2)>h2 {
+        background-color: var(--mat-sys-tertiary);
+        color: var(--mat-sys-on-tertiary);
+    }
+
+    >div:nth-child(3)>h2 {
+        background-color: var(--mat-sys-primary);
+        color: var(--mat-sys-on-primary);
+    }
+
+    >div:nth-child(4)>h2 {
+        background-color: var(--mat-sys-secondary);
+        color: var(--mat-sys-on-secondary);
+    }
+
+    @include mb-up($tablet-min) {
+        height: calc($desktop-height + 0.3rem); //.125rem;
+    }
+}
+
+//https://codepen.io/carloscdev/pen/mdBLmwP
+@mixin text-animation($height) {
+    animation: text-animation 8s infinite;
+
+    @keyframes text-animation {
+        0% {
+            margin-top: 0;
+        }
+
+        10% {
+            margin-top: 0;
+        }
+
+        20% {
+            margin-top: calc(-2 * $height);
+        }
+
+        30% {
+            margin-top: calc(-2 * $height);
+        }
+
+        40% {
+            margin-top: calc(-4 * $height);
+        }
+
+        60% {
+            margin-top: calc(-4 * $height);
+        }
+
+        70% {
+            margin-top: calc(-2 * $height);
+        }
+
+        80% {
+            margin-top: calc(-2 * $height);
+        }
+
+        90% {
+            margin-top: 0;
+        }
+
+        100% {
+            margin-top: 0;
+        }
+    }
+}
+
+.slider>div:first-child {
+    @include text-animation($mobile-height);
+
+    @include mb-up($tablet-min) {
+        @include text-animation($desktop-height);
+    }
+}
