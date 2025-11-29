@@ -1,4 +1,4 @@
-import { Component, computed, input, Input } from '@angular/core';
+import { Component, computed, ElementRef, input, viewChild } from '@angular/core';
 import { CfPageHeader } from '../../../models/contentful-content-types/page-header';
 import { getUrlFromPage } from '../../shared/utils';
 import { CfNavigationElement } from '../../../models/contentful-content-types/navigation-element';
@@ -15,6 +15,8 @@ import { MatButtonModule } from '@angular/material/button';
 export class PageHeader {
   data = input<CfPageHeader>();
   fullPath = input<string>();
+
+  headerMenuElementSameSite = viewChild<ElementRef>('headerMenuElementSameSite');
 
   menuActive = false;
 
@@ -40,6 +42,9 @@ export class PageHeader {
 
   headerMenuClicked(event: MouseEvent) {
     event.preventDefault();
+    if(this.headerMenuElementSameSite()?.nativeElement?.contains(event.target as Node)) {
+      return;
+    }
     this.menuActive = !this.menuActive;
   }
 
@@ -50,5 +55,12 @@ export class PageHeader {
 
   getNavElementUrlText(element: CfNavigationElement) {
     return element?.fields?.title;
+  }
+
+  isMenuElementSameSite(element: CfNavigationElement): boolean {
+    if(this.fullPath() === '/home' || this.fullPath() === "/") {
+      return this.getNavElementUrl(element) === '/home' || this.getNavElementUrl(element) === '/'
+    }
+    return this.getNavElementUrl(element) === this.fullPath();
   }
 }

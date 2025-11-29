@@ -146,7 +146,7 @@
             @extend %fontBig;
 
             >div {
-                cursor: pointer;
+                display: inline;
             }
         }
     }

@@ -26,17 +26,22 @@
                     <circle cx="17" cy="10" r="2" />
                 </svg>
             </div>
-            <div [class]="{'page-header__menu': true, 'page-header__menu--active': menuActive}" (click)="headerMenuClicked($event)">
+            <div [class]="{'page-header__menu': true, 'page-header__menu--active': menuActive}"
+                (click)="headerMenuClicked($event)">
                 <ul class="page-header__menu-navigation">
                     @for(elem of navigationElements(); track $index) {
                     <li class="page-header__menu-element">
-                        @if(getNavElementUrl(elem) !== fullPath()) {
-                        <a matButton="text" class="mat-text-button--big" [routerLink]="getNavElementUrl(elem)">{{getNavElementUrlText(elem)}}</a>
+                        @if(!isMenuElementSameSite(elem)) {
+                        <a matButton="text" class="mat-text-button--big"
+                            [routerLink]="getNavElementUrl(elem)">{{getNavElementUrlText(elem)}}</a>
                         }
-                        @if(getNavElementUrl(elem) === fullPath()) {
-                        <button matButton="text" class="mat-text-button--big" (click)="pageHeaderToggleMenu($event)">
-                            {{getNavElementUrlText(elem)}}
-                        </button>
+                        @if(isMenuElementSameSite(elem)) {
+                        <div #headerMenuElementSameSite>
+                            <button matButton="text" class="mat-text-button--big"
+                                (click)="pageHeaderToggleMenu($event)">
+                                {{getNavElementUrlText(elem)}}
+                            </button>
+                        </div>
                         }
                     </li>
                     }
