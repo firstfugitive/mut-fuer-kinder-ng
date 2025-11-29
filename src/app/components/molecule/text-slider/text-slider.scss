@@ -34,10 +34,10 @@ $mobile-height: 2.2rem;
     overflow: hidden;
     margin-right: 1rem;
     text-align: right;
-    height: calc($mobile-height + 0rem);
+    height: $mobile-height;
 
     >div>h2 {
-        padding: 0.1rem 0.6rem;
+        padding: 1px 9px;
         display: inline-block;
         height: $mobile-height;
         margin-bottom: $mobile-height;
