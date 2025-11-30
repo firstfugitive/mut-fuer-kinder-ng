@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build && npm run generate-sitemap && npm run cp-redirects && npm run cp-google",
+    "build-preview": "ng build --configuration development && npm run generate-sitemap && npm run cp-redirects && npm run cp-google",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "fire": "firebase deploy",

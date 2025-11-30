@@ -1,10 +1,11 @@
 import { ImageLoaderConfig } from "@angular/common";
 import { ContentfulClientApi, createClient } from "contentful";
+import { environment } from "../../../environments/environment";
 
 export const contentfulClient: ContentfulClientApi<undefined> = createClient({
-    space: 'dbcppdxw8bib',//this.contentfulConfiguration.spaceId,
-    accessToken: 'XIOUq8XaCeuhXgblbO1DA2mgHX-uo1bAseK-FZ6jqJQ',//this.contentfulConfiguration.accessToken,
-    host: 'cdn.contentful.com',//this.contentfulConfiguration.environment,
+    space: 'dbcppdxw8bib',
+    accessToken: environment.production ? 'XIOUq8XaCeuhXgblbO1DA2mgHX-uo1bAseK-FZ6jqJQ' : 'uR_RGqNf--03pw4258mhYMmP2U1-XFHpKCdv8_yvnbM',
+    host: environment.production ? 'cdn.contentful.com' : 'preview.contentful.com',
     environment: 'master',
     //resolveLinks: true,
 });
