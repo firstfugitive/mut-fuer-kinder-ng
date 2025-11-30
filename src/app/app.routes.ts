@@ -5,9 +5,5 @@ export const routes: Routes = [
     {
         path: '',
         loadChildren: generatePaths
-    },
-    {
-        path: '*',
-        redirectTo: ''
     }
 ];
