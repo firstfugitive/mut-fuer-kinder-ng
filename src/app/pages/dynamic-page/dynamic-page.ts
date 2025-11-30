@@ -99,9 +99,9 @@ export class DynamicPage {
     const innerHtml = `{
         "@context": "https://schema.org/",
         "@type": "WebSite",
-        "name": ${environment.organizationName},
-        "alternateName": ${environment.alternativeName},
-        "url": ${environment.baseUrl},
+        "name": "${environment.organizationName}",
+        "alternateName": "${environment.alternativeName}",
+        "url": "${environment.baseUrl}",
         "description": "${ogDescription}",
         "image": {
           "@type": "ImageObject",
@@ -111,8 +111,8 @@ export class DynamicPage {
         },
         "author": {
           "@type": "Organization",
-          "name": ${environment.organizationName},
-          "url": ${environment.baseUrl}
+          "name": "${environment.organizationName}",
+          "url": "${environment.baseUrl}"
         }
       }`;
     this.tagService.addScriptTag("application/ld+json", innerHtml);
