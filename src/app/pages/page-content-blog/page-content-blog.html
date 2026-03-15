@@ -14,6 +14,9 @@
     <p>{{ creationDate() }}</p>
     }
 </div>
+@if (events()) {
+<div id="map" style="height: 600px;" #map></div>
+}
 @for(element of contentElements(); track $index) {
 <ng-container *ngComponentOutlet="element?.component; inputs: element?.inputs" />
 }
