@@ -14,9 +14,12 @@
     <p>{{ creationDate() }}</p>
     }
 </div>
-@if (events()) {
-<div id="map" style="height: 600px;" #map></div>
-}
+<!-- @defer (on immediate) {
+    <app-event-map [events]="events()"></app-event-map>
+} @placeholder {
+    <div>I am a placeholder</div>
+} -->
+<app-event-map [events]="events()"></app-event-map>
 @for(element of contentElements(); track $index) {
 <ng-container *ngComponentOutlet="element?.component; inputs: element?.inputs" />
 }
