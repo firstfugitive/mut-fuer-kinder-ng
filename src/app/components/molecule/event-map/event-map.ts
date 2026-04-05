@@ -1,9 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
-import { afterNextRender, AfterViewInit, Component, ElementRef, inject, input, PLATFORM_ID, viewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, input, PLATFORM_ID, viewChild, ViewEncapsulation } from '@angular/core';
 import { CfEvent } from '../../../models/contentful-content-types/event';
-import { formatDate } from '../../shared/utils';
-// import { LeafletService } from './leaflet.service';
-// import * as L from 'leaflet';
 
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -12,34 +9,14 @@ import OSM from 'ol/source/OSM';
 import { fromLonLat } from 'ol/proj';
 import { boundingExtent } from 'ol/extent';
 
-// add this
-// if (globalThis.window === undefined) {
-//   globalThis.window =
-//     ({
-//       addEventListener: () => {},
-//       // add more methods as you wish
-//     } as never);
-// }
-// import { InjectionToken } from "@angular/core";
-
-// export const WINDOW = new InjectionToken<Window>("WINDOW", {
-//   factory: () => (typeof window !== "undefined" ? window : ({} as Window)),
-// });
-
 @Component({
   selector: 'app-event-map',
-  // providers: [LeafletService],
   templateUrl: './event-map.html',
   styleUrl: './event-map.scss',
   encapsulation: ViewEncapsulation.None
 })
 export class EventMap implements AfterViewInit {
-
-
-  // https://stackoverflow.com/questions/64305306/angular-universal-ssr-with-leaflet-and-ngx-leaflet/64308035#64308035
-  //https://stackoverflow.com/questions/77582598/error-in-angular-server-side-rendering-ssr-with-ngx-leaflet-referenceerror#comment136777864_77583181
-  // https://medium.com/@me.jahirahmed/install-leaflet-map-in-angular-18-bd23bf16e2e1
-
+  
   events = input<CfEvent[]>();
 
   mapElementRef = viewChild<ElementRef>('map');
@@ -47,32 +24,11 @@ export class EventMap implements AfterViewInit {
 
   private platformId: Object = inject(PLATFORM_ID);
 
-  // options = {
-  //   layers: [
-  //     tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  //       attribution: '&amp;copy; OpenStreetMap contributors'
-  //     })
-  //   ],
-  //   zoom: 7,
-  //   center: latLng([ 46.879966, -121.726909 ])
-  // };
-  showLeaflet = false;
-
-  constructor() {
-
-
-  }
-
   async ngAfterViewInit(): Promise<void> {
-    // if (isPlatformBrowser(this.platformId)) {
-    //   this.leafletService.L.map(this.mapElementRef().nativeElement).setView([51.3, 10.1], 6);
-    // }
     const onlyInBrowser = true;
 
     if (onlyInBrowser) {
       if (isPlatformBrowser(this.platformId)) {
-        // this.L = require('leaflet');
-        // this.L.map(this.mapElementRef().nativeElement).setView([51.3, 10.1], 6);
         console.log("Running in browser", window?.innerHeight);
 
         this.loadOlMap();
@@ -81,13 +37,13 @@ export class EventMap implements AfterViewInit {
 
       //works without isPlatformBrowser!
       this.loadOlMap();
-
-      // this.map = L.map('map');
-      // L.tileLayer(baseMapURl).addTo(this.map);
     }
   }
 
   private loadOlMap() {
+    if (!this.mapElementRef()) {
+      return;
+    }
     const germanyExtent = boundingExtent([
       fromLonLat([5.9, 47.3]),   // Südwest
       fromLonLat([15.0, 55.1])   // Nordost
@@ -102,8 +58,8 @@ export class EventMap implements AfterViewInit {
       duration: 1000
     });
 
-    const map = new Map({
-      target: 'map',
+    this.map = new Map({
+      target: this.mapElementRef().nativeElement,
       layers: [
         new TileLayer({
           source: new OSM()
@@ -117,9 +73,7 @@ export class EventMap implements AfterViewInit {
     // if (!isPlatformBrowser(this.platformId) || !this.mapElementRef() || !this.events()) {
     //   return;
     // }
-    if (!this.mapElementRef()) {
-      return;
-    }
+    
 
     // const leaflet = await import('leaflet');
     // this.map = L.map(this.mapElementRef().nativeElement).setView([51.3, 10.1], 6);
