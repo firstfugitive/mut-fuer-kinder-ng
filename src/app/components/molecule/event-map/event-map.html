@@ -6,7 +6,7 @@
   class="ol-popup"
   #popup
   [style.display]="popupContent() ? 'block' : 'none'">
-  <button class="ol-popup-closer" (click)="popupContent.set(null)">×</button>
+  <button class="ol-popup-closer" (click)="closePopup()">×</button>
   <div class="ol-popup-content" #popupContentDiv>
     @if (popupContent()?.title) {
         <strong>{{ popupContent()?.title }}</strong>

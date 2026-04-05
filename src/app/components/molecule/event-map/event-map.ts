@@ -31,7 +31,7 @@ export class EventMap implements AfterViewInit {
   mapElementRef = viewChild<ElementRef>('map');
   popupElementRef = viewChild<ElementRef>('popup');
   popupContentRef = viewChild<ElementRef>('popupContentDiv');
-  
+
   private map: Map | null = null;
   private popupOverlay: Overlay | null = null;
   private select: Select | null = null;
@@ -125,8 +125,7 @@ export class EventMap implements AfterViewInit {
 
     this.popupOverlay = new Overlay({
       element: this.popupElementRef().nativeElement,
-      autoPan: { margin: 50 },
-      // autoPanAnimation: { duration: 250 }
+      autoPan: false,
     });
   }
 
@@ -145,6 +144,16 @@ export class EventMap implements AfterViewInit {
     this.select.on('select', (e) => {
       this.handleFeatureSelect(e, clusterSource);
     });
+  }
+
+  protected closePopup() {
+    this.popupContent.set(null);
+    if (this.popupOverlay) {
+      this.popupOverlay.setPosition(undefined);
+    }
+    if (this.select) {
+      this.select.getFeatures().clear();
+    }
   }
 
   private handleFeatureSelect(e: any, clusterSource: Cluster) {
@@ -168,8 +177,8 @@ export class EventMap implements AfterViewInit {
       const extent = clusterSource.getExtent();
       this.map.getView().fit(extent, {
         duration: 500,
-        padding: [50, 50, 50, 50],
-        minResolution: 0
+        padding: [100, 100, 100, 100],
+        maxZoom: 9
       });
       this.popupOverlay.setPosition(undefined);
     } else {
@@ -179,7 +188,16 @@ export class EventMap implements AfterViewInit {
 
       if (eventData) {
         const geometry = eventFeature.getGeometry() as Point;
-        this.popupOverlay.setPosition(geometry.getCoordinates());
+        const coords = geometry.getCoordinates();
+
+        // Zentriere die Karte auf den Event-Punkt
+        this.map.getView().animate({
+          center: coords,
+          duration: 300
+        });
+
+        //todo : Popup-Positionierung verbessern, damit es nicht das Kalendericon verdeckt
+        this.popupOverlay.setPosition(coords);
 
         this.popupContent.set({
           title: eventData.fields?.name || 'Event',
@@ -327,7 +345,7 @@ export class EventMap implements AfterViewInit {
 
     // Tag-Text
     ctx.fillStyle = '#fff';
-    ctx.font = 'bold 24px Arial';
+    ctx.font = 'bold 24px Arial, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(day, 24, 32, 100);
