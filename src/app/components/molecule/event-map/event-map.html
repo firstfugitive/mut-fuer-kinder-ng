@@ -1,1 +1,18 @@
-<div id="map" style="height: 600px;" #map></div>
+<div id="map" style="height: 400px;" #map></div>
+
+<!-- Popup für Event-Details -->
+<div 
+  id="popup" 
+  class="ol-popup"
+  #popup
+  [style.display]="popupContent() ? 'block' : 'none'">
+  <button class="ol-popup-closer" (click)="popupContent.set(null)">×</button>
+  <div class="ol-popup-content" #popupContentDiv>
+    @if (popupContent()?.title) {
+        <strong>{{ popupContent()?.title }}</strong>
+    }
+    @if (popupContent()?.content) {
+    <div [innerHTML]="popupContent()?.content"></div>
+    }
+  </div>
+</div>

@@ -1,13 +1,22 @@
 import { isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, inject, input, PLATFORM_ID, viewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, input, PLATFORM_ID, viewChild, ViewEncapsulation, signal } from '@angular/core';
 import { CfEvent } from '../../../models/contentful-content-types/event';
 
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
+import VectorLayer from 'ol/layer/Vector';
 import OSM from 'ol/source/OSM';
+import VectorSource from 'ol/source/Vector';
+import Cluster from 'ol/source/Cluster';
+import Feature from 'ol/Feature';
+import Point from 'ol/geom/Point';
 import { fromLonLat } from 'ol/proj';
 import { boundingExtent } from 'ol/extent';
+import { Style, Icon, Text, Fill, Stroke, Circle } from 'ol/style';
+import Overlay from 'ol/Overlay';
+import { click } from 'ol/events/condition';
+import Select from 'ol/interaction/Select';
 
 @Component({
   selector: 'app-event-map',
@@ -16,26 +25,23 @@ import { boundingExtent } from 'ol/extent';
   encapsulation: ViewEncapsulation.None
 })
 export class EventMap implements AfterViewInit {
-  
+
   events = input<CfEvent[]>();
 
   mapElementRef = viewChild<ElementRef>('map');
-  private map: any;
+  popupElementRef = viewChild<ElementRef>('popup');
+  popupContentRef = viewChild<ElementRef>('popupContentDiv');
+  
+  private map: Map | null = null;
+  private popupOverlay: Overlay | null = null;
+  private select: Select | null = null;
+  protected popupContent = signal<{ title: string; content: string } | null>(null);
 
   private platformId: Object = inject(PLATFORM_ID);
+  private vectorSource: VectorSource<Feature> | null = null;
 
   async ngAfterViewInit(): Promise<void> {
-    const onlyInBrowser = true;
-
-    if (onlyInBrowser) {
-      if (isPlatformBrowser(this.platformId)) {
-        console.log("Running in browser", window?.innerHeight);
-
-        this.loadOlMap();
-      }
-    } else {
-
-      //works without isPlatformBrowser!
+    if (isPlatformBrowser(this.platformId)) {
       this.loadOlMap();
     }
   }
@@ -44,6 +50,7 @@ export class EventMap implements AfterViewInit {
     if (!this.mapElementRef()) {
       return;
     }
+
     const germanyExtent = boundingExtent([
       fromLonLat([5.9, 47.3]),   // Südwest
       fromLonLat([15.0, 55.1])   // Nordost
@@ -51,57 +58,281 @@ export class EventMap implements AfterViewInit {
 
     const germanyView = new View({
       center: fromLonLat([10.45, 51.16]), // Mittelpunkt Deutschland
-      zoom: 6
-    })
+      zoom: 5
+    });
+
     germanyView.fit(germanyExtent, {
       padding: [50, 50, 50, 50],
       duration: 1000
     });
+
+    // Vector Source für Events
+    this.vectorSource = new VectorSource();
+    this.addEventFeatures();
+
+    // Cluster Source
+    const clusterSource = new Cluster({
+      distance: 80,
+      source: this.vectorSource
+    });
+
+    // Vector Layer mit Clustering
+    const vectorLayer = new VectorLayer({
+      source: clusterSource,
+      style: (feature) => this.styleFunction(feature as Feature, clusterSource)
+    });
+
+    // Popup Overlay
+    this.setupPopupOverlay();
 
     this.map = new Map({
       target: this.mapElementRef().nativeElement,
       layers: [
         new TileLayer({
           source: new OSM()
-        })
+        }),
+        vectorLayer
       ],
-      view: germanyView
+      view: germanyView,
+      overlays: this.popupOverlay ? [this.popupOverlay] : []
+    });
+
+    // Interaktionen für Click-Events
+    this.setupInteractions(clusterSource);
+  }
+
+  private addEventFeatures() {
+    if (!this.vectorSource || !this.events()) {
+      return;
+    }
+
+    this.events()?.forEach((event) => {
+      if (event.fields?.location?.lon && event.fields?.location?.lat) {
+        const feature = new Feature({
+          geometry: new Point(fromLonLat([event.fields.location.lon, event.fields.location.lat])),
+          eventData: event
+        });
+
+        this.vectorSource!.addFeature(feature);
+      }
     });
   }
 
-  private async loadMap(): Promise<void> {
-    // if (!isPlatformBrowser(this.platformId) || !this.mapElementRef() || !this.events()) {
-    //   return;
-    // }
-    
+  private setupPopupOverlay() {
+    if (!this.popupElementRef()) {
+      return;
+    }
 
-    // const leaflet = await import('leaflet');
-    // this.map = L.map(this.mapElementRef().nativeElement).setView([51.3, 10.1], 6);
-    // leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //   attribution: '© OpenStreetMap'
-    // }).addTo(this.map);
-    // if (this.events()) {
+    this.popupOverlay = new Overlay({
+      element: this.popupElementRef().nativeElement,
+      autoPan: { margin: 50 },
+      // autoPanAnimation: { duration: 250 }
+    });
+  }
 
-    //   this.events()?.forEach(async event => {
+  private setupInteractions(clusterSource: Cluster) {
+    if (!this.map) {
+      return;
+    }
 
-    //     //todo check if possible via leaflet?
-    //     const address = await reverseGeocode(event.fields?.location?.lat || 0, event.fields?.location?.lon || 0);
+    this.select = new Select({
+      condition: click,
+      style: (feature) => this.selectStyle(feature as Feature)
+    });
 
-    //     const street = address.road || address.pedestrian || address.cycleway || 'Straße unbekannt';
-    //     const house = address.house_number ? ` ${address.house_number}` : '';
-    //     const postcode = address.postcode ? ` ${address.postcode}` : '';
-    //     const village = address.village ? ` ${address.village}` : '';
+    this.map.addInteraction(this.select);
 
-    //     leaflet.marker([event.fields?.location?.lat || 0, event.fields?.location?.lon || 0]).addTo(this.map)
-    //       .bindPopup(`
-    //         <br>${event.fields?.locationName}<br>
-    //         ${formatDate(event.fields?.date?.toString())}
-    //         <br>${event.fields?.contactDetails}<br>
-    //         <a href="${event.fields?.link}" target="_blank">Mehr Informationen</a>
-    //         <br>📍 ${street} ${house}, ${postcode || ''} ${village || ''}
-    //         `);
-    //   });
-    // }
+    this.select.on('select', (e) => {
+      this.handleFeatureSelect(e, clusterSource);
+    });
+  }
+
+  private handleFeatureSelect(e: any, clusterSource: Cluster) {
+    if (!this.map || !this.popupOverlay) {
+      return;
+    }
+
+    const features = e.selected;
+
+    if (features.length === 0) {
+      this.popupOverlay.setPosition(undefined);
+      this.popupContent.set(null);
+      return;
+    }
+
+    const feature = features[0];
+    const featuresInCluster = feature.get('features');
+
+    if (featuresInCluster && featuresInCluster.length > 1) {
+      // Cluster wurde geklickt - zoome hinein
+      const extent = clusterSource.getExtent();
+      this.map.getView().fit(extent, {
+        duration: 500,
+        padding: [50, 50, 50, 50],
+        minResolution: 0
+      });
+      this.popupOverlay.setPosition(undefined);
+    } else {
+      // Einzelnes Event wurde geklickt
+      const eventFeature = featuresInCluster ? featuresInCluster[0] : feature;
+      const eventData = eventFeature.get('eventData') as CfEvent;
+
+      if (eventData) {
+        const geometry = eventFeature.getGeometry() as Point;
+        this.popupOverlay.setPosition(geometry.getCoordinates());
+
+        this.popupContent.set({
+          title: eventData.fields?.name || 'Event',
+          content: this.buildPopupContent(eventData)
+        });
+      }
+    }
+  }
+
+  private buildPopupContent(event: CfEvent): string {
+    const locationName = event.fields?.locationName || '';
+    const date = event.fields?.date ? this.formatDate(event.fields.date) : '';
+    const contactDetails = event.fields?.contactDetails || '';
+    const link = event.fields?.link ? ` <a href="${event.fields.link}" target="_blank">Mehr Informationen</a>` : '';
+
+    return `
+      <div style="font-size: 12px;">
+        ${locationName ? `<p><strong>${locationName}</strong></p>` : ''}
+        ${date ? `<p>${date}</p>` : ''}
+        ${contactDetails ? `<p>${contactDetails}</p>` : ''}
+        ${link ? `<p>${link}</p>` : ''}
+      </div>
+    `;
+  }
+
+  private formatDate(dateString: string): string {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('de-DE', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    } catch {
+      return dateString;
+    }
+  }
+
+  private styleFunction(feature: Feature, clusterSource: Cluster): Style | Style[] {
+    const size = feature.get('features').length;
+
+    if (size > 1) {
+      // Cluster Style
+      return new Style({
+        image: new Circle({
+          radius: 22,
+          fill: new Fill({ color: 'rgba(51, 122, 183, 0.8)' }),
+          stroke: new Stroke({ color: '#fff', width: 2 })
+        }),
+        text: new Text({
+          text: size.toString(),
+          fill: new Fill({ color: '#fff' }),
+          font: 'bold 14px Arial'
+        })
+      });
+    } else {
+      // Einzelnes Event - Kalender Icon
+      const eventFeature = feature.get('features')[0];
+      const eventData = eventFeature.get('eventData') as CfEvent;
+      const day = this.extractDay(eventData.fields?.date?.toString() || '');
+
+      return new Style({
+        image: new Icon({
+          src: this.generateCalendarIcon(day),
+          scale: 1,
+          anchor: [0.5, 1]
+        })
+      });
+    }
+  }
+
+  private selectStyle(feature: Feature): Style | Style[] {
+    const size = feature.get('features').length;
+
+    if (size > 1) {
+      // Selected Cluster
+      return new Style({
+        image: new Circle({
+          radius: 25,
+          fill: new Fill({ color: 'rgba(230, 126, 34, 0.9)' }),
+          stroke: new Stroke({ color: '#fff', width: 3 })
+        }),
+        text: new Text({
+          text: size.toString(),
+          fill: new Fill({ color: '#fff' }),
+          font: 'bold 14px Arial'
+        })
+      });
+    } else {
+      // Selected Event - Kalender Icon mit Highlight
+      const eventFeature = feature.get('features')[0];
+      const eventData = eventFeature.get('eventData') as CfEvent;
+      const day = this.extractDay(eventData.fields?.date?.toString() || '');
+
+      return new Style({
+        image: new Icon({
+          src: this.generateCalendarIcon(day, true),
+          scale: 1.2,
+          anchor: [0.5, 1]
+        })
+      });
+    }
+  }
+
+  private extractDay(dateString: string): string {
+    try {
+      const date = new Date(dateString);
+      return date.getDate().toString().padStart(2, '0');
+    } catch {
+      return '??';
+    }
+  }
+
+  private generateCalendarIcon(day: string, highlight = false): string {
+    const canvas = document.createElement('canvas');
+    canvas.width = 48;
+    canvas.height = 56;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return '';
+
+    // Hintergrund
+    const bgColor = highlight ? '#e67e22' : '#3498db';
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(2, 10, 44, 40);
+
+    // Border
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(2, 10, 44, 40);
+
+    // Kalender-Streifen oben
+    ctx.fillStyle = '#34495e';
+    ctx.fillRect(2, 2, 44, 8);
+
+    // Löcher für Kalender-Aufhängung
+    ctx.fillStyle = '#888';
+    ctx.beginPath();
+    ctx.arc(12, 6, 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(36, 6, 2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Tag-Text
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 24px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(day, 24, 32, 100);
+
+    return canvas.toDataURL('image/png');
   }
 }
 

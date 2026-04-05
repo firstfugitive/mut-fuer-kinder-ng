@@ -1,1 +1,86 @@
 @use "ol/ol.css";
+
+.ol-popup {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  bottom: 12px;
+  left: -50px;
+  min-width: 250px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+
+  .ol-popup-closer {
+    position: absolute;
+    top: 2px;
+    right: 8px;
+    border: none;
+    background: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+
+    &:hover {
+      color: #000;
+    }
+  }
+
+  .ol-popup-content {
+    padding: 15px;
+    font-size: 13px;
+    color: #333;
+
+    strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #1a1a1a;
+    }
+
+    p {
+      margin: 5px 0;
+
+      a {
+        color: #3498db;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  &::before {
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-top-color: white;
+    border-width: 10px;
+    margin-left: -10px;
+  }
+
+  &::after {
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-top-color: #ccc;
+    border-width: 11px;
+    margin-left: -11px;
+  }
+}
