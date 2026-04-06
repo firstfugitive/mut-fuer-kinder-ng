@@ -9,5 +9,6 @@ export interface CfEvent extends CfContentType {
         date?: EntryFields.Date;
         contactDetails?: EntryFields.Text;
         link?: EntryFields.Text;
+        detailsNotAvailable?: EntryFields.Boolean;
     }
 }

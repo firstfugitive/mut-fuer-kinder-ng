@@ -1,18 +1,40 @@
 <div id="map" style="height: 400px;" #map></div>
 
 <!-- Popup für Event-Details -->
-<div 
-  id="popup" 
-  class="ol-popup"
-  #popup
-  [style.display]="popupContent() ? 'block' : 'none'">
+<div id="popup" class="ol-popup" #popup [style.display]="popupContent() ? 'block' : 'none'">
   <button class="ol-popup-closer" (click)="closePopup()">×</button>
   <div class="ol-popup-content" #popupContentDiv>
-    @if (popupContent()?.title) {
-        <strong>{{ popupContent()?.title }}</strong>
+    @if (popupContent()?.event?.fields?.locationName) {
+    <strong>{{ popupContent()?.event?.fields?.locationName }}</strong>
     }
-    @if (popupContent()?.content) {
-    <div [innerHTML]="popupContent()?.content"></div>
+    @if (popupContent()?.event?.fields?.detailsNotAvailable) {
+    <p>Details folgen</p>
+    } @else {
+    <div class="row">
+      <mat-icon fontIcon="location_on" />
+      <div>{{ popupContent()?.formattedAddress}}</div>
+    </div>
+    @if (popupContent()?.event?.fields?.date) {
+    <div class="row">
+      <mat-icon fontIcon="schedule" />
+      <div>
+        <div>{{ formatDateTime(popupContent()?.event?.fields?.date) }}</div>
+        <div>{{ formatDate(popupContent()?.event?.fields?.date) }}</div>
+      </div>
+    </div>
+    }
+    @if (popupContent()?.event?.fields?.contactDetails) {
+    <div class="row">
+      <mat-icon fontIcon="call" />
+      <div>{{ popupContent()?.event?.fields?.contactDetails}}</div>
+    </div>
+    }
+    @if(popupContent()?.event?.fields?.link) {
+    <div class="row">
+      <mat-icon fontIcon="link" />
+      <a href="{{ popupContent()?.event?.fields?.link }}" target="_blank">Weitere Informationen</a>
+    </div>
+    }
     }
   </div>
 </div>

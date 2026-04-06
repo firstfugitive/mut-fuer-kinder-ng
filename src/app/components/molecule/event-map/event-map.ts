@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, inject, input, PLATFORM_ID, viewChild, ViewEncapsulation, signal } from '@angular/core';
 import { CfEvent } from '../../../models/contentful-content-types/event';
+import { MatIconModule } from '@angular/material/icon';
 
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -17,10 +18,17 @@ import { Style, Icon, Text, Fill, Stroke, Circle } from 'ol/style';
 import Overlay from 'ol/Overlay';
 import { click } from 'ol/events/condition';
 import Select from 'ol/interaction/Select';
+import { EntryFields } from 'contentful';
+
+interface MyPopupContent {
+  event: CfEvent;
+  formattedAddress: string;
+}
 
 @Component({
   selector: 'app-event-map',
   templateUrl: './event-map.html',
+  imports: [MatIconModule],
   styleUrl: './event-map.scss',
   encapsulation: ViewEncapsulation.None
 })
@@ -35,7 +43,8 @@ export class EventMap implements AfterViewInit {
   private map: Map | null = null;
   private popupOverlay: Overlay | null = null;
   private select: Select | null = null;
-  protected popupContent = signal<{ title: string; content: string } | null>(null);
+  protected popupContent = signal<MyPopupContent | null>(null);
+
 
   private platformId: Object = inject(PLATFORM_ID);
   private vectorSource: VectorSource<Feature> | null = null;
@@ -156,9 +165,9 @@ export class EventMap implements AfterViewInit {
     }
   }
 
-  private handleFeatureSelect(e: any, clusterSource: Cluster) {
+  private async handleFeatureSelect(e: any, clusterSource: Cluster): Promise<void> {
     if (!this.map || !this.popupOverlay) {
-      return;
+      return Promise.resolve();
     }
 
     const features = e.selected;
@@ -166,7 +175,7 @@ export class EventMap implements AfterViewInit {
     if (features.length === 0) {
       this.popupOverlay.setPosition(undefined);
       this.popupContent.set(null);
-      return;
+      return Promise.resolve();
     }
 
     const feature = features[0];
@@ -177,10 +186,11 @@ export class EventMap implements AfterViewInit {
       const extent = clusterSource.getExtent();
       this.map.getView().fit(extent, {
         duration: 500,
-        padding: [100, 100, 100, 100],
+        padding: [50, 50, 50, 50],
         maxZoom: 9
       });
       this.popupOverlay.setPosition(undefined);
+      return Promise.resolve();
     } else {
       // Einzelnes Event wurde geklickt
       const eventFeature = featuresInCluster ? featuresInCluster[0] : feature;
@@ -190,6 +200,14 @@ export class EventMap implements AfterViewInit {
         const geometry = eventFeature.getGeometry() as Point;
         const coords = geometry.getCoordinates();
 
+        // Zoom-abhängige Popup-Verschiebung
+        const currentZoom = this.map.getView().getZoom() || 5;
+        const baseOffset = 60000; // Basis-Verschiebung bei Zoom 5
+        console.log('Current Zoom:', currentZoom, 'Zoom Factor:', (5 / currentZoom));
+        const zoomFactor = Math.max(0.2, (5 / currentZoom)); // Skaliert mit dem Zoom-Level
+        const offsetX = Math.round(baseOffset * zoomFactor);
+        // const newCoordsForMapViewWithPopup = add(coords, [offsetX, 32000]);
+
         // Zentriere die Karte auf den Event-Punkt
         this.map.getView().animate({
           center: coords,
@@ -197,33 +215,20 @@ export class EventMap implements AfterViewInit {
         });
 
         //todo : Popup-Positionierung verbessern, damit es nicht das Kalendericon verdeckt
-        this.popupOverlay.setPosition(coords);
+        this.popupOverlay.setPosition(geometry.getCoordinates());
 
-        this.popupContent.set({
-          title: eventData.fields?.name || 'Event',
-          content: this.buildPopupContent(eventData)
+        if(eventData.fields?.detailsNotAvailable) {
+          return this.popupContent.set({event: eventData, formattedAddress: 'Details zum Event sind leider nicht verfügbar.'});
+        }
+        return this.formatAddress(eventData.fields?.location || {lat: 0, lon: 0}).then(formattedAddress => {
+          console.log('Formatted Address:', formattedAddress);
+          return this.popupContent.set({event: eventData, formattedAddress: formattedAddress});
         });
       }
     }
   }
 
-  private buildPopupContent(event: CfEvent): string {
-    const locationName = event.fields?.locationName || '';
-    const date = event.fields?.date ? this.formatDate(event.fields.date) : '';
-    const contactDetails = event.fields?.contactDetails || '';
-    const link = event.fields?.link ? ` <a href="${event.fields.link}" target="_blank">Mehr Informationen</a>` : '';
-
-    return `
-      <div style="font-size: 12px;">
-        ${locationName ? `<p><strong>${locationName}</strong></p>` : ''}
-        ${date ? `<p>${date}</p>` : ''}
-        ${contactDetails ? `<p>${contactDetails}</p>` : ''}
-        ${link ? `<p>${link}</p>` : ''}
-      </div>
-    `;
-  }
-
-  private formatDate(dateString: string): string {
+  protected formatDate(dateString: string): string {
     try {
       const date = new Date(dateString);
       return date.toLocaleDateString('de-DE', {
@@ -236,6 +241,41 @@ export class EventMap implements AfterViewInit {
       return dateString;
     }
   }
+
+  protected formatDateTime(dateString: string): string {
+    try {
+      const date = new Date(dateString);
+      const formattedTime = date.toLocaleTimeString('de-DE', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      if(formattedTime === '00:00') {
+        return "Uhrzeit noch nicht bekannt";
+      }
+      return formattedTime;
+    } catch {
+      return dateString;
+    }
+  }
+
+  protected async formatAddress(location: EntryFields.Location): Promise<string> {
+    if (!location) {
+      return 'Adresse unbekannt';
+    }
+
+    const address = await reverseGeocode(location.lat || 0, location.lon || 0).catch(() => null);
+    if (!address) {
+      return `Lat ${location.lat?.toFixed(4) || '??'}, Lon ${location.lon?.toFixed(4) || '??'}`;
+    }
+
+    const street = address.road || address.pedestrian || address.cycleway || 'Straße unbekannt';
+    const house = address.house_number ? ` ${address.house_number}` : '';
+    const postcode = address.postcode ? ` ${address.postcode}` : '';
+    const town = address.town ? ` ${address.town}` : address.city ? ` ${address.city}` : address.village ? ` ${address.village}` : '';
+
+    return `${street}${house}, ${postcode}${town}`;
+  }
+
 
   private styleFunction(feature: Feature, clusterSource: Cluster): Style | Style[] {
     const size = feature.get('features').length;
@@ -356,10 +396,21 @@ export class EventMap implements AfterViewInit {
 
 async function reverseGeocode(lat: number, lon: number) {
   const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&addressdetails=1`;
-  const res = await fetch(url, {
-    headers: { 'User-Agent': 'mut-fuer-kinder-ng/1.0' }
-  });
-  if (!res.ok) throw new Error('Reverse geocode failed');
-  const data = await res.json();
-  return data.address;
+  console.log('Reverse Geocoding URL:', url);
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`Reverse geocode failed: ${res.status}`);
+    }
+    const data = await res.json();
+    return data.address;
+  } catch {
+    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+    const proxyRes = await fetch(proxyUrl);
+    if (!proxyRes.ok) {
+      throw new Error(`Reverse geocode proxy failed: ${proxyRes.status}`);
+    }
+    const proxyData = await proxyRes.json();
+    return proxyData.address;
+  }
 }
