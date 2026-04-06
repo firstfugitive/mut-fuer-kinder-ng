@@ -4,37 +4,18 @@
 <div id="popup" class="ol-popup" #popup [style.display]="popupContent() ? 'block' : 'none'">
   <button class="ol-popup-closer" (click)="closePopup()">×</button>
   <div class="ol-popup-content" #popupContentDiv>
-    @if (popupContent()?.event?.fields?.locationName) {
-    <strong>{{ popupContent()?.event?.fields?.locationName }}</strong>
-    }
-    @if (popupContent()?.event?.fields?.detailsNotAvailable) {
-    <p>Details folgen</p>
-    } @else {
-    <div class="row">
-      <mat-icon fontIcon="location_on" />
-      <div>{{ popupContent()?.formattedAddress}}</div>
-    </div>
-    @if (popupContent()?.event?.fields?.date) {
-    <div class="row">
-      <mat-icon fontIcon="schedule" />
-      <div>
-        <div>{{ formatDateTime(popupContent()?.event?.fields?.date) }}</div>
-        <div>{{ formatDate(popupContent()?.event?.fields?.date) }}</div>
-      </div>
-    </div>
-    }
-    @if (popupContent()?.event?.fields?.contactDetails) {
-    <div class="row">
-      <mat-icon fontIcon="call" />
-      <div>{{ popupContent()?.event?.fields?.contactDetails}}</div>
-    </div>
-    }
-    @if(popupContent()?.event?.fields?.link) {
-    <div class="row">
-      <mat-icon fontIcon="link" />
-      <a href="{{ popupContent()?.event?.fields?.link }}" target="_blank">Weitere Informationen</a>
-    </div>
-    }
-    }
+    <app-event-details-display [eventDetails]="popupContent()" />
   </div>
 </div>
+
+<mat-accordion multi>
+  @for(eventDetail of eventDetails(); track $index) {
+  <mat-expansion-panel >
+    <mat-expansion-panel-header>
+      <mat-panel-title>{{ extractDay(eventDetail.event?.fields?.date) }}</mat-panel-title>
+      <mat-panel-description>{{ eventDetail.event?.fields?.locationName }}</mat-panel-description>
+    </mat-expansion-panel-header>
+    <app-event-details-display [eventDetails]="eventDetail" />
+  </mat-expansion-panel>
+  }
+</mat-accordion>

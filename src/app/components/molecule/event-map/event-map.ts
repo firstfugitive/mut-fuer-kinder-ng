@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, inject, input, PLATFORM_ID, viewChild, ViewEncapsulation, signal } from '@angular/core';
 import { CfEvent } from '../../../models/contentful-content-types/event';
-import { MatIconModule } from '@angular/material/icon';
+import {MatExpansionModule, MatAccordion} from '@angular/material/expansion';
 
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -19,18 +19,15 @@ import Overlay from 'ol/Overlay';
 import { click } from 'ol/events/condition';
 import Select from 'ol/interaction/Select';
 import { EntryFields } from 'contentful';
-
-interface MyPopupContent {
-  event: CfEvent;
-  formattedAddress: string;
-}
+import { EventDetails } from '../../../models/event-details';
+import { EventDetailsDisplay } from "./event-details-display/event-details-display";
 
 @Component({
   selector: 'app-event-map',
   templateUrl: './event-map.html',
-  imports: [MatIconModule],
   styleUrl: './event-map.scss',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  imports: [EventDetailsDisplay, MatExpansionModule, MatAccordion]
 })
 export class EventMap implements AfterViewInit {
 
@@ -40,19 +37,38 @@ export class EventMap implements AfterViewInit {
   popupElementRef = viewChild<ElementRef>('popup');
   popupContentRef = viewChild<ElementRef>('popupContentDiv');
 
+  eventDetails = signal<EventDetails[]>(undefined);
+
   private map: Map | null = null;
   private popupOverlay: Overlay | null = null;
   private select: Select | null = null;
-  protected popupContent = signal<MyPopupContent | null>(null);
-
+  protected popupContent = signal<EventDetails | null>(null);
 
   private platformId: Object = inject(PLATFORM_ID);
   private vectorSource: VectorSource<Feature> | null = null;
 
   async ngAfterViewInit(): Promise<void> {
     if (isPlatformBrowser(this.platformId)) {
-      this.loadOlMap();
+      this.setEventDetails().then(() => this.loadOlMap());
     }
+  }
+
+  private async setEventDetails(): Promise<void> {
+    const eventDetails: EventDetails[] = [];
+    return Promise.all(
+      this.events()?.map(async (event) => {
+      if (event.fields?.detailsNotAvailable) {
+        eventDetails.push({ event: event, formattedAddress: 'Details zum Event sind leider nicht verfügbar.' });
+        return Promise.resolve();
+      }
+      return this.formatAddress(event.fields?.location || { lat: 0, lon: 0 }).then(formattedAddress => {
+        console.log('Formatted Address:', formattedAddress);
+        eventDetails.push({ event: event, formattedAddress: formattedAddress });
+      });
+    })).then(() => {
+      this.eventDetails.set(eventDetails);
+    });
+
   }
 
   private loadOlMap() {
@@ -111,15 +127,16 @@ export class EventMap implements AfterViewInit {
   }
 
   private addEventFeatures() {
-    if (!this.vectorSource || !this.events()) {
+    if (!this.vectorSource || !this.eventDetails()) {
       return;
     }
 
-    this.events()?.forEach((event) => {
+    this.eventDetails()?.forEach((eventDetail) => {
+      const event = eventDetail.event;
       if (event.fields?.location?.lon && event.fields?.location?.lat) {
         const feature = new Feature({
           geometry: new Point(fromLonLat([event.fields.location.lon, event.fields.location.lat])),
-          eventData: event
+          eventDetails: eventDetail
         });
 
         this.vectorSource!.addFeature(feature);
@@ -194,16 +211,16 @@ export class EventMap implements AfterViewInit {
     } else {
       // Einzelnes Event wurde geklickt
       const eventFeature = featuresInCluster ? featuresInCluster[0] : feature;
-      const eventData = eventFeature.get('eventData') as CfEvent;
+      const eventDetails = eventFeature.get('eventDetails') as EventDetails;
 
-      if (eventData) {
+      if (eventDetails) {
         const geometry = eventFeature.getGeometry() as Point;
         const coords = geometry.getCoordinates();
 
         // Zoom-abhängige Popup-Verschiebung
         const currentZoom = this.map.getView().getZoom() || 5;
         const baseOffset = 60000; // Basis-Verschiebung bei Zoom 5
-        console.log('Current Zoom:', currentZoom, 'Zoom Factor:', (5 / currentZoom));
+        // console.log('Current Zoom:', currentZoom, 'Zoom Factor:', (5 / currentZoom));
         const zoomFactor = Math.max(0.2, (5 / currentZoom)); // Skaliert mit dem Zoom-Level
         const offsetX = Math.round(baseOffset * zoomFactor);
         // const newCoordsForMapViewWithPopup = add(coords, [offsetX, 32000]);
@@ -217,46 +234,13 @@ export class EventMap implements AfterViewInit {
         //todo : Popup-Positionierung verbessern, damit es nicht das Kalendericon verdeckt
         this.popupOverlay.setPosition(geometry.getCoordinates());
 
-        if(eventData.fields?.detailsNotAvailable) {
-          return this.popupContent.set({event: eventData, formattedAddress: 'Details zum Event sind leider nicht verfügbar.'});
-        }
-        return this.formatAddress(eventData.fields?.location || {lat: 0, lon: 0}).then(formattedAddress => {
-          console.log('Formatted Address:', formattedAddress);
-          return this.popupContent.set({event: eventData, formattedAddress: formattedAddress});
-        });
+        return this.popupContent.set(eventDetails);
+  
       }
     }
   }
 
-  protected formatDate(dateString: string): string {
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('de-DE', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-    } catch {
-      return dateString;
-    }
-  }
-
-  protected formatDateTime(dateString: string): string {
-    try {
-      const date = new Date(dateString);
-      const formattedTime = date.toLocaleTimeString('de-DE', {
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-      if(formattedTime === '00:00') {
-        return "Uhrzeit noch nicht bekannt";
-      }
-      return formattedTime;
-    } catch {
-      return dateString;
-    }
-  }
+  
 
   protected async formatAddress(location: EntryFields.Location): Promise<string> {
     if (!location) {
@@ -297,8 +281,8 @@ export class EventMap implements AfterViewInit {
     } else {
       // Einzelnes Event - Kalender Icon
       const eventFeature = feature.get('features')[0];
-      const eventData = eventFeature.get('eventData') as CfEvent;
-      const day = this.extractDay(eventData.fields?.date?.toString() || '');
+      const eventDetails = eventFeature.get('eventDetails') as EventDetails;
+      const day = this.extractDay(eventDetails?.event?.fields?.date?.toString() || '');
 
       return new Style({
         image: new Icon({
@@ -330,8 +314,8 @@ export class EventMap implements AfterViewInit {
     } else {
       // Selected Event - Kalender Icon mit Highlight
       const eventFeature = feature.get('features')[0];
-      const eventData = eventFeature.get('eventData') as CfEvent;
-      const day = this.extractDay(eventData.fields?.date?.toString() || '');
+      const eventDetails = eventFeature.get('eventDetails') as EventDetails;
+      const day = this.extractDay(eventDetails?.event?.fields?.date?.toString() || '');
 
       return new Style({
         image: new Icon({
@@ -343,7 +327,7 @@ export class EventMap implements AfterViewInit {
     }
   }
 
-  private extractDay(dateString: string): string {
+  protected extractDay(dateString: string): string {
     try {
       const date = new Date(dateString);
       return date.getDate().toString().padStart(2, '0');
