@@ -1,4 +1,30 @@
-<div id="map" style="height: 400px;" #map></div>
+<div class="background-wrapper">
+  <h2 class="events-heading">Alle Termine auf einen Blick</h2>
+
+  <div class="events-container">
+    <div id="map" #map></div>
+
+    <mat-accordion multi class="events-list">
+      @for(eventDetail of eventDetails(); track $index) {
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ extractDay(eventDetail.event?.fields?.date) + "." +
+            extractMonth(eventDetail.event?.fields?.date) + "."}}</mat-panel-title>
+          <mat-panel-description>{{ eventDetail.event?.fields?.locationName }}</mat-panel-description>
+        </mat-expansion-panel-header>
+        <app-event-details-display [eventDetails]="eventDetail" [showTitle]="false" />
+      </mat-expansion-panel>
+      }
+    </mat-accordion>
+
+    @if(loadingEventDetails) {
+      <div id="loadingSpinner">
+        Lade Event-Details ...
+        <mat-spinner></mat-spinner>
+      </div>
+    }
+  </div>
+</div>
 
 <!-- Popup für Event-Details -->
 <div id="popup" class="ol-popup" #popup [style.display]="popupContent() ? 'block' : 'none'">
@@ -7,15 +33,3 @@
     <app-event-details-display [eventDetails]="popupContent()" />
   </div>
 </div>
-
-<mat-accordion multi>
-  @for(eventDetail of eventDetails(); track $index) {
-  <mat-expansion-panel >
-    <mat-expansion-panel-header>
-      <mat-panel-title>{{ extractDay(eventDetail.event?.fields?.date) }}</mat-panel-title>
-      <mat-panel-description>{{ eventDetail.event?.fields?.locationName }}</mat-panel-description>
-    </mat-expansion-panel-header>
-    <app-event-details-display [eventDetails]="eventDetail" />
-  </mat-expansion-panel>
-  }
-</mat-accordion>

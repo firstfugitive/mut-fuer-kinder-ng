@@ -1,5 +1,14 @@
-@if (eventDetails()?.event?.fields?.locationName) {
+@if (showTitle() && eventDetails()?.event?.fields?.locationName) {
 <strong>{{ eventDetails()?.event?.fields?.locationName }}</strong>
+}
+@if (eventDetails()?.event?.fields?.date) {
+<div class="row">
+    <mat-icon fontIcon="schedule" />
+    <div>
+        <div>{{ formatDateTime(eventDetails()?.event?.fields?.date, eventDetails()?.event?.fields?.dateAdditionalInfo) }}</div>
+        <div>{{ formatDate(eventDetails()?.event?.fields?.date) }}</div>
+    </div>
+</div>
 }
 @if (eventDetails()?.event?.fields?.detailsNotAvailable) {
 <p>Details folgen</p>
@@ -8,15 +17,6 @@
     <mat-icon fontIcon="location_on" />
     <div>{{ eventDetails()?.formattedAddress}}</div>
 </div>
-@if (eventDetails()?.event?.fields?.date) {
-<div class="row">
-    <mat-icon fontIcon="schedule" />
-    <div>
-        <div>{{ formatDateTime(eventDetails()?.event?.fields?.date) }}</div>
-        <div>{{ formatDate(eventDetails()?.event?.fields?.date) }}</div>
-    </div>
-</div>
-}
 @if (eventDetails()?.event?.fields?.contactDetails) {
 <div class="row">
     <mat-icon fontIcon="call" />

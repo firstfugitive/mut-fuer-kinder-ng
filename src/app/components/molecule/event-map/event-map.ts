@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, inject, input, PLATFORM_ID, viewChild, ViewEncapsulation, signal } from '@angular/core';
 import { CfEvent } from '../../../models/contentful-content-types/event';
-import {MatExpansionModule, MatAccordion} from '@angular/material/expansion';
+import { MatExpansionModule, MatAccordion } from '@angular/material/expansion';
 
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -21,13 +21,14 @@ import Select from 'ol/interaction/Select';
 import { EntryFields } from 'contentful';
 import { EventDetails } from '../../../models/event-details';
 import { EventDetailsDisplay } from "./event-details-display/event-details-display";
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-event-map',
   templateUrl: './event-map.html',
   styleUrl: './event-map.scss',
   encapsulation: ViewEncapsulation.None,
-  imports: [EventDetailsDisplay, MatExpansionModule, MatAccordion]
+  imports: [EventDetailsDisplay, MatExpansionModule, MatAccordion, MatProgressSpinnerModule]
 })
 export class EventMap implements AfterViewInit {
 
@@ -46,10 +47,17 @@ export class EventMap implements AfterViewInit {
 
   private platformId: Object = inject(PLATFORM_ID);
   private vectorSource: VectorSource<Feature> | null = null;
+  private clusterSource: Cluster | null = null;
+  protected loadingEventDetails = false;
 
   async ngAfterViewInit(): Promise<void> {
     if (isPlatformBrowser(this.platformId)) {
-      this.setEventDetails().then(() => this.loadOlMap());
+      this.loadOlMap();
+      this.loadingEventDetails = true;
+      this.setEventDetails().then(() => {
+        this.loadOlMapFeatures();
+        this.loadingEventDetails = false;
+      });
     }
   }
 
@@ -57,17 +65,21 @@ export class EventMap implements AfterViewInit {
     const eventDetails: EventDetails[] = [];
     return Promise.all(
       this.events()?.map(async (event) => {
-      if (event.fields?.detailsNotAvailable) {
-        eventDetails.push({ event: event, formattedAddress: 'Details zum Event sind leider nicht verfügbar.' });
-        return Promise.resolve();
-      }
-      return this.formatAddress(event.fields?.location || { lat: 0, lon: 0 }).then(formattedAddress => {
-        console.log('Formatted Address:', formattedAddress);
-        eventDetails.push({ event: event, formattedAddress: formattedAddress });
+        if (event.fields?.detailsNotAvailable) {
+          eventDetails.push({ event: event, formattedAddress: 'Details zum Event sind leider nicht verfügbar.' });
+          return Promise.resolve();
+        }
+        return this.formatAddress(event.fields?.location || { lat: 0, lon: 0 }).then(formattedAddress => {
+          console.log('Formatted Address:', formattedAddress);
+          eventDetails.push({ event: event, formattedAddress: formattedAddress });
+        });
+      })).then(() => {
+        this.eventDetails.set(eventDetails.sort((a, b) => {
+          const dateA = a?.event?.fields?.date ? new Date(a.event.fields.date.toString()).getTime() : 0;
+          const dateB = b?.event?.fields?.date ? new Date(b.event.fields.date.toString()).getTime() : 0;
+          return dateA - dateB;
+        }));
       });
-    })).then(() => {
-      this.eventDetails.set(eventDetails);
-    });
 
   }
 
@@ -83,7 +95,7 @@ export class EventMap implements AfterViewInit {
 
     const germanyView = new View({
       center: fromLonLat([10.45, 51.16]), // Mittelpunkt Deutschland
-      zoom: 5
+      zoom: 5.8
     });
 
     germanyView.fit(germanyExtent, {
@@ -91,39 +103,42 @@ export class EventMap implements AfterViewInit {
       duration: 1000
     });
 
-    // Vector Source für Events
-    this.vectorSource = new VectorSource();
-    this.addEventFeatures();
-
-    // Cluster Source
-    const clusterSource = new Cluster({
-      distance: 80,
-      source: this.vectorSource
-    });
-
-    // Vector Layer mit Clustering
-    const vectorLayer = new VectorLayer({
-      source: clusterSource,
-      style: (feature) => this.styleFunction(feature as Feature, clusterSource)
-    });
-
-    // Popup Overlay
-    this.setupPopupOverlay();
-
     this.map = new Map({
       target: this.mapElementRef().nativeElement,
       layers: [
         new TileLayer({
           source: new OSM()
-        }),
-        vectorLayer
+        })
       ],
-      view: germanyView,
-      overlays: this.popupOverlay ? [this.popupOverlay] : []
+      view: germanyView
+    });
+  }
+
+  private loadOlMapFeatures() {
+    // Vector Source für Events
+    this.vectorSource = new VectorSource();
+    this.addEventFeatures();
+
+    // Cluster Source
+    this.clusterSource = new Cluster({
+      distance: 40,
+      source: this.vectorSource
     });
 
+    // Vector Layer mit Clustering
+    const vectorLayer = new VectorLayer({
+      source: this.clusterSource,
+      style: (feature) => this.styleFunction(feature as Feature, this.clusterSource)
+    });
+
+    // Popup Overlay
+    this.setupPopupOverlay();
+
+    this.map.addLayer(vectorLayer);
+    this.map.addOverlay(this.popupOverlay!);
+
     // Interaktionen für Click-Events
-    this.setupInteractions(clusterSource);
+    this.setupInteractions(this.clusterSource);
   }
 
   private addEventFeatures() {
@@ -235,12 +250,12 @@ export class EventMap implements AfterViewInit {
         this.popupOverlay.setPosition(geometry.getCoordinates());
 
         return this.popupContent.set(eventDetails);
-  
+
       }
     }
   }
 
-  
+
 
   protected async formatAddress(location: EntryFields.Location): Promise<string> {
     if (!location) {
@@ -327,6 +342,15 @@ export class EventMap implements AfterViewInit {
     }
   }
 
+  protected extractMonth(dateString: string): string {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleString('de-DE', { month: 'numeric' });
+    } catch {
+      return '??';
+    }
+  }
+
   protected extractDay(dateString: string): string {
     try {
       const date = new Date(dateString);
@@ -379,6 +403,7 @@ export class EventMap implements AfterViewInit {
 }
 
 async function reverseGeocode(lat: number, lon: number) {
+  // todo: solve problem with nominatim api usage limits see https://operations.osmfoundation.org/policies/nominatim/
   const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&addressdetails=1`;
   console.log('Reverse Geocoding URL:', url);
   try {

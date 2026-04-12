@@ -11,6 +11,7 @@ import { EventDetails } from '../../../../models/event-details';import { MatIcon
 export class EventDetailsDisplay {
 
   eventDetails = input<EventDetails>();
+  showTitle = input<boolean>(true);
 
   protected formatDate(dateString: string): string {
     try {
@@ -26,7 +27,7 @@ export class EventDetailsDisplay {
     }
   }
 
-  protected formatDateTime(dateString: string): string {
+  protected formatDateTime(dateString: string, dateAdditionalInfo: string): string {
     try {
       const date = new Date(dateString);
       const formattedTime = date.toLocaleTimeString('de-DE', {
@@ -36,7 +37,7 @@ export class EventDetailsDisplay {
       if (formattedTime === '00:00') {
         return "Uhrzeit noch nicht bekannt";
       }
-      return formattedTime;
+      return formattedTime + (dateAdditionalInfo ? ` (${dateAdditionalInfo})` : '');
     } catch {
       return dateString;
     }

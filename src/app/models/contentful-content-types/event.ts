@@ -7,6 +7,7 @@ export interface CfEvent extends CfContentType {
         locationName?: EntryFields.Text;
         location?: EntryFields.Location;
         date?: EntryFields.Date;
+        dateAdditionalInfo?: EntryFields.Text;
         contactDetails?: EntryFields.Text;
         link?: EntryFields.Text;
         detailsNotAvailable?: EntryFields.Boolean;
