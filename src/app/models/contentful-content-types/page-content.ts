@@ -1,5 +1,7 @@
 import { Asset, EntryFields } from "contentful";
 import { CfContentType } from "./content-type";
+import { CfEvent } from "./event";
+import { CfMarkdownText } from "./markdown-text";
 
 export interface CfPageContentBlog extends CfContentType {
     fields?: {
@@ -9,6 +11,8 @@ export interface CfPageContentBlog extends CfContentType {
         hideCreationDate?: EntryFields.Boolean;
         image?: Asset;
         content?: any[];
+        events?: CfEvent[];
+        eventsIntroductionText?: CfMarkdownText;
     }
 }
 

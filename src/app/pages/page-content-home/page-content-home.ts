@@ -1,4 +1,4 @@
-import { Component, computed, input, signal, Type } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { PageContent } from '../page-content';
 import { PageFooter } from '../../components/organism/page-footer/page-footer';
 import { PageHeader } from '../../components/organism/page-header/page-header';
@@ -7,7 +7,6 @@ import { Asset } from 'contentful';
 import { NgComponentOutlet, NgOptimizedImage } from '@angular/common';
 import { getImageUrl } from '../../components/shared/utils';
 import { BaseText } from "../../components/atom/base-text/base-text";
-import { sign } from 'node:crypto';
 import { SliderProperties } from '../../models/slider-properties';
 import { TextSlider } from "../../components/molecule/text-slider/text-slider";
 

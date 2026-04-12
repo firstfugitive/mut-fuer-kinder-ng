@@ -6,10 +6,14 @@ import { PageHeader } from '../../components/organism/page-header/page-header';
 import { Asset } from 'contentful';
 import { NgComponentOutlet, NgOptimizedImage } from '@angular/common';
 import { formatDate, getImageUrl } from '../../components/shared/utils';
+import { CfEvent } from '../../models/contentful-content-types/event';
+import { EventMap } from "../../components/molecule/event-map/event-map";
+import { CfMarkdownText } from '../../models/contentful-content-types/markdown-text';
+import { MarkdownText } from "../../components/molecule/markdown-text/markdown-text";
 
 @Component({
   selector: 'app-page-content-blog',
-  imports: [PageFooter, PageHeader, NgComponentOutlet, NgOptimizedImage],
+  imports: [PageFooter, PageHeader, NgComponentOutlet, NgOptimizedImage, EventMap, MarkdownText],
   templateUrl: './page-content-blog.html',
   styles: `
     @use "../../styles/placeholder.scss" as *;
@@ -29,5 +33,7 @@ export class PageContentBlog extends PageContent {
   title = computed<string>(() => this.pageContent()?.fields?.title);
   creationDate = computed<string>(() => formatDate(this.pageContent()?.fields?.creationDate?.toString()));
   hideCreationDate = computed<boolean>(() => this.pageContent()?.fields?.hideCreationDate);
-
+  events = computed<CfEvent[]>(() => this.pageContent()?.fields?.events);
+  eventsIntroductionText = computed<CfMarkdownText>(() => this.pageContent()?.fields?.eventsIntroductionText);
+  
 }
