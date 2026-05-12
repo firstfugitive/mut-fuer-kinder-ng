@@ -4,7 +4,7 @@
     class="content-blog-overview__intro module" />
 }
 <div class="content-blog-overview__blogs">
-@for (blogPage of blogPages; track $index) {
+@for (blogPage of blogPages(); track $index) {
     <app-blog-teaser [data]="blogPage"/>
 }
 </div>

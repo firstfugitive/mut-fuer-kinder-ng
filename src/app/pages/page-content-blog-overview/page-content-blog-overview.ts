@@ -1,4 +1,4 @@
-import { Component, computed, input, OnInit } from '@angular/core';
+import { Component, computed, input, OnInit, signal } from '@angular/core';
 import { PageContent } from '../page-content';
 import { CfPageContentBlog, CfPageContentBlogOverview } from '../../models/contentful-content-types/page-content';
 import { PageFooter } from '../../components/organism/page-footer/page-footer';
@@ -19,23 +19,23 @@ export class PageContentBlogOverview extends PageContent implements OnInit {
   override pageContent = input<CfPageContentBlogOverview>();
 
   headline = computed<string>(() => this.pageContent()?.fields?.headline);
-  blogPages: CfPage[] = [];
+  blogPages = signal<CfPage[]>([]);
 
   ngOnInit(): void {
     this.fetchBlogs();
   }
 
   private async fetchBlogs() {
-    const blogPages: CfPage[] = await contentfulClient.getEntries({
+    const blogPagesConst: CfPage[] = await contentfulClient.getEntries({
       content_type: 'page',
       'fields.content.sys.contentType.sys.id': 'pageContentBlog',
       limit: 1000
     }).then((res) => res.items) as CfPage[];
-    blogPages.sort((itemA: CfPage, itemB: CfPage) => {
+    blogPagesConst.sort((itemA: CfPage, itemB: CfPage) => {
       const dateA = (itemA?.fields?.content as CfPageContentBlog)?.fields?.creationDate;
       const dateB = (itemB?.fields?.content as CfPageContentBlog)?.fields?.creationDate;
       return (dateB < dateA) ? -1 : ((dateB > dateA) ? 1 : 0)
     })
-    this.blogPages = blogPages;
+    this.blogPages.set(blogPagesConst);
   }
 }
