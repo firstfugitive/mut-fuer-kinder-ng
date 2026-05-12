@@ -230,18 +230,7 @@ export class EventMap implements AfterViewInit {
 
       if (eventDetails) {
         const geometry = eventFeature.getGeometry() as Point;
-        const coords = geometry.getCoordinates();
-
-        // Zoom-abhängige Popup-Verschiebung
-        const currentZoom = this.map.getView().getZoom() || 5;
-        const baseOffset = 60000; // Basis-Verschiebung bei Zoom 5
-        // console.log('Current Zoom:', currentZoom, 'Zoom Factor:', (5 / currentZoom));
-        const zoomFactor = Math.max(0.2, (5 / currentZoom)); // Skaliert mit dem Zoom-Level
-        const offsetX = Math.round(baseOffset * zoomFactor);
-        // const newCoordsForMapViewWithPopup = add(coords, [offsetX, 32000]);
-
         this.popupOverlay.setPosition(geometry.getCoordinates());
-
         this.popupContent.set(eventDetails);
 
         // Zentriere die Karte auf die Mitte des Popups
