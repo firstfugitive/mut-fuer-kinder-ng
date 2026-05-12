@@ -22,6 +22,7 @@ import { EntryFields } from 'contentful';
 import { EventDetails } from '../../../models/event-details';
 import { EventDetailsDisplay } from "./event-details-display/event-details-display";
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Coordinate } from 'ol/coordinate';
 
 @Component({
   selector: 'app-event-map',
@@ -215,11 +216,20 @@ export class EventMap implements AfterViewInit {
 
     if (featuresInCluster && featuresInCluster.length > 1) {
       // Cluster wurde geklickt - zoome hinein
-      const extent = clusterSource.getExtent();
-      this.map.getView().fit(extent, {
+      // Berechne die Extent aller Features im Cluster
+      const clusterFeatures = featuresInCluster as Feature[];
+      const coordinates: any[] = [];
+      clusterFeatures.forEach(f => {
+        const geom = f.getGeometry() as Point;
+        coordinates.push(geom.getCoordinates());
+      });
+      
+      const clusteredExtent = boundingExtent(coordinates);
+      
+      this.map.getView().fit(clusteredExtent, {
         duration: 500,
-        padding: [50, 50, 50, 50],
-        maxZoom: 9
+        padding: [80, 80, 80, 80],
+        maxZoom: 10
       });
       this.popupOverlay.setPosition(undefined);
       return Promise.resolve();
