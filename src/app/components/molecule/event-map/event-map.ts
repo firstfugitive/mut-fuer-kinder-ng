@@ -22,7 +22,6 @@ import { EntryFields } from 'contentful';
 import { EventDetails } from '../../../models/event-details';
 import { EventDetailsDisplay } from "./event-details-display/event-details-display";
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Coordinate } from 'ol/coordinate';
 
 @Component({
   selector: 'app-event-map',
@@ -147,11 +146,34 @@ export class EventMap implements AfterViewInit {
       return;
     }
 
+    // Sammle alle Koordinaten, um Duplikate zu erkennen
+    const coordinateCount: Record<string, number> = {};
+    
     this.eventDetails()?.forEach((eventDetail) => {
       const event = eventDetail.event;
       if (event.fields?.location?.lon && event.fields?.location?.lat) {
+        const coordKey = `${event.fields.location.lon},${event.fields.location.lat}`;
+        coordinateCount[coordKey] = (coordinateCount[coordKey] || 0) + 1;
+      }
+    });
+
+    this.eventDetails()?.forEach((eventDetail) => {
+      const event = eventDetail.event;
+      if (event.fields?.location?.lon && event.fields?.location?.lat) {
+        let lon = event.fields.location.lon;
+        let lat = event.fields.location.lat;
+        
+        // Prüfe, ob diese Koordinate mehrfach vorkommt
+        const coordKey = `${event.fields.location.lon},${event.fields.location.lat}`;
+        if (coordinateCount[coordKey] > 1) {
+          // Jittering nur bei Duplikaten
+          const jitterAmount = 0.01; // ca. 1 km, je nach Breitengrad
+          lon += (Math.random() - 0.5) * jitterAmount;
+          lat += (Math.random() - 0.5) * jitterAmount;
+        }
+        
         const feature = new Feature({
-          geometry: new Point(fromLonLat([event.fields.location.lon, event.fields.location.lat])),
+          geometry: new Point(fromLonLat([lon, lat])),
           eventDetails: eventDetail
         });
 
