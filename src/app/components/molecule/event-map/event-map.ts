@@ -21,7 +21,7 @@ import Select from 'ol/interaction/Select';
 import { EntryFields } from 'contentful';
 import { EventDetails } from '../../../models/event-details';
 import { EventDetailsDisplay } from "./event-details-display/event-details-display";
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-event-map',
@@ -240,16 +240,22 @@ export class EventMap implements AfterViewInit {
         const offsetX = Math.round(baseOffset * zoomFactor);
         // const newCoordsForMapViewWithPopup = add(coords, [offsetX, 32000]);
 
-        // Zentriere die Karte auf den Event-Punkt
-        this.map.getView().animate({
-          center: coords,
-          duration: 300
-        });
-
-        //todo : Popup-Positionierung verbessern, damit es nicht das Kalendericon verdeckt
         this.popupOverlay.setPosition(geometry.getCoordinates());
 
-        return this.popupContent.set(eventDetails);
+        this.popupContent.set(eventDetails);
+
+        // Zentriere die Karte auf die Mitte des Popups
+        setTimeout(() => {
+          const popupRect = this.popupOverlay?.getElement()?.getBoundingClientRect();
+          const mapRect = this.mapElementRef()?.nativeElement?.getBoundingClientRect();
+          const popupCenterX = popupRect.left + popupRect.width / 2 - mapRect.left;
+          const popupCenterY = popupRect.top + popupRect.height / 2 - mapRect.top;
+          const coord = this.map.getCoordinateFromPixel([popupCenterX, popupCenterY]);
+          this.map.getView().animate({
+            center: coord,
+            duration: 300
+          });
+        }, 100);
 
       }
     }
