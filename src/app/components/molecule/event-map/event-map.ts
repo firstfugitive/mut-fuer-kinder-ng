@@ -1,7 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, inject, input, PLATFORM_ID, viewChild, ViewEncapsulation, signal } from '@angular/core';
 import { CfEvent } from '../../../models/contentful-content-types/event';
-import { MatExpansionModule, MatAccordion } from '@angular/material/expansion';
 
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -22,13 +21,14 @@ import { EntryFields } from 'contentful';
 import { EventDetails } from '../../../models/event-details';
 import { EventDetailsDisplay } from "./event-details-display/event-details-display";
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-event-map',
   templateUrl: './event-map.html',
   styleUrl: './event-map.scss',
   encapsulation: ViewEncapsulation.None,
-  imports: [EventDetailsDisplay, MatExpansionModule, MatAccordion, MatProgressSpinnerModule]
+  imports: [EventDetailsDisplay, MatExpansionModule, MatProgressSpinnerModule]
 })
 export class EventMap implements AfterViewInit {
 
