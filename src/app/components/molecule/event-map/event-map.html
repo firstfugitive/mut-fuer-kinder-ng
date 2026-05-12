@@ -5,7 +5,7 @@
     <div id="map" #map></div>
 
     <mat-accordion multi class="events-list">
-      @for(eventDetail of eventDetails(); track $index) {
+      @for(eventDetail of eventDetails(); track `${$index}-${eventDetail?.event?.sys?.id}`) {
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>{{ extractDay(eventDetail.event?.fields?.date) + "." +

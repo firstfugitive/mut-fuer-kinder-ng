@@ -69,10 +69,7 @@ export class EventMap implements AfterViewInit {
           eventDetails.push({ event: event, formattedAddress: 'Details zum Event sind leider nicht verfügbar.' });
           return Promise.resolve();
         }
-        return this.formatAddress(event.fields?.location || { lat: 0, lon: 0 }).then(formattedAddress => {
-          console.log('Formatted Address:', formattedAddress);
-          eventDetails.push({ event: event, formattedAddress: formattedAddress });
-        });
+        return this.formatAddress(event.fields?.location || { lat: 0, lon: 0 }).then(formattedAddress => eventDetails.push({ event: event, formattedAddress: formattedAddress }));
       })).then(() => {
         this.eventDetails.set(eventDetails.sort((a, b) => {
           const dateA = a?.event?.fields?.date ? new Date(a.event.fields.date.toString()).getTime() : 0;
@@ -432,7 +429,6 @@ export class EventMap implements AfterViewInit {
 async function reverseGeocode(lat: number, lon: number) {
   // todo: solve problem with nominatim api usage limits see https://operations.osmfoundation.org/policies/nominatim/
   const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&addressdetails=1`;
-  console.log('Reverse Geocoding URL:', url);
   try {
     const res = await fetch(url);
     if (!res.ok) {
