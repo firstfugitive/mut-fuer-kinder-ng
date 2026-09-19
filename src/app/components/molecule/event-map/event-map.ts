@@ -291,7 +291,7 @@ export class EventMap implements AfterViewInit {
       return `Lat ${location.lat?.toFixed(4) || '??'}, Lon ${location.lon?.toFixed(4) || '??'}`;
     }
 
-    const street = address.road || address.pedestrian || address.cycleway || 'Straße unbekannt';
+    const street = address.road || address.pedestrian || address.cycleway || address.isolated_dwelling || 'Straße unbekannt';
     const house = address.house_number ? ` ${address.house_number}` : '';
     const postcode = address.postcode ? ` ${address.postcode}` : '';
     const town = address.town ? ` ${address.town}` : address.city ? ` ${address.city}` : address.village ? ` ${address.village}` : '';
