@@ -10,6 +10,7 @@ export interface CfEvent extends CfContentType {
         dateAdditionalInfo?: EntryFields.Text;
         contactDetails?: EntryFields.Text;
         link?: EntryFields.Text;
+        linkText?: EntryFields.Text;
         detailsNotAvailable?: EntryFields.Boolean;
     }
 }
